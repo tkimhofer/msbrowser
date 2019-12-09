@@ -1,0 +1,36 @@
+Assay,Compound,m/z,rt (s),Info
+# Include characterised signals with known mz and retention time (s),,,,
+# Do no change the column order of this file,,,,
+HILIC +,Adenosine-2-d1 (M+H),269.1109,98.4,Spiked Standard
+HILIC +,Adenine-2-d1 (M+H),137.0686,124.2,Spiked Standard
+HILIC +,2-aminoethane-d4-sulfonic acid(taurine-d4) (M+H),130.0476,150,Spiked Standard
+HILIC +,Creatinine-(methyl-d3) (M+H),135.0961,295.8,Spiked Standard
+HILIC +,L-arginine-13C6 (M+H),181.1396,350.4,Spiked Standard
+HILIC +,"Uracil-2-13C,15N2 (M+H)",116.0325,49.8,Spiked Standard
+HILIC +,"L-phenylalanine-13C9,15N (M+H)",176.114,216,Spiked Standard
+HILIC +,N-benzoyl-d5-glycine (hippuric acid) (M+H),185.0975,66,Spiked Standard
+HILIC +,Leucine Enkephalin (M+H),556.2771,198.6,Spiked Standard
+HILIC +,D-Sorbitol-13C6 (M+Na),211.0889,93.6,Spiked Standard
+HILIC +,L-tryptophan-(indole-d5) (M+H),210.1291,212.4,Spiked Standard
+HILIC -,Adenosine-2-d1 (M+H),269.1109,98.4,Spiked Standard
+HILIC -,Adenine-2-d1 (M+H),137.0686,124.2,Spiked Standard
+HILIC -,2-aminoethane-d4-sulfonic acid(taurine-d4) (M+H),130.0476,150,Spiked Standard
+HILIC -,Creatinine-(methyl-d3) (M+H),135.0961,295.8,Spiked Standard
+HILIC -,L-arginine-13C6 (M+H),181.1396,350.4,Spiked Standard
+HILIC -,"Uracil-2-13C,15N2 (M+H)",116.0325,49.8,Spiked Standard
+HILIC -,"L-phenylalanine-13C9,15N (M+H)",176.114,216,Spiked Standard
+HILIC -,N-benzoyl-d5-glycine (hippuric acid) (M+H),185.0975,66,Spiked Standard
+HILIC -,Leucine Enkephalin (M+H),556.2771,198.6,Spiked Standard
+HILIC -,D-Sorbitol-13C6 (M+Na),211.0889,93.6,Spiked Standard
+HILIC -,L-tryptophan-(indole-d5) (M+H),210.1291,212.4,Spiked Standard
+ESI +,Methanol [M+H]+,33.033491,100.000000,Contaminant
+ESI +,ACN [M+H]+,42.033825,100.000000,Contaminant
+ESI +,ACN [M+NH4]+,59.060374,100.000000,Contaminant
+ESI +,PEG [A1B+H]+,63.044056,100.000000,Contaminant
+ESI +,ACN [M+Na]+,64.015769,100.000000,Contaminant
+ESI +,Methanol [M2+H]+,65.059706,100.000000,Contaminant
+ESI +,Dimethyl formamide [M+H]+,74.060040,100.000000,Contaminant
+ESI +,Acetonitrile/Methanol [A1B1+H]+,74.060040,100.000000,Contaminant
+ESI +,PPG [A1B+H]+,77.059706,100.000000,Contaminant
+,,,,
+,,,,

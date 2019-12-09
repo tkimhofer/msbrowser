@@ -1,0 +1,34 @@
+Package: msbrowser
+Title: Peak picking paremeter optimisation for xcms
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Torben",
+           family = "Kimhofer",
+           role = c("aut", "cre"),
+           email = "torben.kimhofer@murdoch.edu.au",
+           comment = c(website = "https://www.tkimhofer.com"))
+Description: A shiny application designed for fast and easy xcms parameter testing for peak picking performance optimisation. The tool uses simple statistical techniques and different visualisation modalities that enable the user to gain insight into the LC-MS data structure and the effects different xcms parameter have on peak picking performance. The application can be run on a local computer running R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+  shiny
+Imports:
+  shinyWidgets,
+  shinycssloaders,
+  shinybusy,
+  shinyjs,
+  shinyBS,
+  plotly,
+  ggplot2,
+  utils,
+  plyr,
+  xcms,
+  colorRamps,
+  DT,
+  dbscan,
+  scales,
+  reshape2,
+  graphics,
+  stats
+RoxygenNote: 6.1.1

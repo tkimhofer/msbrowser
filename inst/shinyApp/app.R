@@ -1,0 +1,2 @@
+
+msbrowser::startApp()
