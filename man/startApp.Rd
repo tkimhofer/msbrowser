@@ -2,7 +2,7 @@
 % Please edit documentation in R/startApp.R
 \name{startApp}
 \alias{startApp}
-\title{launches the shinyAppDemo app}
+\title{launch the msbrowser app}
 \usage{
 startApp()
 }
@@ -10,5 +10,5 @@ startApp()
 shiny application object
 }
 \description{
-launches the shinyAppDemo app
+launch the msbrowser app
 }

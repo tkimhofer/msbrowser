@@ -1,4 +1,4 @@
-#' @title  launches the shinyAppDemo app
+#' @title  launch the msbrowser app
 #'
 #' @export startApp
 #'
@@ -6,7 +6,7 @@
 #' @import shiny
 
 
-# wrapper for shiny::shinyApp()
+
 startApp <- function() {
   shinyApp(ui = ui, server = server)
 }

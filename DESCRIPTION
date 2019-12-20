@@ -12,23 +12,24 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
-  shiny
+  shiny  (>= 1.3),
+  shinyjs
 Imports:
-  shinyWidgets,
-  shinycssloaders,
-  shinybusy,
-  shinyjs,
-  shinyBS,
-  plotly,
-  ggplot2,
-  utils,
-  plyr,
-  xcms,
   colorRamps,
-  DT,
   dbscan,
-  scales,
-  reshape2,
+  DT,
+  ggplot2,
   graphics,
-  stats
+  magrittr,
+  plotly,
+  plyr,
+  reshape2,
+  scales,
+  shinyBS,
+  shinybusy,
+  shinycssloaders,
+  shinyWidgets,
+  stats,
+  utils,
+  xcms
 RoxygenNote: 6.1.1
