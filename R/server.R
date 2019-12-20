@@ -17,7 +17,7 @@
 #' @importFrom plotly renderPlotly plot_ly add_trace layout event_register event_data add_segments add_text ggplotly hide_colorbar
 #' @importFrom magrittr %>%
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
-
+#' @importFrom plyr dlply
 
 
 server <- function(input, output, session) {
