@@ -25,16 +25,30 @@ ui <- fluidPage(
   ),
 
 
+  tags$head(
+    tags$style(HTML("
+      @import url('//fonts.googleapis.com/css?family=Indie+Flower|Cabin:400,700');
+
+      h1 {
+        font-family: 'Indie Flower', cursive;
+        font-weight: 500;
+        line-height: 1.1;
+        color: #48ca3b;
+      }
+
+    "))
+  ),
+
   # tags$head(
   #   tags$style(HTML("hr {border-top: 1px solid #991500;}"))
   # ),
-  #titlePanel(title=div(img(src='MSbrowser_logo_tricolour_alpha.png'))),
-  headerPanel(title=div(id="MSbrowser_logo", img(src='MSbrowser_logo_tricolour_alpha.png')), windowTitle='MSbrowser'),
+  #titlePanel(title=h1('MSbrowser')),
+  headerPanel(title=div(a(img(src='www/MSbrowser_logo_tricolour_alpha.png')), href='https://tkimhofer.com', target="_blank"), windowTitle='MSbrowser'),
   #titlePanel(title=div(id="MSbrowser_logo", img(height = 100, width = 100, src = "MSbrowser_logo_tricolour_alpha.png"))),
 
   fluidRow(column(4,offset=0.2,
                   #tags$img(src='MSbrowser_logo_tricolour_alpha.png')
-                  img(src='inst/extdata/MSbrowser_logo_tricolour_alpha.png', align='right'),
+                  #img(src='inst/extdata/MSbrowser_logo_tricolour_alpha.png', align='right'),
                   #style = "position:fixed;width:inherit;",
 
                   div(id ="div_input",

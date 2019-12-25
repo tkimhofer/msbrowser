@@ -4,6 +4,7 @@
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinybusy add_busy_bar
 
+options(warn = -1)
 
 icst=read.table('inst/extdata/signalDB.csv', sep=',', stringsAsFactors = F, comment.char ='#', blank.lines.skip = T,row.names = NULL, skip=1, col.names = c('assay', 'compound', 'mz', 'rt', 'info'))
 

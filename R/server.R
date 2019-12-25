@@ -76,12 +76,23 @@ server <- function(input, output, session) {
 
     observeEvent(input$fileexample, {
       removeNotification(id='nofile')
+      exF=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
+
+
+
       output$msfile <- renderText({
         'Example: HILIC-ESI(+)-MS of a urine sample'
       })
-      if(!is.null(list.files('inst/extdata/mzXML/Urine_HILIC_ESIpos.mzXML'))) unzip('inst/extdata/mzXML/Urine_HILIC_ESIpos.mzXML.zip', exdir = 'inst/extdata/mzXML/')
-      pars$msfile='inst/extdata/mzXML/Urine_HILIC_ESIpos.mzXML'
-      cat('Reading example file...')
+      if(exF=='') {
+
+        exFzip=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML.zip', package = "msbrowser")
+        if(exFzip==''){message('No example file installed'); stopApp()}
+        cat('Unzipping LC-MS example file ...')
+        unzip(exFzip, exdir=gsub('Urine_HILIC_ESIpos\\.mzXML\\.zip', '', exFzip))
+        pars$msfile=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
+        cat('...done!')
+        cat('Reading example file...')
+        }
     }, ignoreNULL = T, ignoreInit = T)
   }
 
