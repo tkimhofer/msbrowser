@@ -90,7 +90,7 @@ server <- function(input, output, session) {
         cat('Unzipping LC-MS example file ...')
         unzip(exFzip, exdir=gsub('Urine_HILIC_ESIpos\\.mzXML\\.zip', '', exFzip))
         pars$msfile=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
-        cat('...done!')
+        cat('...done!\n')
         cat('Reading example file...')
         }
     }, ignoreNULL = T, ignoreInit = T)

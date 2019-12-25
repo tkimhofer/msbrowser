@@ -1,0 +1,16 @@
+pandoc: 2.3.1
+pkgdown: 1.4.1.9000
+pkgdown_sha: 24ef1bbdec0de44fe11eb1d58b40dba961525d43
+articles: []
+home:
+  title: An R package for xcms peak picking algorithm parametrisation
+  description: >
+    Do you love R? Do you love pool-noodles? If so, you might enjoy
+    using this package to automatically discover and add pool-noodles
+    to your growing collection.
+template:
+  params:
+    bootswatch: cerulean
+development:
+  mode: devel
+
