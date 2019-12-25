@@ -3,8 +3,8 @@ pkgdown: 1.4.1.9000
 pkgdown_sha: 24ef1bbdec0de44fe11eb1d58b40dba961525d43
 articles: []
 home:
-  title: An R package for xcms peak picking algorithm parametrisation
-  description: >
+  title: A visualisation tool for optimising LC-MS peak picking parameters using xcms in R
+  description:
     Do you love R? Do you love pool-noodles? If so, you might enjoy
     using this package to automatically discover and add pool-noodles
     to your growing collection.

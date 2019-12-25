@@ -6,7 +6,7 @@ Authors@R:
            family = "Kimhofer",
            role = c("aut", "cre"),
            email = "torben.kimhofer@murdoch.edu.au",
-           comment = c(ORICD = "0000-0001-7158-9930"", website = "https://www.tkimhofer.com"))
+           comment = c(ORCID = "0000-0001-7158-9930", website = "https://www.tkimhofer.com"))
 Description: A shiny application designed for fast and easy xcms parameter testing for peak picking performance optimisation. The tool uses simple statistical techniques and different visualisation modalities that enable the user to gain insight into the LC-MS data structure and the effects different xcms parameter have on peak picking performance. The application can be run on a local computer running R.
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -39,7 +39,8 @@ ui_par_centwave=fluidRow(
                    numericInput('in_prefilter_I', label = '...exceeding Intensity of', min = 3, max=10, value = 3)
          ),
          br(),
-         selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'MS data'='2'), selected='1')
+         selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'MS data'='2'), selected='1'),
+         checkboxInput('in_fitgauss', label='Fit Gaussian to each peak', value = F)
 
   ))
 
@@ -238,7 +239,9 @@ uiE_div_ppick=div(id ="div_ppick",
                                                        numericInput('in_prefilter_I', label = '...exceeding Intensity of', min = 0, max=10000000, value = 100)
                                              ),
                                              br(),
-                                             selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'Real MS data'='2'), selected='1')
+                                             selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'Real MS data'='2'), selected='1'),
+
+                                             checkboxInput('in_fitgauss', label='Fit Gaussian to each peak', value = F)
 
                                       ))
                                   ),

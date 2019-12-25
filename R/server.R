@@ -10,7 +10,7 @@
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
 #' @importFrom colorRamps matlab.like2
 #' @importFrom dbscan dbscan
-#' @importFrom DT renderDT
+#' @importFrom DT renderDT datatable
 #' @importFrom reshape2 melt
 #' @importFrom shinyBS bsTooltip
 #' @importFrom stats median quantile sd
@@ -27,6 +27,7 @@ server <- function(input, output, session) {
     msfile=NA,
     noise98p=NA,
     noise_plot=NA,
+    trans_plot='log10',
     Imax_xic_mz=NA,
     Imax_xic_scant=NA,
     xic_mz=NA,
@@ -431,7 +432,7 @@ server <- function(input, output, session) {
                   fluidRow(
                     column(12, offset=0.7,
                            column(width=3, numericInput(inputId='in_noisethr', label = 'Noise Threshold', value=pars$noise98p)),
-                           column(width=9, align='center', radioGroupButtons('raw_trans', label='Data Transformation', choices = list('None'='none', 'Squared'='sqrt', 'Square Root'='exp', 'Log 10'='log10', 'Logit'='logit','Reciprocal'='reciprocal'), selected = 'log10'))
+                           column(width=9, align='center', radioGroupButtons('raw_trans', label='Data Transformation', choices = list('None'='none', 'Squared'='sqrt', 'Square Root'='exp', 'Log 10'='log10', 'Reciprocal'='reciprocal'), selected = 'log10'))
 
 
                     )
@@ -449,6 +450,10 @@ server <- function(input, output, session) {
       }
     })
 
+
+    observeEvent(input$raw_trans, {
+      pars$trans_plot=input$raw_trans
+    }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(input$in_noisethr, {
       pars$noise_plot=input$in_noisethr
@@ -499,11 +504,10 @@ server <- function(input, output, session) {
             theme_bw()+
             labs(x='Scantime (s)', y='m/z', colour='Intensity',  caption='Raw Data')
 
-          if(is.null(input$raw_trans)){
+          if(pars$trans_plot=='none'){
             g1=g1+scale_colour_gradientn(colours=matlab.like2(10))
           }else{
-            if(input$raw_trans!='none'){g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=input$raw_trans)} else{
-              g1=g1+scale_colour_gradientn(colours=matlab.like2(10))}
+           g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
           }
 
           ggplotly(g1, height=1000, width=1100, dynamicTicks=T)
@@ -601,7 +605,6 @@ server <- function(input, output, session) {
     # peak picking
     fgt <- eventReactive(input$pickpeak1, {
       #showTab(inputId = "msexpl", target = "ppick", select=T)
-
       message('Performing peak picking...')
       removeNotification('nopeaks')
       raw_xcms=raw_data()[[2]] # this is xcms object
@@ -620,10 +623,21 @@ server <- function(input, output, session) {
                                           mzCenterFun=input$in_mzCentFun,
                                           integrate=as.numeric(input$in_integrate),
                                           mzdiff=input$in_mzdiff,
-                                          fitgauss=F,
+                                          fitgauss=as.logical(input$in_fitgauss),
                                           noise=as.numeric(input$in_noise),
-                                          scanrange=range(mf$scan))
+                                          scanrange=range(mf$scan)
+                                          )
                peaktbl=as.data.frame(peaktbl)
+
+               codeRI=paste0('xcms_data=xcmsRaw(filename=', pars$msfile, ' , profstep = 0, includeMSn = F, mslevel = 1)')
+               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=', input$in_rtrange,', snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
+
+               cat(codeRI, '\n')
+               cat(codePP, '\n')
+
+
+
+
              },
              'matchedFilter'={
                peaktbl=findPeaks.matchedFilter(raw_xcms,
@@ -689,8 +703,6 @@ server <- function(input, output, session) {
 
       if(length(idx)>0){
 
-
-
         if(ui_ind$ppick==0){
           insertTab(
             inputId='msexpl',
@@ -720,7 +732,7 @@ server <- function(input, output, session) {
         output$pp1 <- renderPlotly({
 
           # raw data
-          noi=as.numeric(input$in_noisethr)
+          #noi=as.numeric(input$in_noisethr)
           # small points when not belonging to signal
           idc=unlist(dlply(ptbl, as.quoted('roi'), function(peak, ds=mf){
             which(ds$mz>=peak$mzmin & ds$mz<=peak$mzmax & ds$scantime >= peak$rtmin & ds$scantime <= peak$rtmax)
@@ -736,13 +748,14 @@ server <- function(input, output, session) {
             theme_bw()+
             scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
             labs(x='Scantime (s)', y='m/z', colour='Intensity')
-          if(input$raw_trans!='none'){
-            g2=g2+
-              scale_colour_gradientn(colours=matlab.like2(10), trans=input$raw_trans)
+          print(input$raw_trans)
+
+          if(pars$trans_plot=='none'){
+            g2=g2+scale_colour_gradientn(colours=matlab.like2(10))
           }else{
-            g2=g2+
-              scale_colour_gradientn(colours=matlab.like2(10))
+            g2= g2+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
           }
+
           ggplotly(g2, height=1000, width=1100, dynamicTicks=T)
         })
         return(ptbl)
@@ -768,12 +781,17 @@ server <- function(input, output, session) {
       idx=grep('int|max0', colnames(out))
       out[,idx]=apply(out[,idx], 2, round, 0)
 
-      output$PeakTbl=renderDT(out, selection = 'multiple', escape = FALSE, options = list(
+      output$PeakTbl=renderDT(datatable(out,
+                              selection = 'multiple',
+                              escape = FALSE,
+                              extensions = 'Buttons',
+                              options = list(
         searchHighlight = TRUE,
         pageLength = 20,
-        rownames= FALSE
+        rownames= FALSE,
+        buttons = c('copy', 'csv', 'excel')
       ),
-      rownames= FALSE)
+      rownames= FALSE))
     }, ignoreNULL = T, ignoreInit = F)
 
     observeEvent(input$plotselection, {
@@ -810,9 +828,9 @@ server <- function(input, output, session) {
             add_trace(data = df,x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode = 'lines', line = list(width = 10, color='rgba(166, 143, 195, 0.8)'), showlegend = F, name='Min-Max of ROI')# %>%
 
           for(i in 1:length(add)){
-            if(i==1){ g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black', width=5, showscale = F),  name='Signal range in rt dimension', showlegend=T) %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
+            if(i==1){ g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black', width=5, showscale = F),  name='Signal width in rt dimension', showlegend=T) # %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
             }else{
-              g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black',  width=5),  name='', showlegend=F) %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5),  name='', showlegend=F)
+              g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black',  width=5),  name='', showlegend=F) #%>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5),  name='', showlegend=F)
             }
           }
           # add rois that fall into the specified spectral region
