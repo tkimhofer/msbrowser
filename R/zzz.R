@@ -4,7 +4,7 @@
   addResourcePath('www',  system.file("www", package = "msbrowser"))
 
   invisible(suppressPackageStartupMessages(
-    sapply(c('xcms', 'mzR', 'shinyjs', 'methods', 'shiny'),
+    sapply(c('xcms', 'mzR', 'methods', 'shiny'),
            requireNamespace, quietly = TRUE)
   )
   )
