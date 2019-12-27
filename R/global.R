@@ -16,37 +16,41 @@ icst=icst[icst$assay!='' & !is.na(icst$assay),]
 
 
 ui_par_centwave=fluidRow(
-  h4('Parameters'),
-  helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set."),
+  column(12, offset=0.2,
+  h4('Parameterisation'),
+  helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set.")),
   hr(),
-  column(4, numericInput(inputId='in_mzdev', label=paste0('m/z deviation (ppm)'), value=15),
+  column(4, numericInput(inputId='in_mzdev', label=paste0('ppm'), value=15),
+         bsTooltip('in_mzdev', 'Maximal tolerated m/z deviation in consecutive scans in parts per million (ppm)'),
          br(),
-         sliderInput('in_rtrange', 'Peakwidth: RT range (s)', min=2, max=100, step = 1, value= c(20, 50)),
+         sliderInput('in_rtrange', 'peakwidth (s)', min=2, max=100, step = 1, value= c(20, 50)),
+         bsTooltip('in_rtrange', 'Expected approximate peak width in chromatographic space. Given as a range (min, max) in seconds'),
          br(),
-         numericInput('in_mzdiff', label = 'minimum diff m/z overlap', value = 0.1)
+         numericInput('in_mzdiff', label = 'mzdiff', value = 0.1),
+         bsTooltip('in_mzdiff', 'Minimum difference in m/z dimension required for peaks with overlapping retention times; can be negative to allow overlap. During peak post-processing, peaks defined to be overlapping are reduced to the one peak with the largest signal.')
   ),
   column(4,
-         numericInput(inputId='in_noise', label='Noise', value=100),
+         numericInput(inputId='in_noise', label='noise', value=100),
          br(),
-         numericInput(inputId='in_sn', label='Signal/Noise threshold', value=10),
+         numericInput(inputId='in_sn', label='snthresh', value=10),
          br(),
-         selectInput('in_mzCentFun', label='m/z center function', choices = c('Weighted Mean'='wMean', 'Mean'='mean','Peak apex'='apex', 'Weighted mean of peak apex and neigbouring scans'='wMeanApex3', 'Mean of peak apex and neigbouring scans'='meanApex3'))
+         selectInput('in_mzCentFun', label='mzCenterFun', choices = c('Weighted Mean'='wMean', 'Mean'='mean','Peak apex'='apex', 'Weighted mean of peak apex and neigbouring scans'='wMeanApex3', 'Mean of peak apex and neigbouring scans'='meanApex3'))
   ),
   column(4,
-         wellPanel(h5("Pre-filter"),
+         wellPanel(h5("prefilter"),
                    numericInput('in_prefilter_k', label = 'Number of consecutive scans...', min = 3, max=10, value = 3),
                    br(),
                    numericInput('in_prefilter_I', label = '...exceeding Intensity of', min = 3, max=10, value = 3)
          ),
          br(),
-         selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'MS data'='2'), selected='1'),
-         checkboxInput('in_fitgauss', label='Fit Gaussian to each peak', value = F)
+         selectInput('in_integrate', label='integrate', choices = c('Descend Mexican Hat'='1', 'MS data'='2'), selected='1'),
+         checkboxInput('in_fitgauss', label='fitgauss', value = F)
 
   ))
 
 
 ui_par_matchedFilter=fluidRow(
-  h4('Parameters'),
+  h4('Parameterisation'),
   helpText("Specify the expected mass to charge ratio (m/s) and retention time in seconds (s) of a compound. Use the list below to select pre-defined internal chemical standards (ICS) for HILIC positive ionisation mode (v+)."),
   hr(),
   column(4, numericInput(inputId='in_fwhm', label=paste0('FWHM of matched filtration Gaussian'), value=30),
@@ -90,12 +94,12 @@ uiT_rawData=tabPanel(title="Raw Data",  value='rawData',
                      add_busy_bar(color = "#FBDD00")
 )
 
-uiT_ppick=tabPanel("Peak Picked",  value='ppick',
+uiT_ppick=tabPanel("Detected Signals",  value='ppick',
                    withSpinner(plotlyOutput('pp1', width = "100%", inline = T), type=4),
                    add_busy_bar(color = "#FBDD00")
 )
 
-uiT_peaks=tabPanel("Peak Table",  value='peaks',
+uiT_peaks=tabPanel("Signal Table",  value='peaks',
                    column(8, align='center',
                           br(),
                           fluidRow(DTOutput("PeakTbl", width='auto', height='auto')),
@@ -112,23 +116,43 @@ uiT_peaks=tabPanel("Peak Table",  value='peaks',
 
 )
 
+
+
 uiE_div_xic=div(id ="div_xic", fluidRow(
   column(8,  numericRangeInput(inputId='xic_ra', label=NA, value=c(500), separator = " to ", width='100%')),
-  column(4,  actionButton('go_xic', 'Go'))
+  column(2,  actionButton('go_xic', 'Go'))
 ))
 
 uiE_div_summary_file=div(id ="summary_file",
                          column(12, offset = -1, align='center',
                                 br(),
-                                h4('Summary'),
+                                #h4('Summary'),
                                 textOutput('msfile'),
                                 br(),
-                                withSpinner(tableOutput("datsum"), type=8)
+                               tableOutput("datsum")
                          ),
                          br(),
                          column(12, offset = 0.7, align='left',
                                 checkboxInput('imp_xic', 'Select XIC mass range manually', value = F))
 )
+
+uiE_div_inp_col=div(id ="div_input_collapse", fluidRow(
+  column(12, offset = 0.7,
+         fluidRow(
+           column(10,
+                  actionButton("filechoose", label = "Select file"), textOutput('bname', inline = T),
+                  actionButton("fileexample", label = "Load Example", inline=T),
+                  bsTooltip(id="filechoose", title="Choose an LC-MS data file in open data format (e.g., mzML, netCDF)",
+                            placement="right", options = list(container = "body")),
+                  bsTooltip(id="fileexample", title="Use an example LC-MS file.",
+                            placement="right", options = list(container = "body")))),
+         br(),
+         uiOutput('ss1'),
+         add_busy_bar(color = "#FBDD00"))
+
+
+))
+
 
 
 uiE_move=fluidRow(
@@ -137,11 +161,12 @@ uiE_move=fluidRow(
                       style="color: #fff; background-color: #33A2FF; border-color: #33A2FF")))
 
 uiE_target=div(id ="div_target",
-               h3('2. Select target signal'),
-               helpText("Specify a spectral area either through manual entry of a rt and mz value, or use database-listed compound information."),
-               br(),
+               h3(a(href='#', onclick='doThat(this)', '2. Select target signal')),
+               helpText("Specify a spectral area either through clicking in mass spectrum or by manual entry of a scantime and mz value. Alternatively, select compound listed in a database table."),
+               br()
+               )
 
-               div(id='selectors',
+uiE_div_tar_col=div(id='target_col', div(id='selectors',
                    column(12, offset = 0.7,  align="center",
                           radioButtons('target_input', label = NULL, choices = c('Cursor selection'='click', 'Manual'='man', 'Database'='db'), inline = T, selected='click'),
                           conditionalPanel("input.target_input=='click'",
@@ -173,16 +198,17 @@ uiE_target=div(id ="div_target",
                                                     radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(icst$assay), direction = "horizontal"),
                                                     selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
                                                     textOutput('compound_info'), br()
-                                             ))
+                                             )),
 
 
 
-
+                                           br()
                           )),
-                   br(),
+
                    br()),
                fluidRow(
                  column(12, align='right',
+                        br(),
                         actionButton("move_picks", 'Generate plot', icon("thumbs-up"),
                                      style="color: #fff; background-color: #33A2FF; border-color: #33A2FF"))),
                fluidRow(
@@ -196,11 +222,6 @@ uiE_target=div(id ="div_target",
 
 
 uiE_div_ppick=div(id ="div_ppick",
-                  br(),
-                  # hr(),
-                  br(),
-                  hr(),
-                  br(),
                   h3('3. Perform peak picking'),
                   helpText("Select peak picking algorighm from the list below"),
 

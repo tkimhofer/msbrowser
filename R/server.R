@@ -10,7 +10,7 @@
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
 #' @importFrom colorRamps matlab.like2
 #' @importFrom dbscan dbscan
-#' @importFrom DT renderDT datatable
+#' @importFrom DT renderDataTable
 #' @importFrom reshape2 melt
 #' @importFrom shinyBS bsTooltip
 #' @importFrom stats median quantile sd
@@ -53,12 +53,48 @@ server <- function(input, output, session) {
     target=0,
     ppdiv=0,
     impvis=0,
-    peaktbl=0
+    peaktbl=0,
+    div_input_collapse=1,
+    div_target_collapse=1
   )
 
   # suppress warnings
   storeWarn<- getOption("warn")
   options(warn = -1)
+
+
+  observeEvent(input$clicked_text, {
+    print('clicked')
+    if(ui_ind$div_input_collapse==1){
+      print('remove UI')
+      removeUI('#div_input_collapse')
+      ui_ind$div_input_collapse=0
+    }else{
+      print('insert UI')
+      insertUI('#1ri', 'afterEnd', ui=uiE_div_inp_col)
+      ui_ind$div_input_collapse=1
+    }
+
+  }, ignoreInit = T, ignoreNULL = T)
+
+
+
+  observeEvent(input$clicked_target, {
+    print('clicked')
+    if(ui_ind$div_target_collapse==1){
+      print('remove UI')
+      removeUI('#target_col')
+      ui_ind$div_target_collapse=0
+    }else{
+      print('insert UI')
+      insertUI('#div_target', 'afterEnd', ui=uiE_div_tar_col)
+      ui_ind$div_target_collapse=1
+    }
+
+  }, ignoreInit = T, ignoreNULL = T)
+
+
+
 
 
   # SELECT FILE
@@ -82,7 +118,7 @@ server <- function(input, output, session) {
 
 
       output$msfile <- renderText({
-        'Example: HILIC-ESI(+)-MS of a urine sample'
+        'Example file: HILIC-ESI(+)-MS of a urine sample'
       })
       if(exF=='') {
 
@@ -93,7 +129,7 @@ server <- function(input, output, session) {
         pars$msfile=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
         cat('...done!\n')
         cat('Reading example file...')
-        }
+      }
     }, ignoreNULL = T, ignoreInit = T)
   }
 
@@ -112,24 +148,55 @@ server <- function(input, output, session) {
 
     # create summary stats and insert into side bar
     output$datsum<-renderTable(
-      data.frame(Descr=c('Scantime range', 'Scan frequency', 'Mass range', 'Median ion count of all scans', 'Intensity at p(x<=X)=0.98'),
-                 Value=c(paste(paste(round(range(raw_xcms@scantime)), collapse = '-'), 's'),
-                         paste(round(1/median(diff(raw_xcms@scantime[order(raw_xcms@scanindex)]))), 'scans per s'), paste(paste(round(raw_xcms@mzrange), collapse = '-'), 'm/z'),
-                         paste(format(median(raw_xcms@tic), scientific = T, digits = 3), 'AU'),
-                         paste(pars$noise98p, 'AU'))
-      ) , rownames=F, colnames=F, spacing='xs')
+      {data.frame(Descr=c('Scantime range', 'Scan frequency', 'Mass range', 'Median ion count of all scans', 'Intensity at p(x<=X)=0.98'),
+                  Value=c(paste(paste(round(range(raw_xcms@scantime)), collapse = '-'), 's'),
+                          paste(round(1/median(diff(raw_xcms@scantime[order(raw_xcms@scanindex)]))), 'scans per s'), paste(paste(round(raw_xcms@mzrange), collapse = '-'), 'm/z'),
+                          paste(format(median(raw_xcms@tic), scientific = T, digits = 3), 'AU'),
+                          paste(pars$noise98p, 'AU'))
+      )} , rownames=F, colnames=F, spacing='xs', caption = "Summary", caption.placement = getOption("xtable.caption.placement", "top"),
+      caption.width = getOption("xtable.caption.width", NULL))
 
 
     if(ui_ind$summarytbl==0){
       # instert summary file
-      insertUI(
-        selector = "#fileexample",
-        where = "afterEnd",
-        ui = uiE_div_summary_file,
-        immediate=F
-      )
+      # insertUI(
+      #   selector = "#fileexample",
+      #   where = "afterEnd",
+      #   ui = uiE_div_summary_file,
+      #   immediate=F
+      # )
       ui_ind$summarytbl=1
+
+
+      output$ss1=renderUI(uiE_div_summary_file)
+
+
     }
+
+
+    # expand fields for manual entering mz values for xic
+    observeEvent(input$imp_xic,{
+      if(input$imp_xic & ui_ind$xicra==0){
+        insertUI(
+          selector = "#imp_xic",
+          where = "afterEnd",
+          ui = uiE_div_xic
+        )
+        ui_ind$xicra=1
+      }
+
+
+      if(!input$imp_xic  & ui_ind$xicra==1){
+        removeUI(
+          selector = "#div_xic"
+        )
+        ui_ind$xicra=0
+      }
+    }, ignoreInit = T, ignoreNULL = T)
+
+
+
+
 
 
 
@@ -387,37 +454,38 @@ server <- function(input, output, session) {
             ui=uiE_target
           )
           ui_ind$target=1
+
+          insertUI(
+            selector='#div_target',
+            where='afterEnd',
+            ui=uiE_div_tar_col
+          )
+
+          ui_ind$div_target_collapse=1
         }
 
       }, ignoreInit = T, ignoreNULL = T)
 
 
     # generate next window after click on move1
-
-    observeEvent({
-      input$move1
-    }, {
-
-
-
-
-
-
-      if(ui_ind$rawData==0){
-        insertTab(
-          inputId='msexpl',
-          tab=uiT_rawData,
-          target='ichron',
-          position='after',
-          select=T
-        )
-
-        tab_ind$rawData=1
-      }
-
-
-
-    })
+#
+#     observeEvent({
+#       input$move1
+#     }, {
+#
+#       if(ui_ind$rawData==0){
+#         insertTab(
+#           inputId='msexpl',
+#           tab=uiT_rawData,
+#           target='ichron',
+#           position='after',
+#           select=T
+#         )
+#
+#         tab_ind$rawData=1
+#       }
+#
+#     })
 
 
 
@@ -477,6 +545,15 @@ server <- function(input, output, session) {
           ui_ind$rawData=1
         }
 
+        # collapse side 1 and 2
+        removeUI('#target_col')
+        ui_ind$div_target_collapse=0
+
+        removeUI('#div_input_collapse')
+        ui_ind$div_input_collapse=0
+
+        removeUI('#target_col')
+        ui_ind$div_target_collapse=0
 
         mf=raw_data()[[1]]
         message('Generating spectral area plot (scantime vs mz).\n')
@@ -507,7 +584,7 @@ server <- function(input, output, session) {
           if(pars$trans_plot=='none'){
             g1=g1+scale_colour_gradientn(colours=matlab.like2(10))
           }else{
-           g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
+            g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
           }
 
           ggplotly(g1, height=1000, width=1100, dynamicTicks=T)
@@ -531,26 +608,6 @@ server <- function(input, output, session) {
     observeEvent(ttt(), {message(dim(ttt()))})
 
 
-
-    # expand fields for manual entering mz values for xic
-    observeEvent(input$imp_xic,{
-      if(input$imp_xic & ui_ind$xicra==0){
-        insertUI(
-          selector = "#imp_xic",
-          where = "afterEnd",
-          ui = uiE_div_xic
-        )
-        ui_ind$xicra=1
-      }
-
-
-      if(!input$imp_xic  & ui_ind$xicra==1){
-        removeUI(
-          selector = "#div_xic"
-        )
-        ui_ind$xicra=0
-      }
-    }, ignoreInit = T, ignoreNULL = T)
 
 
 
@@ -626,11 +683,11 @@ server <- function(input, output, session) {
                                           fitgauss=as.logical(input$in_fitgauss),
                                           noise=as.numeric(input$in_noise),
                                           scanrange=range(mf$scan)
-                                          )
+               )
                peaktbl=as.data.frame(peaktbl)
 
                codeRI=paste0('xcms_data=xcmsRaw(filename=', pars$msfile, ' , profstep = 0, includeMSn = F, mslevel = 1)')
-               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=', input$in_rtrange,', snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
+               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
 
                cat(codeRI, '\n')
                cat(codePP, '\n')
@@ -781,17 +838,20 @@ server <- function(input, output, session) {
       idx=grep('int|max0', colnames(out))
       out[,idx]=apply(out[,idx], 2, round, 0)
 
-      output$PeakTbl=renderDT(datatable(out,
-                              selection = 'multiple',
-                              escape = FALSE,
-                              extensions = 'Buttons',
-                              options = list(
-        searchHighlight = TRUE,
-        pageLength = 20,
-        rownames= FALSE,
-        buttons = c('copy', 'csv', 'excel')
-      ),
-      rownames= FALSE))
+      # browser()
+      output$PeakTbl=DT::renderDataTable(
+        out, server=F,
+        selection = 'multiple',
+        escape = FALSE,
+        extensions = 'Buttons',
+        options = list(
+          dom='Bfrtips',
+          buttons=list('copy', 'csv', 'excel', 'print'),
+          searchHighlight = TRUE,
+          pageLength = 30,
+          rownames= FALSE
+        ),
+        rownames= FALSE)
     }, ignoreNULL = T, ignoreInit = F)
 
     observeEvent(input$plotselection, {
@@ -853,8 +913,6 @@ server <- function(input, output, session) {
     })
 
   }
-  session$allowReconnect(TRUE)
-
 
 }
 
