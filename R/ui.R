@@ -9,7 +9,7 @@
 #' @importFrom plotly plotlyOutput
 #' @importFrom DT DTOutput
 
-logoF=list.files(system.file('www', package = "msbrowser"), pattern='logo')[1]
+logoF=list.files(system.file('www', package = "msbrowser"))[1]
 print(logoF)
 
 ui <- fluidPage(
