@@ -66,7 +66,7 @@ ui <- fluidPage(
   #   tags$style(HTML("hr {border-top: 1px solid #991500;}"))
   # ),
   #titlePanel(title=h1('MSbrowser')),
-  headerPanel(title=div(a(img(src='www/MSbrowser_logo_tricolour_alpha.png'), href='https://tkimhofer.com', target="_blank"), windowTitle='MSbrowser')),
+  headerPanel(title=div(a(img(src='www/MSbrowser_logo_tricolour_alpha.png'), href='https://tkimhofer.com', target="_blank")), windowTitle='MSbrowser'),
   #titlePanel(title=div(id="MSbrowser_logo", img(height = 100, width = 100, src = "MSbrowser_logo_tricolour_alpha.png"))),
 
   fluidRow(column(4,offset=0.2,
