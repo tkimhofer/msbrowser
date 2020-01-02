@@ -113,7 +113,7 @@ server <- function(input, output, session) {
     }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(input$fileexample, {
-      print(logoF)
+      # print(logoF)
       removeNotification(id='nofile')
       exF=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
 

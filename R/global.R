@@ -12,8 +12,8 @@ icst=icst[icst$assay!='' & !is.na(icst$assay),]
 
 #icst=dlply(icst, .(assay))
 
-logoF=system.file('www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
-print(logoF)
+# logoF=system.file('www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
+# print(logoF)
 
 
 ui_par_centwave=fluidRow(

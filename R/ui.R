@@ -11,7 +11,7 @@
 
 # logoF=system.file('www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
 # print(logoF)
-print(logoF)
+# print(logoF)
 
 
 
