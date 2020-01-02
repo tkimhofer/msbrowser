@@ -18,6 +18,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
 #' @importFrom plyr dlply
+#' @importFrom utils unzip
 
 
 server <- function(input, output, session) {
@@ -112,6 +113,7 @@ server <- function(input, output, session) {
     }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(input$fileexample, {
+      print(logoF)
       removeNotification(id='nofile')
       exF=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
 
@@ -123,7 +125,7 @@ server <- function(input, output, session) {
       if(exF=='') {
 
         exFzip=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML.zip', package = "msbrowser")
-        if(exFzip==''){message('No example file installed'); stopApp()}
+        if(exFzip==''){message('No example file installed'); }
         cat('Unzipping LC-MS example file ...')
         unzip(exFzip, exdir=gsub('Urine_HILIC_ESIpos\\.mzXML\\.zip', '', exFzip))
         pars$msfile=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
@@ -239,7 +241,7 @@ server <- function(input, output, session) {
                                                               showline=TRUE,
                                                               spikedash = 'solid',
                                                               showgrid=TRUE),
-               yaxis=list(title='Intensity (AU)',   showgrid = F,showticklabels = T),
+               yaxis=list(title='Intensity (AU)',   showgrid = F,showticklabels = T, zeroline = FALSE),
                hovermode  = 'x', showlegend = TRUE) %>%
         event_register('plotly_click')
 
@@ -419,7 +421,7 @@ server <- function(input, output, session) {
               showlegend = TRUE,
               legend = list(x = 0.7, y = 0.99),
               xaxis = list(title='m/z', autorange=TRUE),
-              yaxis = list(title='Intensity (%)', autorange=TRUE,  zeroline = FALSE,
+              yaxis = list(title='Intensity (%)', autorange=TRUE,  zeroline = T,
                            showgrid = F,
                            showticklabels = T)
             ) %>%
