@@ -1,16 +1,27 @@
-pandoc: 2.3.1
-pkgdown: 1.4.1.9000
-pkgdown_sha: 24ef1bbdec0de44fe11eb1d58b40dba961525d43
-articles: []
-home:
-  title: A visualisation tool for optimising LC-MS peak picking parameters using xcms in R
-  description:
-    Do you love R? Do you love pool-noodles? If so, you might enjoy
-    using this package to automatically discover and add pool-noodles
-    to your growing collection.
+url: https://tkimhofer.github.io/msbrowser/
+
+destination: "pkgdown/."
+
 template:
   params:
-    bootswatch: cerulean
-development:
-  mode: devel
+    bootswatch: cosmo
 
+navbar:
+  title: "MSbrowser"
+  left:
+    - text: "Installation"
+      href: articles/index.html
+    - text: "Documentation"
+      href: reference/index.html
+    - text: "Training"
+      href: news/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/tkimhofer/msbrowser
+
+description:
+  links:
+  - text: Ask a question
+    href: https://github.com/tkimhofer/msbrowser
+  - text: Browse source code
+    href: https://github.com/tkimhofer/msbrowser
