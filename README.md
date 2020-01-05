@@ -1,4 +1,4 @@
-![MSbrowser Logo](https://github.com/tkimhofer/msbrowser/blob/master/www/MSbrowser_logo_tricolour_alpha.png)
+![MSbrowser Logo](www/MSbrowser_logo_tricolour_alpha.png)
 
 [![HitCount](http://hits.dwyl.io/tkimhofer/msbrowser.svg)](http://hits.dwyl.io/tkimhofer/msbrowser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
