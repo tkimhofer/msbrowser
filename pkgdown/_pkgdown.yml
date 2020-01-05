@@ -1,6 +1,6 @@
 url: https://tkimhofer.github.io/msbrowser/
 
-destination: "pkgdown/."
+destination: "pkgdown/"
 
 template:
   params:
@@ -25,3 +25,6 @@ description:
     href: https://github.com/tkimhofer/msbrowser
   - text: Browse source code
     href: https://github.com/tkimhofer/msbrowser
+
+home:
+  href: index.html
