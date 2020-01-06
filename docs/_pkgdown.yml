@@ -1,0 +1,36 @@
+url: https://tkimhofer.github.io/msbrowser/
+
+destination: "pkgdown/"
+
+template:
+  params:
+    bootswatch: cosmo
+
+navbar:
+  title: "MSbrowser"
+  left:
+    - text: "Installation"
+      href: articles/index.html
+    - text: "Documentation"
+      href: reference/index.html
+    - text: "xcms centWave"
+      menu:
+        - text: Explanation of Parameters
+          href: centwave/parameters.html
+        - text: Algorithm Characterisation
+          href: news/index.html
+    - text: "Parametrisation guideline"
+      href: news/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/tkimhofer/msbrowser
+
+description:
+  links:
+  - text: Ask a question
+    href: https://github.com/tkimhofer/msbrowser
+  - text: Browse source code
+    href: https://github.com/tkimhofer/msbrowser
+
+home:
+  href: index.html

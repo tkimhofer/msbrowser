@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Peak picking paremeter optimisation for xcms • msbrowser</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -59,11 +59,29 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="pkgdown" class="section level1">
+
+<p><img src="www/MSbrowser_logo_tricolour_alpha.png" alt="MSbrowser Logo"></p>
+<p><a href="http://hits.dwyl.io/tkimhofer/msbrowser"><img src="http://hits.dwyl.io/tkimhofer/msbrowser.svg" alt="HitCount"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
+<p><strong>MSbrowser</strong> is an R package providing a web-browser-based application for <strong>parameter fine-tuning of xcms peak picking algorighms</strong>.</p>
+<p>The app is designed for fast and easy xcms parameter testing and peak picking performance optimisation. Different visualisation allow to gain insight into the LC-MS data structure and the effects different peak picking algorithm parameters have on peak picking performance.</p>
+<p>MSbrowser is implemented in a user-friendly web-application framework that can be executed on a local computer running R or assessed via a web-link.</p>
+<div id="installation-and-app-launching" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#pkgdown" class="anchor"></a>pkgdown <img src="www/figures/MSbrowser_logo_tricolour_alpha.png" align="right">
-</h1></div>
+<a href="#installation-and-app-launching" class="anchor"></a>Installation and app launching</h1></div>
+<p>Installation is performed with the following R commands</p>
+<p>`` if(!‘devtools’ %in% installed.packages()[,1]) install.packages(‘devtools’) devtools::install_github(‘tkimhofer/msbrowser’)</p>
+<p>msbrowser::startApp() ``</p>
 </div>
+<div id="documentation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h1>
+<p>Provided is a short tutorial that highlights the different functionalities and provides a step-by-step guidance for less experienced users.</p>
+</div>
+<div id="support" class="section level1">
+<h1 class="hasAnchor">
+<a href="#support" class="anchor"></a>Support</h1>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -78,7 +96,7 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Torben Kimhofer <br><small class="roles"> Author, maintainer </small>  <br><small>(https://www.tkimhofer.com)</small>
+<li>Torben Kimhofer <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-7158-9930" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(https://www.tkimhofer.com)</small>
 </li>
 </ul>
 </div>
