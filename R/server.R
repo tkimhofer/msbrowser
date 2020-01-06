@@ -40,8 +40,8 @@ server <- function(input, output, session) {
     xic_ra=NA,
     pp.mz=NA,
     pp.rt=NA,
-    pp.mz.ra=NA,
-    pp.rt.ra=NA
+    pp.mz.ra=5,
+    pp.rt.ra=10
   )
 
   ui_ind=reactiveValues(
@@ -531,7 +531,7 @@ server <- function(input, output, session) {
 
 
     ttt=eventReactive(
-      { input$move_picks},
+      { input$move_picks}, # 'Generate plot' has been clicked
       {
         #browser()
 
@@ -545,6 +545,14 @@ server <- function(input, output, session) {
           )
 
           ui_ind$rawData=1
+        }
+
+        if(input$target_input=='man'){
+          pars$pp.mz=input$in_mz
+          pars$pp.mz.ra=input$in_mz_ws
+
+          pars$pp.rt=input$in_rt
+          pars$pp.rt.ra=input$in_rt_ws
         }
 
         # collapse side 1 and 2
@@ -640,6 +648,13 @@ server <- function(input, output, session) {
           updateNumericInput(session, 'in_mz', value = icst_cname$mz[idx])
           updateNumericInput(session, 'in_rt', value = icst_cname$rt[idx])
           output$compound_info=renderText({paste0('rt=',icst_cname$rt[idx], ' s, m/z=', icst_cname$mz[idx])})
+
+            pars$pp.mz=icst_cname$mz[idx]
+            #pars$pp.mz.ra=input$in_mz_ws
+
+            pars$pp.rt=icst_cname$rt[idx]
+            #pars$pp.rt.ra=input$in_rt_ws
+
         }
       }, ignoreNULL = T, ignoreInit = T)
     }
