@@ -13,7 +13,13 @@ navbar:
       href: articles/index.html
     - text: "Documentation"
       href: reference/index.html
-    - text: "Training"
+    - text: "xcms centWave"
+      menu:
+        - text: Explanation of Parameters
+          href: centwave/parameters.html
+        - text: Algorithm Characterisation
+          href: news/index.html
+    - text: "Parametrisation guideline"
       href: news/index.html
   right:
     - icon: fa-github
