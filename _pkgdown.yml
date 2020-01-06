@@ -7,22 +7,26 @@ template:
     bootswatch: cosmo
 
 navbar:
-  title: "MSbrowser"
-  left:
-    - text: "Installation"
-      href: articles/index.html
-    - text: "Documentation"
+  title: MSbrowser
+  structure:
+    left: [home, reference,tutorials]
+    right: [github]
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Docu
       href: reference/index.html
-    - text: "xcms centWave"
+    tutorials:
+      text: "xcms centWave"
       menu:
         - text: Explanation of Parameters
-          href: centwave/parameters.html
+          href: tutorials/pars.html
         - text: Algorithm Characterisation
-          href: news/index.html
-    - text: "Parametrisation guideline"
-      href: news/index.html
-  right:
-    - icon: fa-github
+          href: tutorials/character.html
+    github:
+      icon: fa-github
       href: https://github.com/tkimhofer/msbrowser
 
 description:
@@ -32,5 +36,8 @@ description:
   - text: Browse source code
     href: https://github.com/tkimhofer/msbrowser
 
-home:
-  href: index.html
+reference:
+  - title: "Launching MSbrowser"
+    desc: "There is only a single function for starting the application:"
+    contents:
+      - startApp
