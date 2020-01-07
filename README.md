@@ -1,10 +1,10 @@
-![MSbrowser Logo](www/MSbrowser_logo_tricolour_alpha.png)
+![](www/MSbrowser_logo_tricolour_alpha.png)
 
 [![HitCount](http://hits.dwyl.io/tkimhofer/msbrowser.svg)](http://hits.dwyl.io/tkimhofer/msbrowser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/rstudio/rmarkdown.svg?branch=master)](https://travis-ci.org/rstudio/rmarkdown)
 
-**MSbrowser** is an R package providing a web-browser-based application for **parameter fine-tuning of xcms peak picking algorighms**. 
+**MSbrowser** is an R package providing a web-browser-based application for **parameter fine-tuning** of **xcms peak picking algorighms**. 
 
 The app is designed for fast and easy xcms parameter testing and peak picking performance optimisation. Different visualisation allow to gain insight into the LC-MS data structure and the effects different peak picking algorithm parameters have on peak picking performance. 
 

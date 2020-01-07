@@ -1,25 +1,44 @@
-# Explanation of centWave Parameters
+# centWave Parameters
 
 
-**CentWave parameters:** *ppm, peakwidth, snthresh, prefilter, mzCenterFun, integrate, mzdiff, fitgauss, scanrange, noise.*  
+*ppm, peakwidth, snthresh, prefilter, mzCenterFun, integrate, mzdiff, fitgauss, scanrange, noise.*  
 
 
-All centWave parameters require fine-tuning for each assay type and mass analyser. Too stringet parameter values (e.g., ppm to low) can result in missing singals or to peak splitting, the latter leads to quantification errors, which has obvious implications for the statistical analysis. Peak detection errors are not obvious further downstream, e.g., when using PCA for quality control assessment.
+All centWave parameters require fine-tuning for each assay type and mass analyser. 
+
+
+The following illustrates all xcms parameters.  
 
 
 Explanation of parameters:
 
-| Parameter | Explanation | Effect |
-|-----------|-------------|--------|
-|ppm| signal deviation im m/z dimension| |
-|peakwidht | range peak elution times in seconds | |
-| snthresh | signals below this locally defined value are not considered as signals| |
-|pre-filter| Peak definition: how many data points (*n*) should be above a certain intensity threshold (*I*)| |
-|mzCenterFun| | |
-|integrate| | |
-|mzdiff| Closeness of two signals in mz dimension| |
-|fitgauss| Peak fitting using Gauss distribution| |
-|scanrange| limit peak detection to a certain scanrange (in seconds) | |
-|noise| Intensity threshold, values below are considered instrument noise | |
+| Parameter | Explanation | Pre-adjusted value |
+|-----------|-------------|:--------:|
+|[ppm](#ppm)| signal deviation in m/z dimension| 25 |
+|[peakwidht](#peakwidth) | range peak elution times in seconds | 20-50 s |
+|[snthresh](#snthresh) | signals below this locally defined value are not considered as signals| 10 |
+|[prefilter](#prefilter)| Peak definition: how many data points (*n*) should be above a certain intensity threshold (*I*)| *k*=3, *I*=100 |
+|[mzdiff](#mzdiff)| Closeness of two signals in mz dimension |-0.001 |
+|[noise](#noise)| Intensity threshold, values below are considered instrument noise | 0 |
+|integrate| Integration method: 1 - Mexican hat filtered data (less exact), 2- real data (prone to noise)| 1  |
+|mzCenterFun| Function to calculate m/z center of chromatographic peak | weighted Mean (wMean)  |
+|fitgauss| Peak fitting using Gauss distribution| FALSE |
 
 
+## ppm
+![](../../www/pars/ppm.png)
+
+## mzdiff
+![](../../www/pars/mzdiff.png)
+
+## noise
+![](../../www/pars/noise.png)
+
+## snthresh
+![](../../www/pars/snthresh.png)
+
+## peakwidth
+![](../../www/pars/peakwidth.png)
+
+## prefilter
+![](../../www/pars/prefilter.png)
