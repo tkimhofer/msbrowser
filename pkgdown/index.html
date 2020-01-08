@@ -54,15 +54,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="tutorials/pars.html">Explanation of Parameters</a>
+      <a href="articles/pars.html">Explanation of Parameters</a>
     </li>
     <li>
-      <a href="tutorials/character.html">Algorithm Characterisation</a>
+      <a href="articles/character.html">Algorithm Characterisation</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -85,84 +82,17 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><img src="www/MSbrowser_logo_tricolour_alpha.png" alt="MSbrowser Logo"></p>
-<p><a href="http://hits.dwyl.io/tkimhofer/msbrowser"><img src="http://hits.dwyl.io/tkimhofer/msbrowser.svg" alt="HitCount"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
-<p><strong>MSbrowser</strong> is an R package providing a web-browser-based application for <strong>parameter fine-tuning</strong> of <strong>xcms peak picking algorithms</strong>.</p>
-<p>The app is designed for fast and easy xcms parameter testing and peak picking performance optimisation. Interactive visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking algorithm parameters have on peak picking performance.</p>
-<p><strong>CentWave parameters:</strong> <em>ppm, peakwidth, snthresh, prefilter, mzCenterFun, integrate, mzdiff, fitgauss, scanrange, noise.</em> All of these parameters require fine-tuning for each assay type and mass analyser. Too stringet parameter values (e.g., ppm to low) can lead to missing out on singals or to peak splitting, the latter leads to quantification errors, which has obvious implications for the statistical analysis. Peak detection errors are not always obvious when using PCA for quality control assessment.</p>
-<table class="table">
-<colgroup>
-<col width="34%">
-<col width="40%">
-<col width="25%">
-</colgroup>
-<thead><tr class="header">
-<th>Parameter</th>
-<th>Explanation</th>
-<th>Effect</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>ppm</td>
-<td>signal deviation im m/z dimension</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>peakwidht</td>
-<td>range peak elution times in seconds</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>snthresh</td>
-<td>signals below this locally defined value are not considered as signals</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>pre-filter</td>
-<td>Peak definition: how many data points (<em>n</em>) should be above a certain intensity threshold (<em>I</em>)</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>mzCenterFun</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>integrate</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>mzdiff</td>
-<td>Closeness of two signals in mz dimension</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>fitgauss</td>
-<td>Peak fitting using Gauss distribution</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>scanrange</td>
-<td>limit peak detection to a certain scanrange (in seconds)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>noise</td>
-<td>Intensity threshold, values below are considered instrument noise</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>parameter values can have profound negative impact on data analysis. Find out yourself, perform a peak picking quality assessment with MSbrowser!</p>
+<p><img src="www/MSbrowser_logo_tricolour_alpha.png"></p>
+<p><a href="http://hits.dwyl.io/tkimhofer/msbrowser"><img src="http://hits.dwyl.io/tkimhofer/msbrowser.svg" alt="HitCount"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://travis-ci.org/rstudio/rmarkdown"><img src="https://travis-ci.org/rstudio/rmarkdown.svg?branch=master" alt="Build Status"></a></p>
+<p><strong>MSbrowser</strong> is an R package providing a web-browser-based application for <strong>parameter fine-tuning</strong> of <strong>xcms peak picking algorighms</strong>.</p>
+<p>The app is designed for fast and easy xcms parameter testing and peak picking performance optimisation. Different visualisation allow to gain insight into the LC-MS data structure and the effects different peak picking algorithm parameters have on peak picking performance.</p>
 <p>MSbrowser is implemented in a user-friendly web-application framework that can be executed on a local computer running R or assessed via a web-link.</p>
 <div id="installation-and-app-launching" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#installation-and-app-launching" class="anchor"></a>Installation and app launching</h1></div>
-<p>MSbrowser is a simple R package that can be installed with the following R commands.</p>
-<p>` if(!‘devtools’ %in% installed.packages()[,1]) install.packages(‘devtools’)</p>
-<p>devtools::install_github(‘tkimhofer/msbrowser’)</p>
-<p>msbrowser::startApp() `</p>
+<p>Installation is performed with the following R commands</p>
+<p>`` if(!‘devtools’ %in% installed.packages()[,1]) install.packages(‘devtools’) devtools::install_github(‘tkimhofer/msbrowser’)</p>
+<p>msbrowser::startApp() ``</p>
 </div>
 <div id="documentation" class="section level1">
 <h1 class="hasAnchor">
@@ -177,7 +107,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/tkimhofer/msbrowser">https://​github.com/​tkimhofer/​msbrowser</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/tkimhofer/msbrowser/issues">https://​github.com/​tkimhofer/​msbrowser/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>

@@ -1,2 +1,3 @@
 ^msbrowser1\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$

@@ -1,6 +1,6 @@
 url: https://tkimhofer.github.io/msbrowser/
 
-destination: "pkgdown/"
+destination: "docs/"
 
 template:
   params:
@@ -9,22 +9,20 @@ template:
 navbar:
   title: MSbrowser
   structure:
-    left: [home, reference,tutorials]
+    left: [home, tutorials, reference]
     right: [github]
   components:
     home:
       icon: fa-home fa-lg
       href: index.html
     reference:
-      text: Docu
+      text: Documentation
       href: reference/index.html
     tutorials:
       text: "xcms centWave"
       menu:
         - text: Explanation of Parameters
-          href: tutorials/pars.html
-        - text: Algorithm Characterisation
-          href: tutorials/character.html
+          href: articles/pars.html
     github:
       icon: fa-github
       href: https://github.com/tkimhofer/msbrowser

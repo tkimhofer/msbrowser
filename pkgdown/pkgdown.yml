@@ -3,6 +3,6 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles: []
 urls:
-  reference: https://tkimhofer.github.io/msbrowser//reference
-  article: https://tkimhofer.github.io/msbrowser//articles
+  reference: https://tkimhofer.github.io/msbrowser/reference
+  article: https://tkimhofer.github.io/msbrowser/articles
 
