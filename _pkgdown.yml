@@ -5,7 +5,7 @@ destination: "docs/"
 template:
   params:
     bootswatch: cosmo
-    ganalytics: UA-78685833-2
+    ganalytics: UA-78685833-4
 navbar:
   title: MSbrowser
   structure:
