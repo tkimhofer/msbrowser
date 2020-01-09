@@ -5,7 +5,7 @@
 #' @import shiny
 # @import shinyjs
 # @importFrom shinyjs hide hideElement show showElement toggle toggleElement onclick
-#' @importFrom ggplot2 ggplot aes geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
 #' @import plyr
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
 #' @importFrom colorRamps matlab.like2
@@ -334,6 +334,7 @@ server <- function(input, output, session) {
 
     observeEvent(input$go_xic, {
       #browser()
+      updateTabsetPanel(session, inputI='msexpl', selected = 'ichron')
       xic_ra=sort(input$xic_ra)
       if(all(is.numeric(xic_ra))){
         if(length(xic_ra)==2 & all(!is.na(xic_ra)) &  xic_ra[2]!=xic_ra[1]){
@@ -364,12 +365,9 @@ server <- function(input, output, session) {
           )
           xic$hoverlab=paste(round(xic$scantime, 2), 's')
           if(length(pars$xic_ra)==3){
-            tit=paste0('<b>Extracted ion chromatogram</b> m/z ', round(pars$xic_ra[3], 4),
-                       ' (&plusmn;', pars$ppm_change/2, ' ppm)<br>(Exact mass range:',
-                       round(pars$xic_ra[1], 3), '-', round(pars$xic_ra[2], 3), ' m/z)')
+            tit=paste0('<b>Extracted ion chromatogram</b><br> m/z ', round(pars$xic_ra[3], 4),' (&plusmn;', pars$ppm_change/2, ' ppm)')
           }else{
-            tit=paste0('<b>Extracted ion chromatogram</b><br>(Exact mass range:',
-                       round(pars$xic_ra[1], 3), '-', round(pars$xic_ra[2], 3), ' m/z)')
+            tit=paste0('<b>Extracted ion chromatogram</b><br>', round(pars$xic_ra[1], 3), '-', round(pars$xic_ra[2], 3), ' m/z')
           }
           g1=plot_ly(source='pb') %>%
             add_trace(data=xic, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(255, 88, 120,1)', width=1),
@@ -413,7 +411,7 @@ server <- function(input, output, session) {
 
           plot_ly(data=df_scan, source='pc') %>%
             add_segments(x = ~mz, xend = ~mz, y = 0, yend = ~Int,
-                         name=paste('<b>Mass spectrum</b> (single scan at', round(scantime, 2), 's)'),
+                         name=paste('<b>Mass spectrum</b><br>Single scan at', round(scantime, 2), 's'),
                          line=list(color=~'black', width=0.8),
                          text=~hover,  hoverinfo = 'text') %>%
             add_text(data=df_scan[idx,], x = ~mz, y=~Int, text = ~lab, textposition = "top right", showlegend=F) %>%
@@ -449,6 +447,8 @@ server <- function(input, output, session) {
           paste('Selected signal: scantime', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
         })
 
+        removeUI('#proceed')
+
         if(ui_ind$target==0){
           insertUI(
             selector='#div_input',
@@ -470,24 +470,24 @@ server <- function(input, output, session) {
 
 
     # generate next window after click on move1
-#
-#     observeEvent({
-#       input$move1
-#     }, {
-#
-#       if(ui_ind$rawData==0){
-#         insertTab(
-#           inputId='msexpl',
-#           tab=uiT_rawData,
-#           target='ichron',
-#           position='after',
-#           select=T
-#         )
-#
-#         tab_ind$rawData=1
-#       }
-#
-#     })
+    #
+    #     observeEvent({
+    #       input$move1
+    #     }, {
+    #
+    #       if(ui_ind$rawData==0){
+    #         insertTab(
+    #           inputId='msexpl',
+    #           tab=uiT_rawData,
+    #           target='ichron',
+    #           position='after',
+    #           select=T
+    #         )
+    #
+    #         tab_ind$rawData=1
+    #       }
+    #
+    #     })
 
 
 
@@ -543,8 +543,9 @@ server <- function(input, output, session) {
             position='after',
             select=T
           )
-
           ui_ind$rawData=1
+        }else{
+          updateTabsetPanel(session, inputI='msexpl', selected = 'rawData')
         }
 
         if(input$target_input=='man'){
@@ -649,11 +650,11 @@ server <- function(input, output, session) {
           updateNumericInput(session, 'in_rt', value = icst_cname$rt[idx])
           output$compound_info=renderText({paste0('rt=',icst_cname$rt[idx], ' s, m/z=', icst_cname$mz[idx])})
 
-            pars$pp.mz=icst_cname$mz[idx]
-            #pars$pp.mz.ra=input$in_mz_ws
+          pars$pp.mz=icst_cname$mz[idx]
+          #pars$pp.mz.ra=input$in_mz_ws
 
-            pars$pp.rt=icst_cname$rt[idx]
-            #pars$pp.rt.ra=input$in_rt_ws
+          pars$pp.rt=icst_cname$rt[idx]
+          #pars$pp.rt.ra=input$in_rt_ws
 
         }
       }, ignoreNULL = T, ignoreInit = T)
@@ -679,6 +680,7 @@ server <- function(input, output, session) {
     # peak picking
     fgt <- eventReactive(input$pickpeak1, {
       #showTab(inputId = "msexpl", target = "ppick", select=T)
+      updateTabsetPanel(session, inputI='msexpl', selected = 'ppick')
       message('Performing peak picking...')
       removeNotification('nopeaks')
       raw_xcms=raw_data()[[2]] # this is xcms object
@@ -703,12 +705,16 @@ server <- function(input, output, session) {
                )
                peaktbl=as.data.frame(peaktbl)
 
-               codeRI=paste0('xcms_data=xcmsRaw(filename=', pars$msfile, ' , profstep = 0, includeMSn = F, mslevel = 1)')
-               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
+               codeRI=paste0('xcms_data=xcmsRaw(filename=\"', pars$msfile, '\" , profstep = 0, includeMSn = F, mslevel = 1)')
+               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun="', input$in_mzCentFun, '", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
 
                cat(codeRI, '\n')
                cat(codePP, '\n')
 
+
+               # output$centwave_pars=renderText({paste0('ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')})
+
+               output$centwave_pars<-renderText({codePP})
 
 
 
@@ -822,7 +828,6 @@ server <- function(input, output, session) {
             theme_bw()+
             scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
             labs(x='Scantime (s)', y='m/z', colour='Intensity')
-          print(input$raw_trans)
 
           if(pars$trans_plot=='none'){
             g2=g2+scale_colour_gradientn(colours=matlab.like2(10))

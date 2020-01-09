@@ -51,18 +51,18 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    xcms centWave
+    centWave Resources
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/pars.html">Explanation of Parameters</a>
+      <a href="articles/pars.html">Description of Parameters</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="reference/index.html">Documentation</a>
+  <a href="reference/index.html">App Function</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -87,27 +87,27 @@
 
 <p><img src="www/MSbrowser_logo_tricolour_alpha.png"></p>
 <p><a href="http://hits.dwyl.io/tkimhofer/msbrowser"><img src="http://hits.dwyl.io/tkimhofer/msbrowser.svg" alt="HitCount"></a> <a href="https://travis-ci.org/rstudio/rmarkdown"><img src="https://travis-ci.org/rstudio/rmarkdown.svg?branch=master" alt="Build Status"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
-<p><strong>MSbrowser</strong> is an R package providing a web-browser-based application for <strong>parameter fine-tuning</strong> of <strong>xcms peak picking algorighms</strong>.</p>
+<p><strong>MSbrowser</strong> is an R package providing a web-browser-based application for <strong>parameter fine-tuning</strong> of <strong>xcms peak picking algorithms</strong>.</p>
 <p>The app is designed for fast and easy xcms parameter testing and peak picking performance optimisation. Different visualisation allow to gain insight into the LC-MS data structure and the effects different peak picking algorithm parameters have on peak picking performance.</p>
 <p>MSbrowser is implemented in a user-friendly web-application framework that can be executed on a local computer running R or assessed via a web-link.</p>
 <div id="installation-and-launch" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#installation-and-launch" class="anchor"></a>Installation and launch</h1></div>
-<p>Installation is performed with the following R commands</p>
+<p>Installation is performed with the following R commands:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install devtools (if not already installed)</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="cf">if</span>(<span class="op">!</span><span class="st">'devtools'</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span>()[,<span class="dv">1</span>]) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'devtools'</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># install MSbroswer</span></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">'tkimhofer/msbrowser'</span>)</a></code></pre></div>
-<p>Once successfully installed, MSbrowswer can be started as follows</p>
+<p>Once successfully installed, MSbrowser can be launched as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">msbrowser<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/msbrowser/man/startApp.html">startApp</a></span>()</a></code></pre></div>
-<p>A new web-browser window opens with the MSbrowser user interface.</p>
+<p>A new web-browser window opens with the <strong>MSbrowser</strong> user interface.</p>
 </div>
 <div id="documentation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h1>
-<p>Provided is a short video tutorial that walks through the different functionalities of MS browser, provides a step-by-step guidance for first time user.</p>
-<p>Descriptions of all <em>centWave</em> peak picking paramters can be found under the <strong>xcms CentWave</strong> option in the menu above.</p>
+<p>Provided is a short video tutorial that walks through the different functionalities of <strong>MSbrowser</strong>, provides a step-by-step guidance for first time user.</p>
+<p>Descriptions of all <em>centWave</em> peak picking parameters can be found under the <strong>xcms centWave</strong> option in the menu above.</p>
 </div>
 
   </div>

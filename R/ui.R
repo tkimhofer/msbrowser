@@ -90,7 +90,7 @@ ui <- fluidPage(
   fluidRow(
 
     br(),
-    hr(),
+    br(),
     br(),
     column(11, offset=0.5,
                   h5(a(id='Info', icon("github"), 'Report an issue or suggest to add a feature', href='https://github.com/tkimhofer/msbrowser/issues', target="_blank")), h5(a(id='author', icon("external-link-alt"), 'About the developer', href='https://tkimhofer.com', target="_blank"), align='right')), align='right')

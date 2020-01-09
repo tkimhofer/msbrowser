@@ -10,11 +10,6 @@ icst=read.table('inst/extdata/signalDB.csv', sep=',', stringsAsFactors = F, comm
 
 icst=icst[icst$assay!='' & !is.na(icst$assay),]
 
-#icst=dlply(icst, .(assay))
-
-# logoF=system.file('www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
-# print(logoF)
-
 
 ui_par_centwave=fluidRow(
   column(12, offset=0.2,
@@ -95,12 +90,13 @@ uiT_rawData=tabPanel(title="Raw Data",  value='rawData',
                      add_busy_bar(color = "#FBDD00")
 )
 
-uiT_ppick=tabPanel("Detected Signals",  value='ppick',
+uiT_ppick=tabPanel("Detected Features",  value='ppick',
                    withSpinner(plotlyOutput('pp1', width = "100%", inline = T), type=4),
+                   textOutput('centwave_pars'),
                    add_busy_bar(color = "#FBDD00")
 )
 
-uiT_peaks=tabPanel("Signal Table",  value='peaks',
+uiT_peaks=tabPanel("Feature Table",  value='peaks',
                    column(8, align='center',
                           br(),
                           fluidRow(DTOutput("PeakTbl", width='auto', height='auto')),
@@ -120,7 +116,7 @@ uiT_peaks=tabPanel("Signal Table",  value='peaks',
 
 
 uiE_div_xic=div(id ="div_xic", fluidRow(
-  column(8,  numericRangeInput(inputId='xic_ra', label=NA, value=c(500), separator = " to ", width='100%')),
+  column(8,  numericRangeInput(inputId='xic_ra', label=NA, value=c(200, 201), separator = " to ", width='100%')),
   column(2,  actionButton('go_xic', 'Go'))
 ))
 
@@ -134,7 +130,11 @@ uiE_div_summary_file=div(id ="summary_file",
                          ),
                          br(),
                          column(12, offset = 0.7, align='left',
-                                checkboxInput('imp_xic', 'Select XIC mass range manually', value = F))
+                                checkboxInput('imp_xic', 'Select m/z range for XIC manually', value = F)),
+                         br(),
+                         div(id='proceed',
+                         column(12, offset = 0.7, align='center',
+                                p(tags$strong('Click on signal in mass spectrum to proceed!'))))
 )
 
 uiE_div_inp_col=div(id ="div_input_collapse", fluidRow(
@@ -241,31 +241,35 @@ uiE_div_ppick=div(id ="div_ppick",
                                       h4('Parameters'),
                                       helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set (most importantly: ppm, rt range and noise level)."),
                                       hr(),
-                                      column(4, numericInput(inputId='in_mzdev', label=paste0('m/z deviation (ppm)'), value=25),
+                                      column(4, numericInput(inputId='in_mzdev', label=paste0('m/z deviation [ppm]'), value=25),
                                              br(),
-                                             sliderInput('in_rtrange', 'Peakwidth: RT range (s)', min=1, max=100, step = 1, value= c(20, 50)),
+                                             sliderInput('in_rtrange', 'Elution time range (s) [peakwidth] )', min=1, max=100, step = 1, value= c(20, 50)),
                                              br(),
-                                             numericInput('in_mzdiff', label = 'minimum diff m/z overlap', value = -0.001)
+                                             numericInput('in_mzdiff', label = 'Minimum diff m/z overlap [mzdiff]', value = -0.001),
+
+                                             br(),
+                                             selectInput('in_integrate', label='Integration method [integrate]', choices = c('Descend Mexican Hat'='1', 'Real MS data'='2'), selected='1'),
+
+                                             checkboxInput('in_fitgauss', label='Fit Gaussian to each peak [fitgauss]', value = F)
                                       ),
                                       column(4,
                                              numericInput(inputId='in_noise', label='Noise', value=0),
                                              br(),
-                                             numericInput(inputId='in_sn', label='Signal/Noise threshold', value=10),
+                                             numericInput(inputId='in_sn', label='Signal/Noise threshold [snthresh]', value=10),
                                              br(),
                                              selectInput('in_mzCentFun', label='m/z center function', choices = c('Weighted Mean'='wMean', 'Mean'='mean','Peak apex'='apex', 'Weighted mean of peak apex and neigbouring scans'='wMeanApex3', 'Mean of peak apex and neigbouring scans'='meanApex3'))
                                       ),
                                       column(4,
                                              wellPanel(h5("Pre-filter"),
-                                                       numericInput('in_prefilter_k', label = 'Number of consecutive scans...', min = 0, max=100, value = 3),
+                                                       numericInput('in_prefilter_k', label = 'Number of scans [k]', min = 0, max=100, value = 3),
                                                        br(),
-                                                       numericInput('in_prefilter_I', label = '...exceeding Intensity of', min = 0, max=10000000, value = 100)
-                                             ),
-                                             br(),
-                                             selectInput('in_integrate', label='Integration method', choices = c('Descend Mexican Hat'='1', 'Real MS data'='2'), selected='1'),
+                                                       numericInput('in_prefilter_I', label = 'Intensity [I]', min = 0, max=10000000, value = 100)
+                                             )
+                                      )),
+                                    fluidRow(
 
-                                             checkboxInput('in_fitgauss', label='Fit Gaussian to each peak', value = F)
-
-                                      ))
+                                      h4(a('Need parameter help?', href='https://tkimhofer.github.io/msbrowser/articles/pars.html', target="_blank"))
+                                    )
                                   ),
                                   conditionalPanel(
                                     condition="input.in_pickMethod=='matchedFilter'",
@@ -319,7 +323,8 @@ uiE_div_ppick=div(id ="div_ppick",
 
                            )
                   ),
-                  actionButton('pickpeak1', label='Pick Peaks!'))
+                  actionButton('pickpeak1', label='Pick Peaks!', icon("thumbs-up"),
+                               style="color: #fff; background-color: #33A2FF; border-color: #33A2FF"))
 
 
 

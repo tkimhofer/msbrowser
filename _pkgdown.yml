@@ -9,19 +9,19 @@ template:
 navbar:
   title: MSbrowser
   structure:
-    left: [home, tutorials, reference]
+    left: [home, tutorials, reference, data]
     right: [github]
   components:
     home:
       icon: fa-home fa-lg
       href: index.html
     reference:
-      text: Documentation
+      text: "App Function"
       href: reference/index.html
     tutorials:
-      text: "xcms centWave"
+      text: "centWave Resources"
       menu:
-        - text: Explanation of Parameters
+        - text: "Description of Parameters"
           href: articles/pars.html
     github:
       icon: fa-github

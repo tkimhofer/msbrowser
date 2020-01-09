@@ -1,4 +1,4 @@
-#' @title  launch the msbrowser app
+#' @title  Launch MSbrowser application
 #'
 #' @export startApp
 #'
