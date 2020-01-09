@@ -37,7 +37,7 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 # Documentation 
-MSbrowswer has an intuitive worflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the page menu above.
+MSbrowswer has an intuitive worflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the page menu above. All open data file formats are accepted. File conversion from vendor format can be performed with [ProteoWizard](http://proteowizard.sourceforge.net/).
 
 
 # Feedback
