@@ -1,10 +1,14 @@
 ![](www/MSbrowser_logo_tricolour_alpha.png)
 
-[![HitCount](http://hits.dwyl.io/tkimhofer/msbrowser.svg)](http://hits.dwyl.io/tkimhofer/msbrowser)
+# Welcome!
+
 [![Build Status](https://travis-ci.org/rstudio/rmarkdown.svg?branch=master)](https://travis-ci.org/rstudio/rmarkdown)
+[![HitCount](http://hits.dwyl.io/tkimhofer/msbrowser.svg)](http://hits.dwyl.io/tkimhofer/msbrowser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**MSbrowser** is web-browser-based application for **parameter fine-tuning** of **xcms peak picking algorithms**. 
+
+**MSbrowser is web-browser-based application for parameter fine-tuning of xcms peak picking algorithms**. 
+
 
 The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance. 
 
@@ -32,9 +36,9 @@ msbrowser::startApp()
 A new web-browser window opens with the **MSbrowser** user interface.
 
 
-# Documentation
-A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the menu above.
+# Documentation 
+MSbrowswer has an intuitive worflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the page menu above.
 
 
 # Feedback
-Do you want to get involved in improving the app? [Drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)
+Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!
