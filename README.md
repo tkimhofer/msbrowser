@@ -14,7 +14,7 @@ The app is designed for fast and easy parameter testing to optimise xcms peak pi
 
 MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.
 
-![](www/GUI.png)
+![](../www/GUI.png)
 
 
 # App installation and launch
