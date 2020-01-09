@@ -10,7 +10,10 @@ The app is designed for fast and easy parameter testing to optimise xcms peak pi
 
 MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.
 
-# Installation and launch
+![](../www/GUI.png)
+
+
+# App installation and launch
 Installation is performed with the following R commands:
 
 ```R
@@ -30,4 +33,8 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 # Documentation
-Descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the menu above.
+A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the menu above.
+
+
+# Feedback
+Do you want to get involved in improving the app? [Drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)
