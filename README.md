@@ -18,11 +18,17 @@ MSbrowser is implemented in a user-friendly web-application framework that can b
 
 
 # App installation and launch
+
 Installation is performed with the following R commands:
 
 ```R
-# install devtools (if not already installed)
-if(!'devtools' %in% installed.packages()[,1]) install.packages('devtools')
+# install dependencies from CRAN (devtools and xcms)
+deps=c('devtools', 'BiocManager')
+id=deps %in% installed.packages()[,1]
+if(any(!id)) install.packages(deps[id])
+
+# install xcms
+if(!required(xcms)){BiocManager::install('xcms')}
 
 # install MSbroswer
 devtools::install_github('tkimhofer/msbrowser')
@@ -34,6 +40,8 @@ Once successfully installed, MSbrowser can be launched with the following R-term
 msbrowser::startApp()
 ```
 A new web-browser window opens with the **MSbrowser** user interface.
+
+
 
 
 # Documentation 
