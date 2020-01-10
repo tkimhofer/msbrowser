@@ -1,10 +1,10 @@
-# xcms ***<span style="color:red">centWave</span>*** Parameters
+# ***centWave*** Parameters
 
 *ppm, peakwidth, snthresh, prefilter, mzCenterFun, integrate, mzdiff, fitgauss, scanrange, noise.*  
 
 &nbsp;
 
-All xcms *centWave* parameters require fine-tuning for each assay type and mass analyser. The following provides a short description of each parameter and its relevance in the *centWave* algorithm.  
+All centWave parameters require fine-tuning for each assay type and mass analyser. The following provides a short description of each parameter value and it's relevance in the *centWave* algorithm.  
 
 &nbsp;
 
@@ -13,7 +13,7 @@ All xcms *centWave* parameters require fine-tuning for each assay type and mass 
 |[ppm](#ppm-allowed-signal-deviation-in-mz-dimension)| Allowed signal deviation in m/z dimension | 25 |
 |[peakwidth](#peakwidth-range-of-peak-elution-times) | Range of peak elution times (in seconds) | 20-50 s |
 |[snthresh](#snthresh-threshold-of-signal-to-noise-ratio) | Threshgold signal to noise ratio | 10 |
-|[prefilter](#prefilter-number-of-data-points-exceeding-a-certain-intensity-threshold)| Peak definition: Number of data points (*k*) exceeding a certain intensity threshold (*I*)| *k*=3, *I*=100 |
+|[prefilter](#prefilter-number-of-data-points-k-exceeding-a-certain-intensity-threshold-i)| Peak definition: Number of data points (*n*) exceeding a certain intensity threshold (*I*)| *k*=3, *I*=100 |
 |[mzdiff](#mzdiff-accepted-closeness-of-two-signals-in-mz-dimension)| Accepted closeness of two signals in m/z dimension |-0.001 |
 |[noise](#noise-intensity-cut-off-values-below-are-not-considered)| Intensity cut-off, values below are considered as instrument noise | 0 |
 |[mzCenterFun](#mzcenterfun-mz-summary-statistic-of-a-peak)| Function to calculate the m/z center of a chromatographic peak | weighted Mean (wMean)  |
@@ -31,7 +31,7 @@ All xcms *centWave* parameters require fine-tuning for each assay type and mass 
 This *centWave* parameter *ppm* specifies the tolerance in m/z values for defining a signal in m/z dimensions. This parameter is closely related to the mass accuracy of the mass spectrometer, which is traditionally expressed in parts per million (ppm). 
 
 <p align="center">
-![](../../www/pars1/ppm_formula.png)
+![](../www/pars1/ppm_formula.png)
 </p>
 
 Higher *ppm* values allow more m/z value variations and lead to detection of a higher number of potential peaks - increasing false positives. Lower values can lead to missing out on many signals, since the measured mass values differ from the true mass more than expected. 
@@ -39,7 +39,7 @@ Higher *ppm* values allow more m/z value variations and lead to detection of a h
 The illustration below shows a peak picking example using the same LC-MS data, where *ppm* paramter values was changed and all other *centWave* paramters were held constant.
 
 <p align="center">
-![](../../www/pars1/ppm_comp.png)
+![](../www/pars1/ppm_comp.png)
 </p>
 
 &nbsp; 
@@ -52,12 +52,12 @@ The illustration below shows a peak picking example using the same LC-MS data, w
 ## ***<span style="color:red">mzdiff</span>***: Accepted closeness of two signals in m/z dimension
 The *mzdiff* parameter specifies the allowed minimum distance of two co-eluting peaks in m/z dimension. An *mzdiff* value of 1 indicates that the m/z value of two signals with overalpping scan times be at least 1 in order for both signals to be included in the result peak list. 
 
-CentWave's *mzdiff* parameter can also take negative values, indicating that the same data point can be allocated to two different peaks. Assigning negative *mzdiff* values has implications for further downstream processing steps, e.g., establishing correspondence of overlapping peaks across different samples. Higher *mzdiff* paramter values lead to detecting more potential singals, lower values reduce the number of signals detected. 
+The centwave *mzdiff* parameter can also take negative values, indicating that the same data point can be allocated to two different peaks. Assigning negative *mzdiff* values has implications for further downstream processing steps, e.g., establishing correspondence of overlapping peaks across different samples. Higher *mzdiff* paramter values lead to detecting more potential singals, lower values reduce the number of signals detected. 
 
 Below is an example using the same data processed with *mzdiff* values of 1 and 0.01. 
 
 <p align="center">
-![](../../www/pars1/mzdiff.png)
+![](../www/pars1/mzdiff.png)
 </p>
 
 &nbsp; 
@@ -73,7 +73,7 @@ The ion detection in most mass spectrometers is accompolished with electron mult
 The noise structure of LC-MS spectra generated with mass specs of different types and from different vendors (incl. software updates) can be inherently different. Therefore, this parameter requires careful adjustment for each mass spectrometer setup. Lower values increases *centWave* computation time, higher values lead to missing out on true data signals. 
 
 <p align="center">
-![](../../www/pars1/noise.png)
+![](../www/pars1/noise.png)
 </p>
 
 &nbsp; 
@@ -87,13 +87,13 @@ The noise structure of LC-MS spectra generated with mass specs of different type
 Closely related to the noise structure is the *snthresh* parameter, allowing to set a minimal signal to noise ratio (S/N) for peaks to be detected. *snthresh* builds on an S/N estimate that defines noise intensities locally in the scan time dimension:
 
 <p align="center">
-![](../../www/pars1/snthresh_formula.png)
+![](../www/pars1/snthresh_formula.png)
 <p/>
 
 This S/N definition can be problematic when the noise structure is not evenly distributed across the m/z dimension. The example below shows that higher intensity signals are discarded with higher *snthresh* values, most likely due to noisy and high intensity data points in proximity to the signal's m/z trace. The final peak list using a high *sntrhes* parameter value contains signals of low intensities, which is somewhat unexpected.
 
 <p align="center">
-![](../../www/pars1/snthresh_comp.png)
+![](../www/pars1/snthresh_comp.png)
 <p/>
 
 &nbsp; 
@@ -111,7 +111,7 @@ The example below shows the results of *centWave* peak picking performed with di
 An unexpected algorithm behaviour was observed when setting the minimal elution time to a value of 1, which resulted in peak splitting of a coherent signal which was not split with higher *peakwidth* values. 
 
 <p align="center">
-![](../../www/pars1/peakwidth.png)
+![](../www/pars1/peakwidth.png)
 <p/>
 
 &nbsp; 
@@ -121,13 +121,13 @@ An unexpected algorithm behaviour was observed when setting the minimal elution 
 &nbsp;
 
 
-## ***<span style="color:red">prefilter</span>***: Number of data points exceeding a certain intensity threshold
-The *prefilter* parameter is similar to the *noise* parameter, but instead of specifying a general intensity cut-off, it specifies a minimal number of consecutive data points in scant time dimension (*k*) that exeed an intensity value (*I*) for a feature. A feature is discareded if it is made up of by less than *k* data points of intensity *I*.
+## ***<span style="color:red">prefilter</span>***: Number of data points (*k*) exceeding a certain intensity threshold (*I*)
+The *prefilter* parameter is similar to the *noise* parameter, but instead of specifying an intensity cut-off, it specifies a minimal number of data points (*k*) that exeed an intensity value (*I*). A signal is discareded if there it is represented by less than *k* data points of intensity *I*.
 
-Lower *prefilter* paramter values perform less filtering of signals and increase computation time. Higher values shorten compoutation time but filter more signals based on their intensity. The optimal values of this paramter strongly depend on what a well-behavied LC-MS signal looks like.
+Lower *prefilter* paramter values perform less filtering of signals with low intensity / scantime, and therefore, reduce computation time. The values of this paramter strongly depend on the characteristics of well-behavied LC-MS signals. This parameter should not be set to stringent as it can lead to discarding true positive signals.
 
 <p align="center">
-![](../../www/pars1/prefilter.png)
+![](../www/pars1/prefilter.png)
 <p/>
 
 &nbsp; 
@@ -141,7 +141,7 @@ Lower *prefilter* paramter values perform less filtering of signals and increase
 In the final LC-MS feature table, each feature is characterised by a scan time and m/z value. The latter represents a summary statistic of all data points defining a feature, where each one has a slightly different m/z value (see also *ppm* parameter). The *mzCenterFun* parameter specifies the m/z summary statistic of a feature. In practice, the different *mzCenterFun* options have very little impact.
 
 <p align="center">
-![](../../www/pars1/mzCenterFun.png)
+![](../www/pars1/mzCenterFun.png)
 </p>
 
 &nbsp; 
@@ -155,16 +155,20 @@ In the final LC-MS feature table, each feature is characterised by a scan time a
 Signal quantification is performed by integrating the area under a peak. The *integrate* function specifies if the non-transformed data should be used for peak integration or if a wavelet-transform filtered data should be used (upper and lower panel, respectively, in the plot below). The former is sentive to outliers and noise, since *centWave* defines left and right peak boundaries through change in slope (see Figure below). The latter is less sensitive to noise, however, the wavelet-filtered data is less exact and can lead to signal mis-representations.
 
 <p align="center">
-![](../../www/pars1/integrate.png)
+![](../www/pars1/integrate.png)
 </p>
 
+&nbsp; 
+
+&nbsp;
+
+&nbsp;
 
 
 ## ***<span style="color:red">scanrange</span>***: Perform peak picking in a specific scan range
 The *scanrange* parameter allows to select an scan time interval for peak picking of the entire m/z range. Spectral data outside the specified interval are not considered for peak picking. This parameter is usually not specified in untargeted metabolic profiling studies. The scanrange paramter takes scan ID values (it is not specified in seconds).
 
 <p align="center">
-![](../../www/pars1/scanrange.png)
+![](../www/pars1/scanrange.png)
 </p>
-
 
