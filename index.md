@@ -45,8 +45,7 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 # Documentation 
-MSbrowser has an intuitive workflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the page menu above. All open data file formats are accepted. File conversion from vendor format can be performed with [ProteoWizard](http://proteowizard.sourceforge.net/).
-
+MSbroswer has an intuitive workflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters and further documentation can be found at the official MSbrowser homepage: **https://tkimhofer.github.io/msbrowser/**.
 
 # Feedback
 Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!
