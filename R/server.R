@@ -59,9 +59,9 @@ server <- function(input, output, session) {
     div_target_collapse=1
   )
 
-  # suppress warnings
-  storeWarn<- getOption("warn")
-  options(warn = -1)
+  # # suppress warnings
+  # storeWarn<- getOption("warn")
+  # options(warn = -1)
 
 
   observeEvent(input$clicked_text, {
@@ -115,23 +115,26 @@ server <- function(input, output, session) {
     observeEvent(input$fileexample, {
       # print(logoF)
       removeNotification(id='nofile')
-      exF=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
 
-
-
+      # check if file was unzipped previously
+      exF=system.file(file.path('extdata', 'mzXML', 'Urine_HILIC_ESIpos.mzXML', fsep = .Platform$file.sep), package='msbrowser')
+      print(exF)
       output$msfile <- renderText({
         'Example file: HILIC-ESI(+)-MS of a urine sample'
       })
+      # in case it can't find exF (hasn't been unzipped)
       if(exF=='') {
-
-        exFzip=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML.zip', package = "msbrowser")
+        # locate file
+        zipF=file.path('extdata', 'mzXML', 'Urine_HILIC_ESIpos.mzXML.zip', fsep = .Platform$file.sep)
+        exFzip=system.file(zipF, package = "msbrowser")
         if(exFzip==''){message('No example file installed'); }
+
         cat('Unzipping LC-MS example file ...')
-        unzip(exFzip, exdir=gsub('Urine_HILIC_ESIpos\\.mzXML\\.zip', '', exFzip))
-        pars$msfile=system.file('extdata/mzXML/Urine_HILIC_ESIpos.mzXML', package = "msbrowser")
+        unzip(exFzip, exdir=dirname(exFzip))
+        pars$msfile=gsub('\\.zip', '', exFzip)
         cat('...done!\n')
         cat('Reading example file...')
-      }
+      }else{pars$msfile=exF}
     }, ignoreNULL = T, ignoreInit = T)
   }
 

@@ -4,17 +4,19 @@
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinybusy add_busy_bar
 
+
+# suppress warnings
 options(warn = -1)
 
-icst=read.table('inst/extdata/signalDB.csv', sep=',', stringsAsFactors = F, comment.char ='#', blank.lines.skip = T,row.names = NULL, skip=1, col.names = c('assay', 'compound', 'mz', 'rt', 'info'))
+icst=read.table(file.path('inst', 'extdata', 'signalDB.csv', fsep = .Platform$file.sep), sep=',', stringsAsFactors = F, comment.char ='#', blank.lines.skip = T,row.names = NULL, skip=1, col.names = c('assay', 'compound', 'mz', 'rt', 'info'))
 
 icst=icst[icst$assay!='' & !is.na(icst$assay),]
 
 
 ui_par_centwave=fluidRow(
   column(12, offset=0.2,
-  h4('Parameterisation'),
-  helpText("The following peak picking parameters values are xcms pre-adjusted - these nearly always require optimisation for each instrumental setup.")),
+         h4('Parameterisation'),
+         helpText("The following peak picking parameters values are xcms pre-adjusted - these nearly always require optimisation for each instrumental setup.")),
   hr(),
   column(4, numericInput(inputId='in_mzdev', label=paste0('ppm'), value=15),
          bsTooltip('in_mzdev', 'Maximal tolerated m/z deviation in consecutive scans in parts per million (ppm)'),
@@ -126,15 +128,17 @@ uiE_div_summary_file=div(id ="summary_file",
                                 #h4('Summary'),
                                 textOutput('msfile'),
                                 br(),
-                               tableOutput("datsum")
+                                tableOutput("datsum")
                          ),
                          br(),
                          column(12, offset = 0.7, align='left',
                                 checkboxInput('imp_xic', 'Select m/z range for XIC manually', value = F)),
                          br(),
                          div(id='proceed',
-                         column(12, offset = 0.7, align='center',
-                                p(tags$strong('Click on signal in mass spectrum to proceed!'))))
+                             br(),
+                             br(),
+                             column(12, offset = 0.7, align='center',
+                                    p(tags$strong(HTML('<span style="color:#33A2FF">Click on signal in mass spectrum to proceed!</span>')))))
 )
 
 uiE_div_inp_col=div(id ="div_input_collapse", fluidRow(
@@ -165,57 +169,57 @@ uiE_target=div(id ="div_target",
                h3(a(href='#', onclick='doThat(this)', '2. Select target signal')),
                helpText("Specify a spectral area either through clicking in mass spectrum or by manual entry of a scantime and m/z value. Alternatively, select a compound listed in a database table."),
                br()
-               )
+)
 
 uiE_div_tar_col=div(id='target_col', div(id='selectors',
-                   column(12, offset = 0.7,  align="center",
-                          radioButtons('target_input', label = NULL, choices = c('Cursor selection'='click', 'Manual'='man', 'Database'='db'), inline = T, selected='click'),
-                          conditionalPanel("input.target_input=='click'",
-                                           textOutput('selection'))),
-                   bsTooltip(id="target_input", title="Manual: enter mz and retention time manually, database: pre-entered values in file xxx.)",
-                             placement="right", options = list(container = "body")),
-                   column(12, offset = 0.7,
-                          conditionalPanel("input.target_input=='man'",
-                                           helpText('The chromatograms in the main panel can be used to identify target areas of high and low peak density.'),
-                                           br(),
-                                           fluidRow(
-                                             column(12,
-                                                    column(width=8, numericInput(inputId='in_rt','Retention time (s)', value=98.4)),
-                                                    column(width=4, numericInput(inputId='in_rt_ws','window size (s)', value=25))
-                                             )),
+                                         column(12, offset = 0.7,  align="center",
+                                                radioButtons('target_input', label = NULL, choices = c('Cursor selection'='click', 'Manual'='man', 'Database'='db'), inline = T, selected='click'),
+                                                conditionalPanel("input.target_input=='click'",
+                                                                 textOutput('selection'))),
+                                         bsTooltip(id="target_input", title="Manual: enter mz and retention time manually, database: pre-entered values in file xxx.)",
+                                                   placement="right", options = list(container = "body")),
+                                         column(12, offset = 0.7,
+                                                conditionalPanel("input.target_input=='man'",
+                                                                 helpText('The chromatograms in the main panel can be used to identify target areas of high and low peak density.'),
+                                                                 br(),
+                                                                 fluidRow(
+                                                                   column(12,
+                                                                          column(width=8, numericInput(inputId='in_rt','Retention time (s)', value=98.4)),
+                                                                          column(width=4, numericInput(inputId='in_rt_ws','window size (s)', value=25))
+                                                                   )),
 
-                                           fluidRow(
-                                             column(12,
-                                                    column(width=8, numericInput(inputId='in_mz','Mass to charge ratio', value=269.1109)),
-                                                    column(width=4, numericInput(inputId='in_mz_ws','window size', value=10))
-                                             ))
+                                                                 fluidRow(
+                                                                   column(12,
+                                                                          column(width=8, numericInput(inputId='in_mz','Mass to charge ratio', value=269.1109)),
+                                                                          column(width=4, numericInput(inputId='in_mz_ws','window size', value=10))
+                                                                   ))
 
-                          ),
-                          conditionalPanel("input.target_input=='db'",
-                                           helpText('Select assay type and use the list below as shortcut to compounds with database records. The list can be edited through the master csv file (see documentation).'),
-                                           br(),
-                                           fluidRow(
-                                             column(12,
-                                                    radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(icst$assay), direction = "horizontal"),
-                                                    selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
-                                                    textOutput('compound_info'), br()
-                                             )),
+                                                ),
+                                                conditionalPanel("input.target_input=='db'",
+                                                                 helpText('Select assay type and use the list below as shortcut to compounds with database records. The list can be edited through the master csv file (see documentation).'),
+                                                                 br(),
+                                                                 fluidRow(
+                                                                   column(12,
+                                                                          radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(icst$assay), direction = "horizontal"),
+                                                                          selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
+                                                                          textOutput('compound_info'), br()
+                                                                   )),
 
 
 
-                                           br()
-                          )),
+                                                                 br()
+                                                )),
 
-                   br()),
-               fluidRow(
-                 column(12, align='right',
-                        br(),
-                        actionButton("move_picks", 'Generate plot', icon("thumbs-up"),
-                                     style="color: #fff; background-color: #33A2FF; border-color: #33A2FF"))),
-               fluidRow(
-                 div(id='selectors1',
-                     column(12, offset=0.7, align='left', checkboxInput('imp_vis', 'Viz options', value = F))))
-               #helpText("To improve visualisation add an inital intensity value as noise threshold as well as data transformation (reflected in point size and colour scale, respectively). Initial specifications can be altered once a plot is generated."),
+                                         br()),
+                    fluidRow(
+                      column(12, align='right',
+                             br(),
+                             actionButton("move_picks", 'Generate plot', icon("thumbs-up"),
+                                          style="color: #fff; background-color: #33A2FF; border-color: #33A2FF"))),
+                    fluidRow(
+                      div(id='selectors1',
+                          column(12, offset=0.7, align='left', checkboxInput('imp_vis', 'Viz options', value = F))))
+                    #helpText("To improve visualisation add an inital intensity value as noise threshold as well as data transformation (reflected in point size and colour scale, respectively). Initial specifications can be altered once a plot is generated."),
 
 
 

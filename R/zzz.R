@@ -11,3 +11,13 @@
 
 
 }
+
+
+.onLoad <- function(libname, pkgname) {
+  invisible(suppressPackageStartupMessages(
+    sapply(c('xcms', 'mzR', 'methods', 'shiny'),
+           requireNamespace, quietly = TRUE)
+  )
+  )
+}
+
