@@ -14,16 +14,16 @@ icst=icst[icst$assay!='' & !is.na(icst$assay),]
 ui_par_centwave=fluidRow(
   column(12, offset=0.2,
   h4('Parameterisation'),
-  helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set.")),
+  helpText("The following peak picking parameters values are xcms pre-adjusted - these nearly always require optimisation for each instrumental setup.")),
   hr(),
   column(4, numericInput(inputId='in_mzdev', label=paste0('ppm'), value=15),
          bsTooltip('in_mzdev', 'Maximal tolerated m/z deviation in consecutive scans in parts per million (ppm)'),
          br(),
          sliderInput('in_rtrange', 'peakwidth (s)', min=2, max=100, step = 1, value= c(20, 50)),
-         bsTooltip('in_rtrange', 'Expected approximate peak width in chromatographic space. Given as a range (min, max) in seconds'),
+         bsTooltip('in_rtrange', 'Expected chromatographic peak width. Given as range (min, max) in seconds'),
          br(),
          numericInput('in_mzdiff', label = 'mzdiff', value = 0.1),
-         bsTooltip('in_mzdiff', 'Minimum difference in m/z dimension required for peaks with overlapping retention times; can be negative to allow overlap. During peak post-processing, peaks defined to be overlapping are reduced to the one peak with the largest signal.')
+         bsTooltip('in_mzdiff', 'Minimum closeness in m/z dimension for peaks with overlapping retention times; can take negative values, indicating the a single data point can be allocated to two different signals.')
   ),
   column(4,
          numericInput(inputId='in_noise', label='noise', value=100),
@@ -163,7 +163,7 @@ uiE_move=fluidRow(
 
 uiE_target=div(id ="div_target",
                h3(a(href='#', onclick='doThat(this)', '2. Select target signal')),
-               helpText("Specify a spectral area either through clicking in mass spectrum or by manual entry of a scantime and mz value. Alternatively, select compound listed in a database table."),
+               helpText("Specify a spectral area either through clicking in mass spectrum or by manual entry of a scantime and m/z value. Alternatively, select a compound listed in a database table."),
                br()
                )
 
