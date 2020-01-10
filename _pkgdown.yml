@@ -17,12 +17,12 @@ navbar:
       href: index.html
     reference:
       text: "App Function"
-      href: reference/index.html
+      href: ../reference/index.html
     tutorials:
       text: "centWave Resources"
       menu:
         - text: "Description of Parameters"
-          href: articles/pars.html
+          href: ../articles/pars.html
     github:
       icon: fa-github
       href: https://github.com/tkimhofer/msbrowser
