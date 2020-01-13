@@ -37,12 +37,12 @@ chrom_xic=function(df, pars){
   g1=plot_ly(source='pb') %>%
     add_trace(data=xic, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(255, 88, 120,1)', width=1),
               name=tit,
-              hoverinfo='text', text=~hoverlab ) %>%
+              hoverinfo='text', text=~hoverlab) %>%
     layout(legend = list(x = 0.7, y = 0.99),
            showlegend = TRUE,
            annotations =annot_max,
            xaxis=list(
-             title='Scantime (s)',
+             title='Scan time (s)',
              showgrid = T,
              showticklabels = T,
              showspikes = TRUE,

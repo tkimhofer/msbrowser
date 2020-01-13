@@ -20,15 +20,23 @@ chrom_bpc_tic=function(df=raw_data()[[1]], pars){
               text=~paste(scantime, 's'), name='<b>Total ion chromatogram</b>') %>%
     add_trace(data=bpc, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(0, 215, 167,1)', width=1.1),
               text=~paste(round(V2, 4), 'm/z'), name='<b>Base peak chromatogram</b>') %>%
-    layout(legend = list(x = 0.7, y = 0.99), xaxis = list(title='Scantime (s)', range = c(0, max(df$scantime)),
-                                                          showspikes = TRUE,
-                                                          spikemode  = 'toaxis+across',
-                                                          spikesnap = 'data',
-                                                          showline=TRUE,
-                                                          spikedash = 'solid',
-                                                          showgrid=TRUE),
-           yaxis=list(title='Intensity (AU)',   showgrid = F,showticklabels = T, zeroline = FALSE),
-           hovermode  = 'x', showlegend = TRUE) %>%
+    layout(legend = list(x = 0.7, y = 0.99),
+           xaxis = list(title='Scan time (s)',
+                        range = c(0, max(df$scantime)),
+                        showspikes = TRUE,
+                        spikemode  = 'toaxis+across',
+                        spikesnap = 'data',
+                        showline=F,
+                        zeroline = F,
+                        spikedash = 'solid',
+                        showgrid=TRUE),
+           yaxis = list(title='Counts',
+                        showgrid = F,
+                        showticklabels = T,
+                        zeroline = FALSE,
+                        showline=F),
+           hovermode  = 'x',
+           showlegend = TRUE) %>%
     event_register('plotly_click')
 
  return(pa)

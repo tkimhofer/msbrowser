@@ -334,7 +334,7 @@ server <- function(input, output, session) {
 
         print('check 1')
         output$selection <- renderText({
-          paste('Selected signal: scantime', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
+          paste('Selected signal: scan time', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
         })
 
         removeUI('#proceed')
@@ -434,7 +434,7 @@ server <- function(input, output, session) {
         ui_ind$div_target_collapse=0
 
         mf=raw_data()[[1]]
-        message('Generating spectral area plot (scantime vs mz).\n')
+        message('Generating spectral area plot (scan time vs mz).\n')
         target.rt=as.numeric(input$in_rt)
         target.mz=as.numeric(input$in_mz)
         # create sub with fixed equidist window size from target signal
@@ -450,20 +450,24 @@ server <- function(input, output, session) {
           if(is.na(pars$noise_plot)){
             pars$noise_plot=pars$noise98p
           }
+
           noi=pars$noise_plot
-          df=sub
+          idx=sub$Int<=noi
+          df=transf(sub, pars$trans_plot)
+
           g1=ggplot()+
-            geom_point(data=subset(df, Int<=noi), aes(scantime, mz, colour=Int), size=0.1)+
-            geom_point(data=subset(df, Int>noi), aes(scantime, mz, colour=Int), size=1)+
+            geom_point(data=df[idx,], aes(scantime, mz, colour=Int), size=0.1)+
+            geom_point(data=df[!idx,], aes(scantime, mz, colour=Int), size=1)+
             #scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
             theme_bw()+
-            labs(x='Scantime (s)', y='m/z', colour='Counts',  caption='Raw Data')
-
-          if(pars$trans_plot=='none'){
-            g1=g1+scale_colour_gradientn(colours=matlab.like2(10))
-          }else{
-            g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
-          }
+            scale_colour_gradientn(colours=matlab.like2(10))+
+            labs(x='Scan time (s)', y='m/z', colour='Counts',  caption='Raw Data')
+#
+#           if(pars$trans_plot=='none'){
+#             g1=g1+scale_colour_gradientn(colours=matlab.like2(10))
+#           }else{
+#             g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
+#           }
 
           ggplotly(g1, height=1000, width=1100, dynamicTicks=T)
         })
@@ -591,45 +595,46 @@ server <- function(input, output, session) {
                                                #sleep=F,
                                                scanrange=range(mf$scan))
                peaktbl=as.data.frame(peaktbl)
-             },
-             'dbscan'={
-               # # noise=10
-               # ppm=60
-               #fe=1e4
-               exp_fact=as.numeric(input$in_ppm_mztrans)
-               mz_cor=((1/as.numeric(input$ppm))*exp_fact)
-               rt_fac=as.numeric(input$in_rttrans)
-               # mzp=280
-               # rtp=247
-               # noise=1000
-
-               #idx=which(df_xcms$mz>800 & df_xcms$mz<820 & df_xcms$scantime>320 & df_xcms$scantime<370)
-               #df_xcms[which.min(df_xcms$mz-802),]
-
-               # define df and noise
-               #browser()
-               df=ttt()
-
-               dcl=df[df$Int>as.numeric(input$in_noise),c(1,3)]
-               dcl$mz=dcl$mz*mz_cor
-               dcl$scan=dcl$scan*scan_cor
-
-               # calculate distance matrix and check ditances for a signal manually
-               # tt=dist(dcl)
-               # ttm=melt(tt)
-               # which(ttm$value<1 & ttm$value>0)
-
-               dbclust=dbscan(dcl, eps=3, minPts = 2, search='kdtree', borderPoints = T); test;
-               dcl$cl=dbclust$cluster
-
-               clb=ddply(dcl, as.quoted('cl'), function(x){
-                 if(nrow(x)<5){return(NULL)}
-                 c(range(x$mz), range(x$scanrange), max(x$Int), sd(x$Int))
-               })
-
-               peaktbl=clb
-
              }
+             # ,
+             # 'dbscan'={
+             #   # # noise=10
+             #   # ppm=60
+             #   #fe=1e4
+             #   exp_fact=as.numeric(input$in_ppm_mztrans)
+             #   mz_cor=((1/as.numeric(input$ppm))*exp_fact)
+             #   rt_fac=as.numeric(input$in_rttrans)
+             #   # mzp=280
+             #   # rtp=247
+             #   # noise=1000
+             #
+             #   #idx=which(df_xcms$mz>800 & df_xcms$mz<820 & df_xcms$scantime>320 & df_xcms$scantime<370)
+             #   #df_xcms[which.min(df_xcms$mz-802),]
+             #
+             #   # define df and noise
+             #   #browser()
+             #   df=ttt()
+             #
+             #   dcl=df[df$Int>as.numeric(input$in_noise),c(1,3)]
+             #   dcl$mz=dcl$mz*mz_cor
+             #   dcl$scan=dcl$scan*scan_cor
+             #
+             #   # calculate distance matrix and check ditances for a signal manually
+             #   # tt=dist(dcl)
+             #   # ttm=melt(tt)
+             #   # which(ttm$value<1 & ttm$value>0)
+             #
+             #   dbclust=dbscan(dcl, eps=3, minPts = 2, search='kdtree', borderPoints = T); test;
+             #   dcl$cl=dbclust$cluster
+             #
+             #   clb=ddply(dcl, as.quoted('cl'), function(x){
+             #     if(nrow(x)<5){return(NULL)}
+             #     c(range(x$mz), range(x$scanrange), max(x$Int), sd(x$Int))
+             #   })
+             #
+             #   peaktbl=clb
+             #
+             # }
       )
 
 
@@ -669,31 +674,32 @@ server <- function(input, output, session) {
         cat('Vis peaks.\n')
         ptbl=peaktbl[idx,]
         ptbl=ptbl[order(ptbl$maxo, decreasing = T),]
-        ptbl$roi=as.character(1:nrow(ptbl))
+        ptbl$feature=as.character(1:nrow(ptbl))
         output$pp1 <- renderPlotly({
 
           # raw data
           # small points when not belonging to signal
-          idc=unlist(dlply(ptbl, as.quoted('roi'), function(peak, ds=mf){
+          idc=unlist(dlply(ptbl, as.quoted('feature'), function(peak, ds=mf){
             which(ds$mz>=peak$mzmin & ds$mz<=peak$mzmax & ds$scantime >= peak$rtmin & ds$scantime <= peak$rtmax)
           }))
-          df=mf
+          df=transf(mf, pars$trans_plot)
           df$peak='No'
           df$peak[idc]='Yes'
           g2=ggplot()+
             geom_point(data=subset(df, peak=='No'), aes(scantime, mz, colour=Int), size=0.1)+
             geom_rect(data=ptbl, aes(xmin=rtmin, xmax=rtmax, ymin=mzmin, ymax=mzmax),  size=1 , color='darkgrey', fill='darkgrey')+
             geom_point(data=subset(df, peak=='Yes'), aes(scantime, mz, colour=Int), size=1)+
-            geom_text(data=ptbl, aes(x=rtmax, y=mzmin, label=roi), colour='red', size=5, hjust=0, vjust=0)+
+            geom_text(data=ptbl, aes(x=rtmax, y=mzmin, label=feature), colour='red', size=5, hjust=0, vjust=0)+
             theme_bw()+
-            scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
+            scale_colour_gradientn(colours=matlab.like2(10))+
+            scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scan time (min)'))+
             labs(x='Scantime (s)', y='m/z', colour='Counts')
 
-          if(pars$trans_plot=='none'){
-            g2=g2+scale_colour_gradientn(colours=matlab.like2(10))
-          }else{
-            g2= g2+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
-          }
+          # if(pars$trans_plot=='none'){
+          #   g2=g2+scale_colour_gradientn(colours=matlab.like2(10))
+          # }else{
+          #   g2= g2+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
+          # }
 
           ggplotly(g2, height=1000, width=1100, dynamicTicks=T)
         })
@@ -741,11 +747,11 @@ server <- function(input, output, session) {
       if(length(idx)>0){
         removeNotification('norows')
         df=fgt()[idx,c(11, 1:10)]
-        df$roi=paste('ROI', df$roi)
-        df$roi=factor(df$roi, levels=df$roi)
+        df$feature=paste('Feat.', df$feature)
+        df$feature=factor(df$feature, levels=df$feature)
         output$peakplt <- renderPlotly({
           df$text_hover=paste0('m/z=', round(df$mz, 4), '<br />', 'rt=', round(df$rt))
-          plot_ly(df, x = ~roi, type = 'bar', hoverinfo = 'text', y = ~into, name = 'into: Signal integration', text = ~paste0('into<br />', text_hover), marker = list(color = 'rgba(255,88,120,,0.8)')) %>%
+          plot_ly(df, x = ~feature, type = 'bar', hoverinfo = 'text', y = ~into, name = 'into: Signal integration', text = ~paste0('into<br />', text_hover), marker = list(color = 'rgba(255,88,120,,0.8)')) %>%
             add_trace(y = ~intb, name = 'intb: Signal integration after baseline correction', text = ~paste0('intb<br />', text_hover), marker = list(color = 'rgba(255,213,117,,0.8)')) %>%
             add_trace(y = ~maxo, name = 'maxo: Maximum signal intensity', text = ~paste0('maxo<br />', text_hover), marker = list(color = 'rgba(0, 214, 167,0.8)')) %>%
             layout(yaxis = list(title = 'Intensity', showgrid = T), barmode = 'group', xaxis = list(title = ''), legend=list(x=0.15, y=-0.1, orientation='h'))
@@ -757,17 +763,17 @@ server <- function(input, output, session) {
           ra_rt=range(c(df$rtmin-1, df$rtmax+1))
           ra_mz=range(c(df$mzmin-0.1, df$mzmax+0.1))
 
-          add=dlply(df, as.quoted('roi'), function(x) {
+          add=dlply(df, as.quoted('feature'), function(x) {
             melt(x, id.vars=colnames(x)[!colnames(x) %in% c('mzmin', 'mzmax', 'rtmin', 'rtmax')])
           })
           idx_rt=grep('rt', add[[1]]$variable)
-          df$text_annot=paste0(df$roi, '<br />', paste('mz', round(df$mz, 4)), '<br />', paste('rt', round(df$rt, 2)), '<br />', paste0('Intensity is ',round(df$maxo_norm), '% of ', df$roi[idx_maxo]) )
-          df$text_annot[idx_maxo]=paste0(df$roi[idx_maxo], '<br />', paste('mz', round(df$mz[idx_maxo], 4)), '<br />', paste('rt', round(df$rt[idx_maxo], 2)), '<br />', paste0('Intensity set to 100%') )
+          df$text_annot=paste0(df$feature, '<br />', paste('mz', round(df$mz, 4)), '<br />', paste('rt', round(df$rt, 2)), '<br />', paste0('Intensity is ',round(df$maxo_norm), '% of ', df$feature[idx_maxo]) )
+          df$text_annot[idx_maxo]=paste0(df$feature[idx_maxo], '<br />', paste('mz', round(df$mz[idx_maxo], 4)), '<br />', paste('rt', round(df$rt[idx_maxo], 2)), '<br />', paste0('Intensity set to 100%') )
 
           g1=plot_ly() %>%
             layout(scene = list(xaxis = list(title = "rt (s)", range = ra_rt), yaxis = list(title = "m/z", range = ra_mz), zaxis = list(title = "Intensity (AU)")),  legend=list(x=0.15, y=-0.1, orientation='h'))  %>%
             add_trace(data = df, x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode='markers', color=~sn, hoverinfo='text', marker=list(size=20, color='rgba(166, 143, 195, 1)'), showlegend =F, hoverinfo = 'text', text = ~df$text_annot) %>%
-            add_trace(data = df,x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode = 'lines', line = list(width = 10, color='rgba(166, 143, 195, 0.8)'), showlegend = F, name='Min-Max of ROI')# %>%
+            add_trace(data = df,x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode = 'lines', line = list(width = 10, color='rgba(166, 143, 195, 0.8)'), showlegend = F, name='Min-Max of Feat.')# %>%
 
           for(i in 1:length(add)){
             if(i==1){ g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black', width=5, showscale = F),  name='Signal width in rt dimension', showlegend=T) # %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
@@ -780,9 +786,9 @@ server <- function(input, output, session) {
           idx_other=which(ds$mz>ra_mz[1] & ds$mz<ra_mz[2] & ds$rt>ra_rt[1] & ds$rt<ra_rt[2] & ds$maxo<=int_max)
           if(length(idx_other)>0){
             ds=ds[which(ds$mz>ra_mz[1] & ds$mz<ra_mz[2] & ds$rt>ra_rt[1] & ds$rt<ra_rt[2] & ds$maxo<=int_max),]
-            ds$roi=paste('ROI', ds$roi)
+            ds$feature=paste('Feature', ds$feature)
             ds$maxo=ds$max/int_max*100
-            g1 %>% add_trace(data = ds, x = ~rt, y = ~mz, z=~maxo,  type = 'scatter3d', mode='markers', showlegend =F, hoverinfo='text', marker=list(size=5, color='rgba(0, 214, 167,0.4)', showscale = F), text = ~ds$roi) %>%
+            g1 %>% add_trace(data = ds, x = ~rt, y = ~mz, z=~maxo,  type = 'scatter3d', mode='markers', showlegend =F, hoverinfo='text', marker=list(size=5, color='rgba(0, 214, 167,0.4)', showscale = F), text = ~ds$feature) %>%
               hide_colorbar()
           }else{
             g1 %>% hide_colorbar()

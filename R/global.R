@@ -236,7 +236,7 @@ uiE_div_ppick=div(id ="div_ppick",
 
                                   br(),
                                   fluidRow(align='center',
-                                           selectInput('in_pickMethod', label='Algorithm', choices = c('CentWave'='centWave', 'Matched Filter'='matchedFilter', 'DBSCAN'='dbscan'))
+                                           selectInput('in_pickMethod', label='Algorithm', choices = c('CentWave'='centWave', 'Matched Filter'='matchedFilter')) #, 'DBSCAN'='dbscan'))
                                   ),
 
                                   conditionalPanel(
