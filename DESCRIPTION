@@ -14,22 +14,21 @@ LazyData: true
 Depends:
   shiny  (>= 1.4),
 Imports:
-  colorRamps,
-  DT,
-  ggplot2,
-  graphics,
-  magrittr,
-  plotly,
-  plyr,
-  reshape2,
-  scales,
-  shinyBS,
-  shinybusy,
-  shinycssloaders,
-  shinyWidgets,
-  stats,
+  colorRamps  (>= 2.3),
+  DT  (>= 0.1),
+  ggplot2  (>= 3.2),
+  magrittr  (>= 1.5),
+  plotly  (>= 4.9),
+  plyr  (>= 1.8),
+  reshape2  (>= 1.4),
+  scales  (>= 1.1),
+  shinyBS  (>= 0.6),
+  shinybusy  (>= 0.2),
+  shinycssloaders  (>= 0.2),
+  shinyWidgets  (>= 0.5),
+  stats  (>= 1.4),
   utils,
-  xcms
+  xcms  (>= 3.6),
 RoxygenNote: 6.1.1
 StagedInstall: yes
 URL: https://github.com/tkimhofer/msbrowser
