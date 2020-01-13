@@ -16,7 +16,8 @@
 
 
 ui <- fluidPage(
-  #responsive = T,
+
+
   #title='MSbrowser',
   #useShinyjs(),  # Set up shinyjs
   tags$body(
@@ -57,7 +58,6 @@ ui <- fluidPage(
     '
     )),
 
-
   #   "function doSomething(hd) {
   # Shiny.onInputChange('clicked_text', hd.innerHTML);
   #   }"
@@ -67,8 +67,8 @@ ui <- fluidPage(
   # ),
   #titlePanel(title=h1('MSbrowser')),
 
-  headerPanel(title=div(a(img(src=file.path('www', 'MSbrowser_logo_tricolour_alpha.png', fsep = .Platform$file.sep)), href='https://tkimhofer.github.io/msbrowser/index.html', target="_blank")), windowTitle='MSbrowser'),
-  #titlePanel(title=div(id="MSbrowser_logo", img(height = 100, width = 100, src = "MSbrowser_logo_tricolour_alpha.png"))),
+  #headerPanel(title=div(a(img(src=file.path('www/logo.png', fsep = .Platform$file.sep)), href='https://tkimhofer.github.io/msbrowser/index.html', target="_blank")), windowTitle='MSbrowser'),
+  titlePanel(title=div(img(src = "www/logo.png")),  windowTitle = 'MSbrowser'),
 
   fluidRow(column(4,offset=0.2,
                   #tags$img(src='MSbrowser_logo_tricolour_alpha.png')

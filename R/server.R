@@ -56,7 +56,10 @@ server <- function(input, output, session) {
     impvis=0,
     peaktbl=0,
     div_input_collapse=1,
-    div_target_collapse=1
+    div_target_collapse=1#,
+    # pa=0,
+    # bp=0,
+    # pc=0
   )
 
   # # suppress warnings
@@ -67,11 +70,11 @@ server <- function(input, output, session) {
   observeEvent(input$clicked_text, {
     print('clicked')
     if(ui_ind$div_input_collapse==1){
-      print('remove UI')
+      #print('remove UI')
       removeUI('#div_input_collapse')
       ui_ind$div_input_collapse=0
     }else{
-      print('insert UI')
+      #print('insert UI')
       insertUI('#1ri', 'afterEnd', ui=uiE_div_inp_col)
       ui_ind$div_input_collapse=1
     }
@@ -108,7 +111,7 @@ server <- function(input, output, session) {
           msfile1
         })
         pars$msfile=msfile1
-        cat('Reading user file...')
+        # cat('Reading user file...')
       } else{showNotification(ui="Accepted file formats are netCDF, mzXML, mzData and mzML. ", duration=NULL, closeButton = T, type='error', id='nofile')}
     }, ignoreNULL = T, ignoreInit = T)
 
@@ -118,7 +121,7 @@ server <- function(input, output, session) {
 
       # check if file was unzipped previously
       exF=system.file(file.path('extdata', 'mzXML', 'Urine_HILIC_ESIpos.mzXML', fsep = .Platform$file.sep), package='msbrowser')
-      print(exF)
+      # print(exF)
       output$msfile <- renderText({
         'Example file: HILIC-ESI(+)-MS of a urine sample'
       })
@@ -129,11 +132,11 @@ server <- function(input, output, session) {
         exFzip=system.file(zipF, package = "msbrowser")
         if(exFzip==''){message('No example file installed'); }
 
-        cat('Unzipping LC-MS example file ...')
+        # cat('Unzipping LC-MS example file ...')
         unzip(exFzip, exdir=dirname(exFzip))
         pars$msfile=gsub('\\.zip', '', exFzip)
-        cat('...done!\n')
-        cat('Reading example file...')
+        # cat('...done!\n')
+        # cat('Reading example file...')
       }else{pars$msfile=exF}
     }, ignoreNULL = T, ignoreInit = T)
   }
@@ -213,7 +216,9 @@ server <- function(input, output, session) {
     #observeEvent({raw_data()},{
     # bpc triggered when data is loaded
     output$tic_bpc <- renderPlotly({
-      chrom_bpc_tic(df=raw_data()[[1]], pars)
+      pa=chrom_bpc_tic(df=raw_data()[[1]], pars)
+      pars$pa=1
+      return(pa)
     })
 
     # XIC and MASS SPECTRUM PLOT TRIGGERS / REACTIVITY
@@ -250,9 +255,10 @@ server <- function(input, output, session) {
 
 
     # 2. click on BPC/TIC
-    pa_act=observeEvent(
+    observeEvent(
 
       {
+        req(pars$pa)
         event_data("plotly_click", source='pa')
       }
       ,{
@@ -274,7 +280,10 @@ server <- function(input, output, session) {
 
 
     # pb_act=observeEvent(
-    observeEvent({event_data("plotly_click", source='pb')},{
+    observeEvent({
+      req(pars$pb)
+      event_data("plotly_click", source='pb')
+      },{
         df=raw_data()[[1]]
         event.data <- event_data("plotly_click", source='pb')
         # which scan xic is closest to click, save scan mspec
@@ -304,17 +313,21 @@ server <- function(input, output, session) {
       {pars$xic_ra},{
         output$xic <- renderPlotly({
           #browser()
-          chrom_xic(df=raw_data()[[1]], pars)
+          pb=chrom_xic(df=raw_data()[[1]], pars)
+          pars$pb=1
+          return(pb)
         })
       }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(
       {pars$xic_ra
         pars$mspec_scant},{
-        print('xic plot now generated')
+        #print('xic plot now generated')
         # Generate ssms plot based on trigger event
         output$ssms <- renderPlotly({
-          massspectrum(df=raw_data()[[1]], pars)
+          pc=massspectrum(df=raw_data()[[1]], pars)
+          pars$pc==1
+          return(pc)
           #browser()
           # pc<<-pc
           # pc
@@ -323,7 +336,10 @@ server <- function(input, output, session) {
 
 
 
-    observeEvent({event_data("plotly_click", source='pc')},{
+    observeEvent({
+      req(pars$pc)
+      event_data("plotly_click", source='pc')
+      },{
         event.data <- event_data("plotly_click", source='pc')
         pars$pp.mz=event.data$x[1]
         pars$pp.rt=pars$mspec_scant
@@ -332,7 +348,7 @@ server <- function(input, output, session) {
         updateNumericInput(session, inputId='in_mz', value=round(pars$pp.mz, 4))
         updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
 
-        print('check 1')
+        #print('check 1')
         output$selection <- renderText({
           paste('Selected signal: scan time', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
         })
@@ -400,8 +416,8 @@ server <- function(input, output, session) {
       { input$move_picks}, # 'Generate plot' has been clicked
       {
         #browser()
-        print('check 6')
-        print('move picks clicked')
+        # print('check 6')
+        # print('move picks clicked')
         if(ui_ind$rawData==0){
           insertTab(
             inputId='msexpl',
@@ -485,7 +501,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(ttt(), { print('check 6');  message(dim(ttt()))})
+    observeEvent(ttt(), { message(dim(ttt()))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
