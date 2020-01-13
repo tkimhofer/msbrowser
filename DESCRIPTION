@@ -31,6 +31,6 @@ Imports:
   utils,
   xcms
 RoxygenNote: 6.1.1
-StagedInstall: no
+StagedInstall: yes
 URL: https://github.com/tkimhofer/msbrowser
 BugReports: https://github.com/tkimhofer/msbrowser/issues
