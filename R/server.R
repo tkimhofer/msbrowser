@@ -326,7 +326,7 @@ server <- function(input, output, session) {
         # Generate ssms plot based on trigger event
         output$ssms <- renderPlotly({
           pc=massspectrum(df=raw_data()[[1]], pars)
-          pars$pc==1
+          pars$pc=1
           return(pc)
           #browser()
           # pc<<-pc
@@ -415,9 +415,6 @@ server <- function(input, output, session) {
     ttt=eventReactive(
       { input$move_picks}, # 'Generate plot' has been clicked
       {
-        #browser()
-        # print('check 6')
-        # print('move picks clicked')
         if(ui_ind$rawData==0){
           insertTab(
             inputId='msexpl',
@@ -501,7 +498,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(ttt(), { message(dim(ttt()))})
+    observeEvent(ttt(), {message(dim(ttt()))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
@@ -540,23 +537,6 @@ server <- function(input, output, session) {
         }
       }, ignoreNULL = T, ignoreInit = T)
     }
-
-    #
-    #
-    # #
-
-    #
-
-    #
-    #
-    #
-
-    # #
-    # # hide create image button when cursor selection is enabled
-
-    #
-    #
-
 
     # peak picking
     fgt <- eventReactive(input$pickpeak1, {

@@ -9,7 +9,7 @@
 #' @importFrom plotly plotlyOutput
 #' @importFrom DT DTOutput
 
-# logoF=system.file('www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
+# logoF=system.file('extdata/inst/www/MSbrowser_logo_tricolour_alpha.png', package = "msbrowser")
 # print(logoF)
 # print(logoF)
 
@@ -68,7 +68,9 @@ ui <- fluidPage(
   #titlePanel(title=h1('MSbrowser')),
 
   #headerPanel(title=div(a(img(src=file.path('www/logo.png', fsep = .Platform$file.sep)), href='https://tkimhofer.github.io/msbrowser/index.html', target="_blank")), windowTitle='MSbrowser'),
-  titlePanel(title=div(img(src = "www/logo.png")),  windowTitle = 'MSbrowser'),
+
+  # titlePanel(title=div(img(src = "www/logo.png")),  windowTitle = 'MSbrowser'),
+  titlePanel(title= div(img(src =file.path('www', 'logo.png', fsep = .Platform$file.sep))), windowTitle='MSbrowser'),
 
   fluidRow(column(4,offset=0.2,
                   #tags$img(src='MSbrowser_logo_tricolour_alpha.png')
