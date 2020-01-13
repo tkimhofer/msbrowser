@@ -140,20 +140,13 @@ server <- function(input, output, session) {
 
   # AND READ DATA
   raw_data<-eventReactive(pars$msfile, {
-    raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = F, mslevel = 1)
-    # extract raw data from xcms object
-    df_xcms=data.frame(mz=raw_xcms@env$mz, Int=raw_xcms@env$intensity)
-    # extract intensities per scan and scantime
-    ndp=length(raw_xcms@env$mz)
-    idx.trans=which(raw_xcms@env$mz[-1]<raw_xcms@env$mz[-ndp]) # every new scan starts with low mz
-    idx.scans=cbind(c(0, idx.trans)+1, c(idx.trans, ndp)) # create df of indices (one scan per row)
-    df_xcms$scan=unlist(sapply(1:nrow(idx.scans), function(i){ rep(i, diff(idx.scans[i,])+1) }))
-    df_xcms$scantime=raw_xcms@scantime[df_xcms$scan] # add scantime (s)
 
+    raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = F, mslevel = 1)
+    df_xcms=xcms_df(raw_xcms)
 
     # create summary stats and insert into side bar
     output$datsum<-renderTable(
-      {data.frame(Descr=c('Scantime range', 'Scan frequency', 'Mass range', 'Median ion count of all scans', 'Intensity at p(x<=X)=0.98'),
+      {data.frame(Descr=c('Scantime range', 'Scan frequency', 'Mass range', 'Median ion count of all scans', 'Counts at p(x<=X)=0.98'),
                   Value=c(paste(paste(round(range(raw_xcms@scantime)), collapse = '-'), 's'),
                           paste(round(1/median(diff(raw_xcms@scantime[order(raw_xcms@scanindex)]))), 'scans per s'), paste(paste(round(raw_xcms@mzrange), collapse = '-'), 'm/z'),
                           paste(format(median(raw_xcms@tic), scientific = T, digits = 3), 'AU'),
@@ -201,10 +194,6 @@ server <- function(input, output, session) {
 
 
 
-
-
-
-
     # get parameter values for plotting
     pars$noise98p=round(quantile(df_xcms$Int,probs = 0.98))
     pars$Imax_xic_mz=df_xcms$mz[which.max(df_xcms$Int)]
@@ -213,10 +202,7 @@ server <- function(input, output, session) {
     pars$mspec_scant=df_xcms$scantime[which.max(df_xcms$Int)]
     pars$mzra=range(df_xcms$mz)
     pars$scantimera=range(df_xcms$scantime)
-
-
     cat('completed!\nPlotting chromatograms and mass spectrum...')
-
     return(list(df_xcms, raw_xcms))
   }, ignoreNULL = T, ignoreInit = T)
 
@@ -227,35 +213,8 @@ server <- function(input, output, session) {
     #observeEvent({raw_data()},{
     # bpc triggered when data is loaded
     output$tic_bpc <- renderPlotly({
-      df=raw_data()[[1]]
-      cat('BPC, ')
-      tic=ddply(df, as.quoted('scantime'),function(x) sum(x$Int))
-      bpc=ddply(df, as.quoted('scantime'),function(x) {idx=which.max(x$Int)[1]; c(x$Int[idx], x$mz[idx])})
-
-      pa=plot_ly(source='pa') %>%
-        add_trace(data=tic, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(0, 0, 0,0.7)', width=0.8),
-                  text=~paste(scantime, 's'), name='<b>Total ion chromatogram</b>') %>%
-        add_trace(data=bpc, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(0, 215, 167,1)', width=1.1),
-                  text=~paste(round(V2, 4), 'm/z'), name='<b>Base peak chromatogram</b>') %>%
-        layout(legend = list(x = 0.7, y = 0.99), xaxis = list(title='Scantime (s)', range = c(0, max(df$scantime)),
-                                                              showspikes = TRUE,
-                                                              spikemode  = 'toaxis+across',
-                                                              spikesnap = 'data',
-                                                              showline=TRUE,
-                                                              spikedash = 'solid',
-                                                              showgrid=TRUE),
-               yaxis=list(title='Intensity (AU)',   showgrid = F,showticklabels = T, zeroline = FALSE),
-               hovermode  = 'x', showlegend = TRUE) %>%
-        event_register('plotly_click')
-
-      pa<<-pa
-      pa
-
+      chrom_bpc_tic(df=raw_data()[[1]], pars)
     })
-
-
-
-
 
     # XIC and MASS SPECTRUM PLOT TRIGGERS / REACTIVITY
     # an XIC can be triggered by 3 events:
@@ -274,7 +233,6 @@ server <- function(input, output, session) {
     # TRIGGERS
     # 1. new data
     observeEvent(raw_data(), {
-
       # add tab showing chromatograms
       if(ui_ind$ichron==0){
         prependTab(
@@ -288,7 +246,6 @@ server <- function(input, output, session) {
       pars$xic_ra=xic_mzrange(pars$xic_mz, pars$ppm_change)
       # scantime for single scan mass spectrum
       pars$mspec_scant=pars$Imax_xic_scant
-
     }, ignoreNULL = T)
 
 
@@ -298,8 +255,6 @@ server <- function(input, output, session) {
       {
         event_data("plotly_click", source='pa')
       }
-
-
       ,{
         df=raw_data()[[1]]
         event.data <- event_data("plotly_click", source='pa')
@@ -307,7 +262,6 @@ server <- function(input, output, session) {
         # which scan xic is closest to click, save scan mspec
         sdif=abs(df$scantime-event.data$x[1])
         pars$mspec_scant=df$scantime[which(sdif==min(sdif))[1]]
-
 
         # get max mz for respective scantime
         sub=df[which(df$scantime==pars$mspec_scant),]
@@ -319,24 +273,19 @@ server <- function(input, output, session) {
       }, ignoreInit = T, ignoreNULL = T)
 
 
-    pb_act=observeEvent(
-      {
-        event_data("plotly_click", source='pb')
-      }
-      ,{
+    # pb_act=observeEvent(
+    observeEvent({event_data("plotly_click", source='pb')},{
         df=raw_data()[[1]]
         event.data <- event_data("plotly_click", source='pb')
         # which scan xic is closest to click, save scan mspec
         sdif=abs(df$scantime-event.data$x[1])
         pars$mspec_scant=df$scantime[which(sdif==min(sdif))[1]]
-
       }, ignoreInit = T, ignoreNULL = T)
 
     # clean-up / validate manually entered mz range for xic
 
 
     observeEvent(input$go_xic, {
-      #browser()
       updateTabsetPanel(session, inputI='msexpl', selected = 'ichron')
       xic_ra=sort(input$xic_ra)
       if(all(is.numeric(xic_ra))){
@@ -354,91 +303,27 @@ server <- function(input, output, session) {
     observeEvent(
       {pars$xic_ra},{
         output$xic <- renderPlotly({
-          df=raw_data()[[1]]
-          cat('XIC, ')
-          ds=df[df$mz>=pars$xic_ra[1] & df$mz<=pars$xic_ra[2],]
-          xic=ddply(ds, as.quoted('scantime'), function(x) sum(x$Int))
-          idx_lab=which.max(xic$V1)
-          annot_max <- list(
-            x = xic$scantime[idx_lab],
-            y = xic$V1[idx_lab]+(xic$V1[idx_lab]*0.05),
-            text = paste(round(xic$scantime[idx_lab], 2), 's'),
-            showarrow = F,
-            align='right'
-          )
-          xic$hoverlab=paste(round(xic$scantime, 2), 's')
-          if(length(pars$xic_ra)==3){
-            tit=paste0('<b>Extracted ion chromatogram</b><br> m/z ', round(pars$xic_ra[3], 4),' (&plusmn;', pars$ppm_change/2, ' ppm)')
-          }else{
-            tit=paste0('<b>Extracted ion chromatogram</b><br>', round(pars$xic_ra[1], 3), '-', round(pars$xic_ra[2], 3), ' m/z')
-          }
-          g1=plot_ly(source='pb') %>%
-            add_trace(data=xic, x = ~scantime, y = ~V1, type = 'scatter', mode = 'lines', line=list(color='rgba(255, 88, 120,1)', width=1),
-                      name=tit,
-                      hoverinfo='text', text=~hoverlab ) %>%
-            layout(legend = list(x = 0.7, y = 0.99),
-                   showlegend = TRUE,
-                   annotations =annot_max,
-                   xaxis=list(
-                     title='Scantime (s)',
-                     showgrid = T,
-                     showticklabels = T,
-                     showspikes = TRUE,
-                     spikedash = 'solid'),
-                   yaxis = list(
-                     title='Intensity (AU)',
-                     zeroline = FALSE,
-                     showgrid = F,
-                     showticklabels = T)
-            ) %>% event_register('plotly_click')
-          return(g1)
+          #browser()
+          chrom_xic(df=raw_data()[[1]], pars)
         })
       }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(
-      {pars$xic_ra | pars$mspec_scant},{
-
+      {pars$xic_ra
+        pars$mspec_scant},{
+        print('xic plot now generated')
         # Generate ssms plot based on trigger event
-        output$barsScan <- renderPlotly({
-
-          df=raw_data()[[1]]
-          message('mass spectrum.\n')
-          scantime=pars$mspec_scant
-          df_scan=df[df$scantime == scantime,]
-
-          df_scan$lab=NA
-          idx=order(df_scan$Int, decreasing = T)[1:5]
-          df_scan$lab[idx]=round(df_scan$mz[idx],4)
-          df_scan$hover=paste0('m/z: ', round(df_scan$mz,4),  '<br>', 'rt: ', round(scantime, 2), ' s')
-          df_scan$Int=df_scan$Int/max(df_scan$Int)*100
-
-          plot_ly(data=df_scan, source='pc') %>%
-            add_segments(x = ~mz, xend = ~mz, y = 0, yend = ~Int,
-                         name=paste('<b>Mass spectrum</b><br>Single scan at', round(scantime, 2), 's'),
-                         line=list(color=~'black', width=0.8),
-                         text=~hover,  hoverinfo = 'text') %>%
-            add_text(data=df_scan[idx,], x = ~mz, y=~Int, text = ~lab, textposition = "top right", showlegend=F) %>%
-            layout(
-              showlegend = TRUE,
-              legend = list(x = 0.7, y = 0.99),
-              xaxis = list(title='m/z', autorange=TRUE),
-              yaxis = list(title='Intensity (%)', autorange=TRUE,  zeroline = T,
-                           showgrid = F,
-                           showticklabels = T)
-            ) %>%
-            event_register(event = 'plotly_click')
+        output$ssms <- renderPlotly({
+          massspectrum(df=raw_data()[[1]], pars)
+          #browser()
+          # pc<<-pc
+          # pc
         })
-
-
       }, ignoreNULL = T, ignoreInit = T)
 
 
 
-    pc_act=observeEvent(
-      {
-        event_data("plotly_click", source='pc')
-      }
-      ,{
+    observeEvent({event_data("plotly_click", source='pc')},{
         event.data <- event_data("plotly_click", source='pc')
         pars$pp.mz=event.data$x[1]
         pars$pp.rt=pars$mspec_scant
@@ -446,6 +331,8 @@ server <- function(input, output, session) {
         updateNumericInput(session, inputId='in_rt', value=pars$pp.rt)
         updateNumericInput(session, inputId='in_mz', value=round(pars$pp.mz, 4))
         updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
+
+        print('check 1')
         output$selection <- renderText({
           paste('Selected signal: scantime', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
         })
@@ -466,33 +353,11 @@ server <- function(input, output, session) {
             ui=uiE_div_tar_col
           )
 
+
           ui_ind$div_target_collapse=1
         }
 
       }, ignoreInit = T, ignoreNULL = T)
-
-
-    # generate next window after click on move1
-    #
-    #     observeEvent({
-    #       input$move1
-    #     }, {
-    #
-    #       if(ui_ind$rawData==0){
-    #         insertTab(
-    #           inputId='msexpl',
-    #           tab=uiT_rawData,
-    #           target='ichron',
-    #           position='after',
-    #           select=T
-    #         )
-    #
-    #         tab_ind$rawData=1
-    #       }
-    #
-    #     })
-
-
 
 
     observeEvent(input$'imp_vis',{
@@ -504,10 +369,8 @@ server <- function(input, output, session) {
                   br(),
                   fluidRow(
                     column(12, offset=0.7,
-                           column(width=3, numericInput(inputId='in_noisethr', label = 'Noise Threshold', value=pars$noise98p)),
+                           column(width=3, numericInput(inputId='in_noisethr', label = 'Noise Threshold', value=as.numeric(pars$noise98p))),
                            column(width=9, align='center', radioGroupButtons('raw_trans', label='Data Transformation', choices = list('None'='none', 'Squared'='sqrt', 'Square Root'='exp', 'Log 10'='log10', 'Reciprocal'='reciprocal'), selected = 'log10'))
-
-
                     )
                   )
           )
@@ -537,7 +400,8 @@ server <- function(input, output, session) {
       { input$move_picks}, # 'Generate plot' has been clicked
       {
         #browser()
-
+        print('check 6')
+        print('move picks clicked')
         if(ui_ind$rawData==0){
           insertTab(
             inputId='msexpl',
@@ -591,9 +455,9 @@ server <- function(input, output, session) {
           g1=ggplot()+
             geom_point(data=subset(df, Int<=noi), aes(scantime, mz, colour=Int), size=0.1)+
             geom_point(data=subset(df, Int>noi), aes(scantime, mz, colour=Int), size=1)+
-            scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
+            #scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
             theme_bw()+
-            labs(x='Scantime (s)', y='m/z', colour='Intensity',  caption='Raw Data')
+            labs(x='Scantime (s)', y='m/z', colour='Counts',  caption='Raw Data')
 
           if(pars$trans_plot=='none'){
             g1=g1+scale_colour_gradientn(colours=matlab.like2(10))
@@ -617,13 +481,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-
-
-    observeEvent(ttt(), {message(dim(ttt()))})
-
-
-
-
+    observeEvent(ttt(), { print('check 6');  message(dim(ttt()))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
@@ -815,7 +673,6 @@ server <- function(input, output, session) {
         output$pp1 <- renderPlotly({
 
           # raw data
-          #noi=as.numeric(input$in_noisethr)
           # small points when not belonging to signal
           idc=unlist(dlply(ptbl, as.quoted('roi'), function(peak, ds=mf){
             which(ds$mz>=peak$mzmin & ds$mz<=peak$mzmax & ds$scantime >= peak$rtmin & ds$scantime <= peak$rtmax)
@@ -830,7 +687,7 @@ server <- function(input, output, session) {
             geom_text(data=ptbl, aes(x=rtmax, y=mzmin, label=roi), colour='red', size=5, hjust=0, vjust=0)+
             theme_bw()+
             scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
-            labs(x='Scantime (s)', y='m/z', colour='Intensity')
+            labs(x='Scantime (s)', y='m/z', colour='Counts')
 
           if(pars$trans_plot=='none'){
             g2=g2+scale_colour_gradientn(colours=matlab.like2(10))
@@ -891,7 +748,7 @@ server <- function(input, output, session) {
           plot_ly(df, x = ~roi, type = 'bar', hoverinfo = 'text', y = ~into, name = 'into: Signal integration', text = ~paste0('into<br />', text_hover), marker = list(color = 'rgba(255,88,120,,0.8)')) %>%
             add_trace(y = ~intb, name = 'intb: Signal integration after baseline correction', text = ~paste0('intb<br />', text_hover), marker = list(color = 'rgba(255,213,117,,0.8)')) %>%
             add_trace(y = ~maxo, name = 'maxo: Maximum signal intensity', text = ~paste0('maxo<br />', text_hover), marker = list(color = 'rgba(0, 214, 167,0.8)')) %>%
-            layout(yaxis = list(title = 'Intensity (AU)', showgrid = T), barmode = 'group', xaxis = list(title = ''), legend=list(x=0.15, y=-0.1, orientation='h'))
+            layout(yaxis = list(title = 'Intensity', showgrid = T), barmode = 'group', xaxis = list(title = ''), legend=list(x=0.15, y=-0.1, orientation='h'))
         })
         output$peakpltIso <- renderPlotly({
           int_max=max(df$maxo)

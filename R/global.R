@@ -80,7 +80,7 @@ uiT_ichron=tabPanel("Chromatograms and mass spectrum",  value='ichron',
                     #conditionalPanel("input.chromtype=='tic'",
                     withSpinner(plotlyOutput("tic_bpc"), type=8),
                     withSpinner(plotlyOutput("xic"), type=8),
-                    withSpinner(plotlyOutput("barsScan"), type=8),
+                    withSpinner(plotlyOutput("ssms"), type=8),
                     add_busy_bar(color = "#FBDD00")
 )
 
