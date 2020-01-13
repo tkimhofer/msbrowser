@@ -1,6 +1,6 @@
 Package: msbrowser
 Title: Peak picking parameter optimisation for xcms
-Version: 0.0.0.9000
+Version: 0.0.1.0000
 Authors@R: 
     person(given = "Torben",
            family = "Kimhofer",
@@ -12,10 +12,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
-  shiny  (>= 1.3),
+  shiny  (>= 1.4),
 Imports:
   colorRamps,
-  dbscan,
   DT,
   ggplot2,
   graphics,

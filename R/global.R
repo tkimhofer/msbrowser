@@ -3,6 +3,7 @@
 #' @import shiny
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinybusy add_busy_bar
+#' @importFrom shinyBS bsTooltip
 
 
 # suppress warnings
