@@ -185,12 +185,18 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
                                          column(12, offset = 0.7,  align="center",
                                                 radioButtons('target_input', label = NULL, choices = c('Cursor selection'='click', 'Manual'='man', 'Database'='db'), inline = T, selected='click'),
                                                 conditionalPanel("input.target_input=='click'",
-                                                                 textOutput('selection'))),
-                                         bsTooltip(id="target_input", title="Manual: enter m/z and retention time manually, database: pre-entered values in file xxx.)",
-                                                   placement="right", options = list(container = "body")),
+                                                                 helpText('The chromatograms in the main panel can be used to identify target areas of high and low signal intensity.'),
+                                                                 br(),
+                                                                 textOutput('selection'),
+                                                                 ),
+
+                                                )
+                                         #, placement="right", options = list(container = "body")
+                                         ),
                                          column(12, offset = 0.7,
                                                 conditionalPanel("input.target_input=='man'",
-                                                                 helpText('The chromatograms in the main panel can be used to identify target areas of high and low peak density.'),
+                                                                 helpText('Enter spectral region manually'),
+
                                                                  br(),
                                                                  fluidRow(
                                                                    column(12,
@@ -206,11 +212,11 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
 
                                                 ),
                                                 conditionalPanel("input.target_input=='db'",
-                                                                 helpText('Select assay type and use the list below as shortcut to compounds with database records. The list can be edited through the master csv file (see documentation).'),
+                                                                 helpText('Shown are example values.',  tags$strong('Interprete carefully, since scan times are highly assay-specific!'), 'Please refer to the ', a('GitHub Wiki', href='https://github.com/tkimhofer/msbrowser/wiki/Database-Table-Editting', target="_blank"), 'for instructions on database personalisation.'),
                                                                  br(),
                                                                  fluidRow(
                                                                    column(12,
-                                                                          radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(icst$assay), direction = "horizontal"),
+                                                                          radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(as.character(icst$assay)), direction = "horizontal"),
                                                                           selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
                                                                           textOutput('compound_info'), br()
                                                                    )),
@@ -218,7 +224,7 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
 
 
                                                                  br()
-                                                )),
+                                                ),
 
                                          br()),
                     fluidRow(

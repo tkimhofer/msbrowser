@@ -82,7 +82,7 @@ ui <- fluidPage(
 
                   div(id ="div_input",
                       h3(a(href='#', onclick='doThis(this)', '1. Read-in LC-MS experiment')),
-                      div(id='1ri', helpText('Choose an LC-MS data file in open data format (e.g., mzML, netCDF)')),
+                      div(id='1ri', helpText('Choose an LC-MS data file in open data format (e.g., mzML)')),
                       uiE_div_inp_col)),
 
   column(8,offset=0.5,

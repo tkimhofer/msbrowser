@@ -84,7 +84,7 @@ server <- function(input, output, session) {
 
 
   observeEvent(input$clicked_target, {
-    print('clicked')
+    #print('clicked')
     if(ui_ind$div_target_collapse==1){
       #print('remove UI')
       removeUI('#target_col')
@@ -110,9 +110,38 @@ server <- function(input, output, session) {
         output$msfile <- renderText({
           msfile1
         })
+
+        # remove ui's when new file is read-in
         pars$msfile=msfile1
+        message(paste0('Selected file: ', pars$msfile))
+
+        updateTabsetPanel(session, inputI='msexpl', selected = 'ichron')
+
+        # remove all ui's that have been included with other files
+        removeTab('msexpl', 'ichron')
+        ui_ind$ichron=0
+
+        removeTab('msexpl', 'rawData')
+        ui_ind$rawData=0
+
+        removeTab('msexpl', 'ppick')
+        ui_ind$ppick=0
+
+        removeTab('msexpl', 'peaks')
+        ui_ind$peaks=0
+
+        removeUI('#uiE_div_summary_file')
+        ui_ind$summarytbl=0
+
+        removeUI('#div_target')
+        ui_ind$target=0
+
+        removeUI('#div_ppick')
+        ui_ind$ppdiv=0
+
+
         # cat('Reading user file...')
-      } else{showNotification(ui="Accepted file formats are netCDF, mzXML, mzData and mzML. ", duration=NULL, closeButton = T, type='error', id='nofile')}
+      } else{showNotification(ui="Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software. ", duration=NULL, closeButton = T, type='error', id='nofile')}
     }, ignoreNULL = T, ignoreInit = T)
 
     observeEvent(input$fileexample, {
@@ -137,6 +166,7 @@ server <- function(input, output, session) {
         pars$msfile=gsub('\\.zip', '', exFzip)
         # cat('...done!\n')
         # cat('Reading example file...')
+        message(paste0('Selected file: ', pars$msfile))
       }else{pars$msfile=exF}
     }, ignoreNULL = T, ignoreInit = T)
   }
@@ -147,13 +177,14 @@ server <- function(input, output, session) {
     raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = F, mslevel = 1)
     df_xcms=xcms_df(raw_xcms)
 
+    browser()
     # create summary stats and insert into side bar
     output$datsum<-renderTable(
-      {data.frame(Descr=c('Scantime range', 'Scan frequency', 'Mass range', 'Median ion count of all scans', 'Counts at p(x<=X)=0.98'),
+      {data.frame(Descr=c('Scan time range', 'Scan frequency', 'Mass range', 'Median ion count across scans', 'Counts ECDF(x<=X), p=0.98'),
                   Value=c(paste(paste(round(range(raw_xcms@scantime)), collapse = '-'), 's'),
                           paste(round(1/median(diff(raw_xcms@scantime[order(raw_xcms@scanindex)]))), 'scans per s'), paste(paste(round(raw_xcms@mzrange), collapse = '-'), 'm/z'),
-                          paste(format(median(raw_xcms@tic), scientific = T, digits = 3), 'AU'),
-                          paste(pars$noise98p, 'AU'))
+                          paste(format(median(raw_xcms@tic), scientific = T, digits = 3)),
+                          paste(pars$noise98p))
       )} , rownames=F, colnames=F, spacing='xs', caption = "Summary", caption.placement = getOption("xtable.caption.placement", "top"),
       caption.width = getOption("xtable.caption.width", NULL))
 
@@ -167,11 +198,7 @@ server <- function(input, output, session) {
       #   immediate=F
       # )
       ui_ind$summarytbl=1
-
-
       output$ss1=renderUI(uiE_div_summary_file)
-
-
     }
 
 
@@ -245,6 +272,7 @@ server <- function(input, output, session) {
           tab=uiT_ichron,
           select=T
         )
+        ui_ind$ichron=1
       }
 
       # calc mzrange for xic
@@ -345,11 +373,7 @@ server <- function(input, output, session) {
         pars$pp.mz=as.numeric(event.data$x[1])
         pars$pp.rt=as.numeric(pars$mspec_scant)
 
-        updateNumericInput(session, inputId='in_rt', value=as.numeric(pars$pp.rt))
-        updateNumericInput(session, inputId='in_mz', value=round(as.numeric(pars$pp.mz), 4))
-        updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
-
-        #print('check 1')
+       #print('check 1')
         output$selection <- renderText({
           paste('Selected signal: scan time', round(as.numeric(pars$pp.rt),2), 's, m/z', round(as.numeric(pars$pp.mz), 4))
         })
@@ -373,6 +397,10 @@ server <- function(input, output, session) {
 
           ui_ind$div_target_collapse=1
         }
+
+        updateNumericInput(session, inputId='in_rt', value=as.numeric(pars$pp.rt))
+        updateNumericInput(session, inputId='in_mz', value=round(as.numeric(pars$pp.mz), 4))
+        updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
 
       }, ignoreInit = T, ignoreNULL = T)
 
@@ -499,7 +527,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(ttt(), {message(dim(ttt()))})
+    observeEvent(ttt(), {message(paste0('Dimension raw data matrix ', dim(ttt())))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
@@ -525,9 +553,9 @@ server <- function(input, output, session) {
         icst_cname=icst[icst$assay %in% input$"db_assays",]
         idx=match(input$in_icst, icst_cname$compound)
         if(length(idx)>0 & !is.na(idx)){
-          updateNumericInput(session, 'in_mz', value = icst_cname$mz[idx])
-          updateNumericInput(session, 'in_rt', value = icst_cname$rt[idx])
-          output$compound_info=renderText({paste0('rt=',icst_cname$rt[idx], ' s, m/z=', icst_cname$mz[idx])})
+          updateNumericInput(session, 'in_mz', value = as.numeric(icst_cname$mz[idx]))
+          updateNumericInput(session, 'in_rt', value = as.numeric(icst_cname$rt[idx]))
+          output$compound_info=renderText({paste0('Scan time=', as.numeric(icst_cname$rt[idx]), ' s, m/z=', as.numeric(icst_cname$mz[idx]))})
 
           pars$pp.mz=icst_cname$mz[idx]
           #pars$pp.mz.ra=input$in_mz_ws
@@ -694,7 +722,7 @@ server <- function(input, output, session) {
             theme_bw()+
             scale_colour_gradientn(colours=matlab.like2(10))+
             scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scan time (min)'))+
-            labs(x='Scantime (s)', y='m/z', colour='Counts')
+            labs(x='Scan time (s)', y='m/z', colour='Counts')
 
           # if(pars$trans_plot=='none'){
           #   g2=g2+scale_colour_gradientn(colours=matlab.like2(10))
@@ -772,7 +800,7 @@ server <- function(input, output, session) {
           df$text_annot[idx_maxo]=paste0(df$feature[idx_maxo], '<br />', paste('mz', round(df$mz[idx_maxo], 4)), '<br />', paste('rt', round(df$rt[idx_maxo], 2)), '<br />', paste0('Intensity set to 100%') )
 
           g1=plot_ly() %>%
-            layout(scene = list(xaxis = list(title = "rt (s)", range = ra_rt), yaxis = list(title = "m/z", range = ra_mz), zaxis = list(title = "Intensity (AU)")),  legend=list(x=0.15, y=-0.1, orientation='h'))  %>%
+            layout(scene = list(xaxis = list(title = "scan time (s)", range = ra_rt), yaxis = list(title = "m/z", range = ra_mz), zaxis = list(title = "Counts")),  legend=list(x=0.15, y=-0.1, orientation='h'))  %>%
             add_trace(data = df, x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode='markers', color=~sn, hoverinfo='text', marker=list(size=20, color='rgba(166, 143, 195, 1)'), showlegend =F, hoverinfo = 'text', text = ~df$text_annot) %>%
             add_trace(data = df,x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode = 'lines', line = list(width = 10, color='rgba(166, 143, 195, 0.8)'), showlegend = F, name='Min-Max of Feat.')# %>%
 
