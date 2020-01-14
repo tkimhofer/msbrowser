@@ -212,7 +212,7 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
 
                                                 ),
                                                 conditionalPanel("input.target_input=='db'",
-                                                                 helpText('Shown are example values.',  tags$strong('Interprete carefully, since scan times are highly assay-specific!'), 'Please refer to the ', a('GitHub Wiki', href='https://github.com/tkimhofer/msbrowser/wiki/Database-Table-Editting', target="_blank"), 'for instructions on database personalisation.'),
+                                                                 helpText('Shown are example values.',  tags$strong('Interprete carefully, since scan times are highly assay-specific!'), 'Please refer to the ', a('GitHub Wiki', href='https://github.com/tkimhofer/msbrowser/wiki/Database-Table-Editing', target="_blank"), 'for instructions on database personalisation.'),
                                                                  br(),
                                                                  fluidRow(
                                                                    column(12,
@@ -220,12 +220,8 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
                                                                           selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
                                                                           textOutput('compound_info'), br()
                                                                    )),
-
-
-
                                                                  br()
                                                 ),
-
                                          br()),
                     fluidRow(
                       column(12, align='right',
