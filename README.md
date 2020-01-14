@@ -1,4 +1,4 @@
-![](imgs/MSbrowser_logo_tricolour_alpha.png)
+![](imgs/logo.png)
 
 # Welcome!
 
