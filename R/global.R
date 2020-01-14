@@ -94,9 +94,18 @@ uiT_rawData=tabPanel(title="Raw Data",  value='rawData',
 )
 
 uiT_ppick=tabPanel("Detected Features",  value='ppick',
-                   withSpinner(plotlyOutput('pp1', width = "100%", inline = T), type=4),
-                   textOutput('centwave_pars'),
-                   add_busy_bar(color = "#FBDD00")
+                   fluidRow(style = "height:1040px;",
+
+                   withSpinner(plotlyOutput('pp1', width = "100%", inline = T), type=4)),
+                   fluidRow(
+                     column(width=10,
+                     wellPanel(
+                   span(h4('R console commands'), style='color: black'),
+                   span(textOutput('Rcode_loadp'), style="font-family: Courier,courier; font-size:100%"),
+                   span(textOutput('Rcode_file'), style="font-family: Courier,courier; font-size:100%"),
+                   span(textOutput('Rcode_readIn'), style="font-family: Courier,courier; font-size:100%"),
+                   span(textOutput('Rcode_ppick'), style="font-family: Courier,courier; font-size:100%"))),
+                   add_busy_bar(color = "#FBDD00"))
 )
 
 uiT_peaks=tabPanel("Feature Table",  value='peaks',
@@ -148,7 +157,7 @@ uiE_div_inp_col=div(id ="div_input_collapse", fluidRow(
            column(10,
                   actionButton("filechoose", label = "Select file"), textOutput('bname', inline = T),
                   actionButton("fileexample", label = "Load Example", inline=T),
-                  bsTooltip(id="filechoose", title="Choose an LC-MS data file in open data format (e.g., mzML, netCDF)",
+                  bsTooltip(id="filechoose", title="Choose an LC-MS data file in open data format (e.g., mzML)",
                             placement="right", options = list(container = "body")),
                   bsTooltip(id="fileexample", title="Use an example LC-MS file.",
                             placement="right", options = list(container = "body")))),
@@ -177,7 +186,7 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
                                                 radioButtons('target_input', label = NULL, choices = c('Cursor selection'='click', 'Manual'='man', 'Database'='db'), inline = T, selected='click'),
                                                 conditionalPanel("input.target_input=='click'",
                                                                  textOutput('selection'))),
-                                         bsTooltip(id="target_input", title="Manual: enter mz and retention time manually, database: pre-entered values in file xxx.)",
+                                         bsTooltip(id="target_input", title="Manual: enter m/z and retention time manually, database: pre-entered values in file xxx.)",
                                                    placement="right", options = list(container = "body")),
                                          column(12, offset = 0.7,
                                                 conditionalPanel("input.target_input=='man'",
@@ -253,7 +262,7 @@ uiE_div_ppick=div(id ="div_ppick",
                                              numericInput('in_mzdiff', label = 'Minimum diff m/z overlap [mzdiff]', value = -0.001),
 
                                              br(),
-                                             selectInput('in_integrate', label='Integration method [integrate]', choices = c('Descend Mexican Hat'='1', 'Real MS data'='2'), selected='1'),
+                                             selectInput('in_integrate', label='Integration method [integrate]', choices = c('1: Descend Mexican Hat'='1', '2: Real MS data'='2'), selected='1'),
 
                                              checkboxInput('in_fitgauss', label='Fit Gaussian to each peak [fitgauss]', value = F)
                                       ),

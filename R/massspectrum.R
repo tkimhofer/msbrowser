@@ -10,7 +10,7 @@
 #' @importFrom magrittr %>%
 
 massspectrum=function(df, pars){
-  message('mass spectrum.\n')
+  message('mass spectrum')
 
   scantime=pars$mspec_scant
 

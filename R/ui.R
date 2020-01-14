@@ -33,13 +33,13 @@ ui <- fluidPage(
 
   tags$head(
     tags$style(HTML("
-      @import url('//fonts.googleapis.com/css?family=Indie+Flower|Cabin:400,700');
+      @import url('https://fonts.googleapis.com/css?family=Lobster|Roboto&display=swap');
 
       h1 {
-        font-family: 'Indie Flower', cursive;
-        font-weight: 500;
+        font-family: 'Lobster', cursive;
+        font-weight: 800;
         line-height: 1.1;
-        color: #48ca3b;
+        font-size: 380%;
       }
 
     "))
@@ -69,8 +69,11 @@ ui <- fluidPage(
 
   #headerPanel(title=div(a(img(src=file.path('www/logo.png', fsep = .Platform$file.sep)), href='https://tkimhofer.github.io/msbrowser/index.html', target="_blank")), windowTitle='MSbrowser'),
 
-  # titlePanel(title=div(img(src = "www/logo.png")),  windowTitle = 'MSbrowser'),
-  titlePanel(title= div(img(src =file.path('www', 'logo.png', fsep = .Platform$file.sep))), windowTitle='MSbrowser'),
+  #span('MS', style='colour: red'), span('browser', style='colour: blue')
+  titlePanel(title=h1(HTML('<span style="color: #FBDD00">MS</span><span style="color: #00DBB0">browser</span><span style="color: #00DBB0">...</span>')),  windowTitle='MSbrowser'),
+
+  #  span('MS', style='color: #FBDD00'), span('browser', style='color: #00DBB0')),  windowTitle = 'MSbrowser'),
+  # titlePanel(title= div(img(src =file.path('www', 'logo.png', fsep = .Platform$file.sep))), windowTitle='MSbrowser'),
 
   fluidRow(column(4,offset=0.2,
                   #tags$img(src='MSbrowser_logo_tricolour_alpha.png')

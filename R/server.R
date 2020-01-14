@@ -68,7 +68,7 @@ server <- function(input, output, session) {
 
 
   observeEvent(input$clicked_text, {
-    print('clicked')
+    #print('clicked')
     if(ui_ind$div_input_collapse==1){
       #print('remove UI')
       removeUI('#div_input_collapse')
@@ -86,11 +86,11 @@ server <- function(input, output, session) {
   observeEvent(input$clicked_target, {
     print('clicked')
     if(ui_ind$div_target_collapse==1){
-      print('remove UI')
+      #print('remove UI')
       removeUI('#target_col')
       ui_ind$div_target_collapse=0
     }else{
-      print('insert UI')
+      #print('insert UI')
       insertUI('#div_target', 'afterEnd', ui=uiE_div_tar_col)
       ui_ind$div_target_collapse=1
     }
@@ -205,7 +205,7 @@ server <- function(input, output, session) {
     pars$mspec_scant=df_xcms$scantime[which.max(df_xcms$Int)]
     pars$mzra=range(df_xcms$mz)
     pars$scantimera=range(df_xcms$scantime)
-    cat('completed!\nPlotting chromatograms and mass spectrum...')
+    #cat('completed!\nPlotting chromatograms and mass spectrum...')
     return(list(df_xcms, raw_xcms))
   }, ignoreNULL = T, ignoreInit = T)
 
@@ -341,16 +341,17 @@ server <- function(input, output, session) {
       event_data("plotly_click", source='pc')
       },{
         event.data <- event_data("plotly_click", source='pc')
-        pars$pp.mz=event.data$x[1]
-        pars$pp.rt=pars$mspec_scant
+        #browser()
+        pars$pp.mz=as.numeric(event.data$x[1])
+        pars$pp.rt=as.numeric(pars$mspec_scant)
 
-        updateNumericInput(session, inputId='in_rt', value=pars$pp.rt)
-        updateNumericInput(session, inputId='in_mz', value=round(pars$pp.mz, 4))
+        updateNumericInput(session, inputId='in_rt', value=as.numeric(pars$pp.rt))
+        updateNumericInput(session, inputId='in_mz', value=round(as.numeric(pars$pp.mz), 4))
         updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
 
         #print('check 1')
         output$selection <- renderText({
-          paste('Selected signal: scan time', round(pars$pp.rt,2), 's, m/z', round(pars$pp.mz, 4))
+          paste('Selected signal: scan time', round(as.numeric(pars$pp.rt),2), 's, m/z', round(as.numeric(pars$pp.mz), 4))
         })
 
         removeUI('#proceed')
@@ -566,16 +567,20 @@ server <- function(input, output, session) {
                )
                peaktbl=as.data.frame(peaktbl)
 
-               codeRI=paste0('xcms_data=xcmsRaw(filename=\"', pars$msfile, '\" , profstep = 0, includeMSn = F, mslevel = 1)')
-               codePP=paste0('findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun="', input$in_mzCentFun, '", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')
+               codeF=paste0('msfile=\"', pars$msfile, '\"\n')
+               codeRI=paste0('xcms_data=xcmsRaw(filename=msfile , profstep = 0, includeMSn = F, mslevel = 1)\n')
+               codePP=paste0('xcms_ppick=findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun="', input$in_mzCentFun, '", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')\n')
 
-               cat(codeRI, '\n')
-               cat(codePP, '\n')
+               # cat(codeRI, '\n')
+               # cat(codePP, '\n')
 
 
                # output$centwave_pars=renderText({paste0('ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun=\"', input$in_mzCentFun, '\", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')')})
 
-               output$centwave_pars<-renderText({codePP})
+               output$Rcode_loadp<-renderText({'library(xcms)\n'})
+               output$Rcode_file<-renderText({codeF})
+               output$Rcode_readIn<-renderText({codeRI})
+               output$Rcode_ppick<-renderText({codePP})
 
 
 
@@ -667,7 +672,7 @@ server <- function(input, output, session) {
           ui_ind$peaktbl=1
         }
 
-        cat('Vis peaks.\n')
+        #cat('Vis peaks.\n')
         ptbl=peaktbl[idx,]
         ptbl=ptbl[order(ptbl$maxo, decreasing = T),]
         ptbl$feature=as.character(1:nrow(ptbl))
@@ -708,13 +713,13 @@ server <- function(input, output, session) {
     }, ignoreNULL = T)
     #
     observeEvent(fgt(), {
-      print(dim(fgt()))
+      message(paste('rows peak table', nrow(fgt())))
     })
     #
     peakTbl <- observeEvent(fgt(), {
       out=fgt()[,c(11, 1:10)]
       rownames(out)=NULL
-      cat('Ouputting peak table.\n')
+      #cat('Ouputting peak table.\n')
       idx=grep('mz', colnames(out))
       out[,idx]=apply(out[,idx], 2, round, 4)
       idx=grep('rt', colnames(out))
