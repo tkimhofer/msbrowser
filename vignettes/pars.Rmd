@@ -168,6 +168,7 @@ Signal quantification is performed by integrating the area under a peak. The *in
 &nbsp;
 
 &nbsp;
+
 ## ***<span style="color:red">fitgauss</span>***: Peak parametrisation using Gaussian distribution
 A Gaussian function resembles a characterisitic symmetric "bell curve" shape, which is often described as a normal distribution. If this *centWave* parameter option is set to TRUE, a Gaussian is fitted to each each feature. The *xcms* documentation states that when this option is enabled it "affects mostly the retention time position of the peak."
 
@@ -176,6 +177,7 @@ A Gaussian function resembles a characterisitic symmetric "bell curve" shape, wh
 &nbsp;
 
 &nbsp;
+
 ## ***<span style="color:red">scanrange</span>***: Perform peak picking in a specific scan range
 The *scanrange* parameter allows to select a scan time interval for peak picking of the entire m/z range. Spectral data outside the specified interval are not considered for peak picking. This parameter is usually not specified in untargeted metabolic profiling studies. The *scanrange* parameter takes scan ID values (it is not specified in seconds).
 
