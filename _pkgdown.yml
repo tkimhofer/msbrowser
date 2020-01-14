@@ -9,7 +9,7 @@ template:
 navbar:
   title: MSbrowser
   structure:
-    left: [home, tutorials, reference, data]
+    left: [home, reference, articles]
     right: [github]
   components:
     home:
@@ -18,11 +18,11 @@ navbar:
     reference:
       text: "App Function"
       href: reference/index.html
-    tutorials:
+    articles:
       text: "centWave Resources"
       menu:
         - text: "Description of Parameters"
-          href: ../articles/pars.html
+          href: articles/pars.html
     github:
       icon: fa-github
       href: https://github.com/tkimhofer/msbrowser
