@@ -23,10 +23,10 @@ ui_par_centwave=fluidRow(
          bsTooltip('in_mzdev', 'Maximal tolerated m/z deviation in consecutive scans in parts per million (ppm)'),
          br(),
          sliderInput('in_rtrange', 'peakwidth (s)', min=2, max=100, step = 1, value= c(20, 50)),
-         bsTooltip('in_rtrange', 'Expected chromatographic peak width. Given as range (min, max) in seconds'),
+         bsTooltip('in_rtrange', 'Expected chromatographic peak width (elution/scan time). Given as range (min, max) in seconds'),
          br(),
          numericInput('in_mzdiff', label = 'mzdiff', value = 0.1),
-         bsTooltip('in_mzdiff', 'Minimum closeness in m/z dimension for peaks with overlapping retention times; can take negative values, indicating the a single data point can be allocated to two different signals.')
+         bsTooltip('in_mzdiff', 'Minimum closeness in m/z dimension for peaks with overlapping retention times; can take negative values, indicating a single data point can be allocated to two different features.')
   ),
   column(4,
          numericInput(inputId='in_noise', label='noise', value=100),

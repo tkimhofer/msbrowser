@@ -177,7 +177,7 @@ server <- function(input, output, session) {
     raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = F, mslevel = 1)
     df_xcms=xcms_df(raw_xcms)
 
-    browser()
+    #browser()
     # create summary stats and insert into side bar
     output$datsum<-renderTable(
       {data.frame(Descr=c('Scan time range', 'Scan frequency', 'Mass range', 'Median ion count across scans', 'Counts ECDF(x<=X), p=0.98'),
