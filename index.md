@@ -33,6 +33,7 @@ if(!required(xcms)){BiocManager::install('xcms')}
 # install MSbroswer
 devtools::install_github('tkimhofer/msbrowser')
 ```
+If prompted by the command line, perform necessary package updates.
 
 Once successfully installed, MSbrowser can be launched with the following R-terminal commands:
 
@@ -43,9 +44,11 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 
-
 # Documentation 
 MSbroswer has an intuitive workflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters and further documentation can be found at the official MSbrowser homepage: **https://tkimhofer.github.io/msbrowser/**.
+
+# Example Data
+The application comes with HILIC-MS example data acquired using a urine sample, so that one can become familiar with MSbrowser's functionalities before using own data.
 
 # Feedback
 Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!

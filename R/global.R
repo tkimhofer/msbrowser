@@ -259,33 +259,33 @@ uiE_div_ppick=div(id ="div_ppick",
                                       hr(),
                                       column(4, numericInput(inputId='in_mzdev', label=paste0('m/z deviation [ppm]'), value=25),
                                              br(),
-                                             sliderInput('in_rtrange', 'Elution time range (s) [peakwidth] )', min=1, max=100, step = 1, value= c(20, 50)),
+                                             sliderInput('in_rtrange', 'Elution time range (s) [peakwidth]', min=1, max=100, step = 1, value= c(20, 50)),
                                              br(),
                                              numericInput('in_mzdiff', label = 'Minimum diff m/z overlap [mzdiff]', value = -0.001),
-
                                              br(),
-                                             selectInput('in_integrate', label='Integration method [integrate]', choices = c('1: Descend Mexican Hat'='1', '2: Real MS data'='2'), selected='1'),
+                                             fluidRow(
 
-                                             checkboxInput('in_fitgauss', label='Fit Gaussian to each peak [fitgauss]', value = F)
+                                               h4(a('Need parameter help?', href='https://tkimhofer.github.io/msbrowser/articles/pars.html', target="_blank"))
+                                             )
                                       ),
                                       column(4,
                                              numericInput(inputId='in_noise', label='Noise', value=0),
                                              br(),
                                              numericInput(inputId='in_sn', label='Signal/Noise threshold [snthresh]', value=10),
                                              br(),
-                                             selectInput('in_mzCentFun', label='m/z center function', choices = c('Weighted Mean'='wMean', 'Mean'='mean','Peak apex'='apex', 'Weighted mean of peak apex and neigbouring scans'='wMeanApex3', 'Mean of peak apex and neigbouring scans'='meanApex3'))
+                                             selectInput('in_mzCentFun', label='m/z center function', choices = c('Weighted Mean'='wMean', 'Mean'='mean','Peak apex'='apex', 'Weighted mean of peak apex and neigbouring scans'='wMeanApex3', 'Mean of peak apex and neigbouring scans'='meanApex3')),
+                                             br(),
+                                             selectInput('in_integrate', label='Integration method [integrate]', choices = c('1: Mexican Hat'='1', '2: Real MS data'='2'), selected='1')
                                       ),
                                       column(4,
                                              wellPanel(h5("Pre-filter"),
                                                        numericInput('in_prefilter_k', label = 'Number of scans [k]', min = 0, max=100, value = 3),
                                                        br(),
                                                        numericInput('in_prefilter_I', label = 'Intensity [I]', min = 0, max=10000000, value = 100)
-                                             )
-                                      )),
-                                    fluidRow(
+                                             ), br(),
+                                             checkboxInput('in_fitgauss', label='Fit Gaussian to each peak [fitgauss]', value = F)
+                                      ))
 
-                                      h4(a('Need parameter help?', href='https://tkimhofer.github.io/msbrowser/articles/pars.html', target="_blank"))
-                                    )
                                   ),
                                   conditionalPanel(
                                     condition="input.in_pickMethod=='matchedFilter'",

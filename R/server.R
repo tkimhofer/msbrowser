@@ -527,7 +527,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(ttt(), {message(paste0('Dimension raw data matrix ', dim(ttt())))})
+    observeEvent(ttt(), {message(paste0('Dimension raw data matrix ', nrow(ttt()), 'x', ncol(ttt())))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
