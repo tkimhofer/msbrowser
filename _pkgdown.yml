@@ -22,7 +22,7 @@ navbar:
       text: "centWave Resources"
       menu:
         - text: "Description of Parameters"
-          href: articles/pars.html
+          href: ../articles/pars.html
     github:
       icon: fa-github
       href: https://github.com/tkimhofer/msbrowser
