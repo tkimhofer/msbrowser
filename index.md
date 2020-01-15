@@ -12,7 +12,7 @@
 
 The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance. 
 
-MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.
+MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package.
 
 ![](../imgs/GUI.png)
 
@@ -47,7 +47,7 @@ devtools::install_github('tkimhofer/msbrowser')
 ```
 If prompted by the command line, perform necessary package updates.
 
-MSbrowser can be launched with the following R-terminal commands:
+MSbrowser can be launched with the following R-terminal command:
 
 ```R
 msbrowser::startApp()
@@ -57,10 +57,15 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 # Documentation 
-MSbroswer has an intuitive workflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters and further documentation can be found at the official MSbrowser homepage: **https://tkimhofer.github.io/msbrowser/**.
+MSbrowser has an intuitive workflow, with **help text placed in the user interface**. 
+
+A Guide for *centWave* peak picking parameters can be found under the [*centWave Resources*](https://tkimhofer.github.io/msbrowser/articles/pars.html) option in the page menu above. 
+
+MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., [ProteoWizard](http://proteowizard.sourceforge.net/)) or online tool (e.g., [GNPS](https://gnps-quickstart.ucsd.edu/conversion)).
 
 # Example Data
-The application comes with HILIC-MS example data acquired using a urine sample, so that one can become familiar with MSbrowser's functionalities before using own data.
+The application comes with HILIC-MS example data acquired from a urine sample, so that one can familiarise oneself with MSbrowser's functionalities without the need to perform any file conversion first.
+
 
 # Feedback
 Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!

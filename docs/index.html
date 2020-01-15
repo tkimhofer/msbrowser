@@ -92,7 +92,7 @@
 <p><a href="https://travis-ci.org/rstudio/rmarkdown"><img src="https://travis-ci.org/rstudio/rmarkdown.svg?branch=master" alt="Build Status"></a> <a href="http://hits.dwyl.io/tkimhofer/msbrowser"><img src="http://hits.dwyl.io/tkimhofer/msbrowser.svg" alt="HitCount"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
 <p><strong>MSbrowser is web-browser-based application for parameter fine-tuning of xcms peak picking algorithms</strong>.</p>
 <p>The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance.</p>
-<p>MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.</p>
+<p>MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package.</p>
 <p><img src="../imgs/GUI.png"></p>
 <p>The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:</p>
 <ul>
@@ -117,19 +117,21 @@
 <pre><code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html"># install MSbroswer
 devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 <p>If prompted by the command line, perform necessary package updates.</p>
-<p>MSbrowser can be launched with the following R-terminal commands:</p>
+<p>MSbrowser can be launched with the following R-terminal command:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">msbrowser<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/msbrowser/man/startApp.html">startApp</a></span>()</a></code></pre></div>
 <p>A new web-browser window opens with the <strong>MSbrowser</strong> user interface.</p>
 </div>
 <div id="documentation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h1>
-<p>MSbroswer has an intuitive workflow, with help text placed in the user interface. A descriptions of all <em>centWave</em> peak picking parameters and further documentation can be found at the official MSbrowser homepage: <strong><a href="https://tkimhofer.github.io/msbrowser/" class="uri">https://tkimhofer.github.io/msbrowser/</a></strong>.</p>
+<p>MSbrowser has an intuitive workflow, with <strong>help text placed in the user interface</strong>.</p>
+<p>A Guide for <em>centWave</em> peak picking parameters can be found under the <a href="https://tkimhofer.github.io/msbrowser/articles/pars.html"><em>centWave Resources</em></a> option in the page menu above.</p>
+<p>MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., <a href="http://proteowizard.sourceforge.net/">ProteoWizard</a>) or online tool (e.g., <a href="https://gnps-quickstart.ucsd.edu/conversion">GNPS</a>).</p>
 </div>
 <div id="example-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example Data</h1>
-<p>The application comes with HILIC-MS example data acquired using a urine sample, so that one can become familiar with MSbrowser’s functionalities before using own data.</p>
+<p>The application comes with HILIC-MS example data acquired from a urine sample, so that one can familiarise oneself with MSbrowser’s functionalities without the need to perform any file conversion first.</p>
 </div>
 <div id="feedback" class="section level1">
 <h1 class="hasAnchor">
