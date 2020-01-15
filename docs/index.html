@@ -85,7 +85,7 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><img src="imgs/logo.png"></p>
+<p><img src="../imgs/logo.png"></p>
 <div id="welcome" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#welcome" class="anchor"></a>Welcome!</h1></div>
@@ -93,25 +93,32 @@
 <p><strong>MSbrowser is web-browser-based application for parameter fine-tuning of xcms peak picking algorithms</strong>.</p>
 <p>The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance.</p>
 <p>MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.</p>
-<p><img src="imgs/GUI.png"></p>
+<p><img src="../imgs/GUI.png"></p>
+<p>The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:</p>
+<ul>
+<li>Generation of LC-MS experiment summary statistics</li>
+<li>User-interactive LC-MS data visualisatons that allow gaining insight into raw MS data structure</li>
+<li>Parameter testing and fine-tuning for xcms peak picking algorithms (<em>centWave</em> and <em>matchFilter</em>)</li>
+<li>Fast and interactive visualisations of xcms peak picking results</li>
+</ul>
 </div>
 <div id="app-installation-and-launch" class="section level1">
 <h1 class="hasAnchor">
 <a href="#app-installation-and-launch" class="anchor"></a>App installation and launch</h1>
-<p>Installation is performed with the following R commands:</p>
+<p>The MSbrowser package is hosted on <a href="https://github.com/">GitHub</a> and is build with <a href="https://bioconductor.org/packages/release/bioc/html/xcms.html">xcms</a> version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install dependencies from CRAN (devtools and BiocManager)</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">deps=<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'devtools'</span>, <span class="st">'BiocManager'</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">id=deps <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span>()[,<span class="dv">1</span>]</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="cf">if</span>(<span class="kw"><a href="https://rdrr.io/r/base/any.html">any</a></span>(<span class="op">!</span>id)) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(deps[id])</a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># install xcms</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="cf">if</span>(<span class="op">!</span><span class="kw">required</span>(xcms)){BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">'xcms'</span>)}</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># install MSbroswer</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">'tkimhofer/msbrowser'</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"xcms"</span>, <span class="dt">versionCheck=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">op =</span> <span class="st">"&gt;="</span>, <span class="dt">version =</span> <span class="st">"3.6"</span>), <span class="dt">quietly =</span> T)){BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">'xcms'</span>)}</a></code></pre></div>
+<p>Now you’re ready to go for the installation of MSbrowser:</p>
+<pre><code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html"># install MSbroswer
+devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 <p>If prompted by the command line, perform necessary package updates.</p>
-<p>Once successfully installed, MSbrowser can be launched with the following R-terminal commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">msbrowser<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/msbrowser/man/startApp.html">startApp</a></span>()</a></code></pre></div>
+<p>MSbrowser can be launched with the following R-terminal commands:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">msbrowser<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/msbrowser/man/startApp.html">startApp</a></span>()</a></code></pre></div>
 <p>A new web-browser window opens with the <strong>MSbrowser</strong> user interface.</p>
 </div>
 <div id="documentation" class="section level1">

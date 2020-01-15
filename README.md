@@ -14,7 +14,15 @@ The app is designed for fast and easy parameter testing to optimise xcms peak pi
 
 MSbrowser is implemented in a user-friendly web-application framework that can be installed as an simple R package.
 
+
 ![](imgs/GUI.png)
+
+The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
+
+- Generation of LC-MS experiment summary statistics 
+- User-interactive LC-MS data visualisatons that allow gaining insight into raw MS data structure
+- Parameter testing and fine-tuning for xcms peak picking algorithms (*centWave* and *matchFilter*)
+- Fast and interactive visualisations of xcms peak picking results
 
 
 # App installation and launch
