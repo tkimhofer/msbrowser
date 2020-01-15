@@ -14,7 +14,7 @@ The app is designed for fast and easy parameter testing to optimise xcms peak pi
 
 MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package.
 
-![](../imgs/GUI.png)
+![](../imgs/msbrowserGIF1.gif)
 
 
 The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
