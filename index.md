@@ -17,9 +17,10 @@ MSbrowser is implemented in a user-friendly web-application framework that can b
 ![](../imgs/GUI.png)
 
 
+
 # App installation and launch
 
-Installation is performed with the following R commands:
+The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
 
 ```R
 # install dependencies from CRAN (devtools and BiocManager)
@@ -28,14 +29,17 @@ id=deps %in% installed.packages()[,1]
 if(any(!id)) install.packages(deps[id])
 
 # install xcms
-if(!required(xcms)){BiocManager::install('xcms')}
+if(!requireNamespace("xcms", versionCheck=list(op = ">=", version = "3.6"), quietly = T)){BiocManager::install('xcms')}
+```
 
+Now you're ready to go for the installation of MSbrowser:
+```
 # install MSbroswer
 devtools::install_github('tkimhofer/msbrowser')
 ```
 If prompted by the command line, perform necessary package updates.
 
-Once successfully installed, MSbrowser can be launched with the following R-terminal commands:
+MSbrowser can be launched with the following R-terminal commands:
 
 ```R
 msbrowser::startApp()

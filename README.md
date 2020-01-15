@@ -19,7 +19,7 @@ MSbrowser is implemented in a user-friendly web-application framework that can b
 
 # App installation and launch
 
-Installation is performed with the following R commands:
+The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
 
 ```R
 # install dependencies from CRAN (devtools and BiocManager)
@@ -28,14 +28,17 @@ id=deps %in% installed.packages()[,1]
 if(any(!id)) install.packages(deps[id])
 
 # install xcms
-if(!required(xcms)){BiocManager::install('xcms')}
+if(!requireNamespace("xcms", versionCheck=list(op = ">=", version = "3.6"), quietly = T)){BiocManager::install('xcms')}
+```
 
+Now you're ready to go for the installation of MSbrowser:
+```
 # install MSbroswer
 devtools::install_github('tkimhofer/msbrowser')
 ```
 If prompted by the command line, perform necessary package updates.
 
-Once successfully installed, MSbrowser can be launched with the following R-terminal commands:
+MSbrowser can be launched with the following R-terminal commands:
 
 ```R
 msbrowser::startApp()
@@ -48,7 +51,7 @@ A new web-browser window opens with the **MSbrowser** user interface.
 MSbrowser has an intuitive workflow, with help text placed in the user interface. A descriptions of all *centWave* peak picking parameters can be found under the **centWave Resources** option in the page menu above. All open data file formats are accepted. File conversion from vendor format can be performed with [ProteoWizard](http://proteowizard.sourceforge.net/).
 
 # Example Data
-The application comes with HILIC-MS example data acquired using a urine sample, so that one can become familiar with MSbrowser's functionalities before using own data.
+The application comes with HILIC-MS example data acquired using a urine sample, so that one can familiarise oneself with MSbrowser's functionalities before using own data.
 
 
 # Feedback
