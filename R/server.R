@@ -56,11 +56,14 @@ server <- function(input, output, session) {
     impvis=0,
     peaktbl=0,
     div_input_collapse=1,
-    div_target_collapse=1#,
+    div_target_collapse=1,
+    nopeaks=0
     # pa=0,
     # bp=0,
     # pc=0
   )
+
+  dat_pl=reactiveVal()
 
   # # suppress warnings
   # storeWarn<- getOption("warn")
@@ -432,11 +435,15 @@ server <- function(input, output, session) {
     })
 
 
-    observeEvent(input$raw_trans, {
+    observeEvent({
+      req(input$raw_trans)
+      input$raw_trans}, {
       pars$trans_plot=input$raw_trans
     }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(input$in_noisethr, {
+    observeEvent({
+      req(input$in_noisethr)
+      input$in_noisethr}, {
       pars$noise_plot=input$in_noisethr
     })
 
@@ -472,11 +479,8 @@ server <- function(input, output, session) {
         removeUI('#div_input_collapse')
         ui_ind$div_input_collapse=0
 
-        removeUI('#target_col')
-        ui_ind$div_target_collapse=0
-
         mf=raw_data()[[1]]
-        message('Generating spectral area plot (scan time vs mz).\n')
+        message('Generating spectral area plot (scan time vs mz).')
         target.rt=as.numeric(input$in_rt)
         target.mz=as.numeric(input$in_mz)
         # create sub with fixed equidist window size from target signal
@@ -486,6 +490,7 @@ server <- function(input, output, session) {
         ra.mz=c(max(target.mz-wind.mz, min(mf$mz)), min(target.mz+wind.mz, max(mf$mz)))
         idx=which(mf$mz>ra.mz[1] & mf$mz<ra.mz[2] & mf$scantime>ra.rt[1] & mf$scantime<ra.rt[2])
         sub=mf[idx,]
+        dat_pl(sub)
         # plot raw data
 
         output$rawdd <- renderPlotly({
@@ -527,7 +532,7 @@ server <- function(input, output, session) {
         return(sub)
       }, ignoreNULL = T, ignoreInit = T)
 
-    observeEvent(ttt(), {message(paste0('Dimension raw data matrix ', nrow(ttt()), 'x', ncol(ttt())))})
+    observeEvent(ttt(), {message(paste0('Number of data points ', nrow(ttt()), '.'))})
 
     # transition to next step (select region for vis 3d raw data)
     # either by clicking on next (move)
@@ -569,18 +574,24 @@ server <- function(input, output, session) {
 
     # peak picking
     fgt <- eventReactive(input$pickpeak1, {
+      #browser()
+
       #showTab(inputId = "msexpl", target = "ppick", select=T)
       updateTabsetPanel(session, inputI='msexpl', selected = 'ppick')
-      message('Performing peak picking...')
-      removeNotification('nopeaks')
+      if(ui_ind$nopeaks==1){
+        removeNotification('nopeaks')
+        ui_ind$nopeaks=0
+      }
       raw_xcms=raw_data()[[2]] # this is xcms object
       target.rt=as.numeric(input$in_rt)
       target.mz=as.numeric(input$in_mz)
       wind.rt=input$in_rt_ws/2
       wind.mz=input$in_mz_ws/2
-      mf=ttt()
+      mf=dat_pl()
+      #if(exists(mf))
       switch(input$in_pickMethod,
              'centWave'={
+               message('Performing peak picking (centWave)')
                peaktbl=findPeaks.centWave(raw_xcms,
                                           ppm=as.numeric(input$in_mzdev),
                                           peakwidth=input$in_rtrange,
@@ -614,6 +625,7 @@ server <- function(input, output, session) {
 
              },
              'matchedFilter'={
+               message('Performing peak picking (matchedFilter)')
                peaktbl=findPeaks.matchedFilter(raw_xcms,
                                                fwhm=as.numeric(input$in_fwhm),
                                                sigma=as.numeric(input$in_sigma),
@@ -734,16 +746,17 @@ server <- function(input, output, session) {
         })
         return(ptbl)
       }else{
-        message('No peaks detected!');
+        message('No peaks detected- change parameter values!');
+        ui_ind$nopeaks=1
         showNotification(ui="No peaks detected!", duration=NULL, closeButton = T, type='error', id='nopeaks');
         return(NULL)
       }
     }, ignoreNULL = T)
-    #
+
     observeEvent(fgt(), {
-      message(paste('rows peak table', nrow(fgt())))
+      message(paste('Features:', nrow(fgt())))
     })
-    #
+
     peakTbl <- observeEvent(fgt(), {
       out=fgt()[,c(11, 1:10)]
       rownames(out)=NULL

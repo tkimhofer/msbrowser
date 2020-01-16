@@ -87,9 +87,9 @@ uiT_ichron=tabPanel("Chromatograms and mass spectrum",  value='ichron',
 
 
 uiT_rawData=tabPanel(title="Raw Data",  value='rawData',
-                     br(),
+                     fluidRow(style = "height:1040px;",
                      withSpinner(plotlyOutput('rawdd', width = "100%",
-                                              inline = T), type=4, color="#0dc5c1"),
+                                              inline = T), type=4, color="#0dc5c1")),
                      add_busy_bar(color = "#FBDD00")
 )
 
@@ -98,12 +98,14 @@ uiT_ppick=tabPanel("Detected Features",  value='ppick',
 
                    withSpinner(plotlyOutput('pp1', width = "100%", inline = T), type=4)),
                    fluidRow(
-                     column(width=10,
+                     column(width=11,
                      wellPanel(
                    span(h4('R console commands'), style='color: black'),
                    span(textOutput('Rcode_loadp'), style="font-family: Courier,courier; font-size:100%"),
+                   br(),
                    span(textOutput('Rcode_file'), style="font-family: Courier,courier; font-size:100%"),
                    span(textOutput('Rcode_readIn'), style="font-family: Courier,courier; font-size:100%"),
+                   br(),
                    span(textOutput('Rcode_ppick'), style="font-family: Courier,courier; font-size:100%"))),
                    add_busy_bar(color = "#FBDD00"))
 )
@@ -215,8 +217,9 @@ uiE_div_tar_col=div(id='target_col', div(id='selectors',
                                                                  helpText('Compund values below are instrument and assay specific!',  tags$strong('Interprete carefully, since scan times vary!'), 'Please refer to the ', a('GitHub Wiki', href='https://github.com/tkimhofer/msbrowser/wiki/Database-Table-Editing', target="_blank"), 'for instructions on database personalisation.'),
                                                                  br(),
                                                                  fluidRow(
-                                                                   column(12,
-                                                                          radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(as.character(icst$assay)), direction = "horizontal"),
+                                                                   column(4,
+                                                                          radioGroupButtons(inputId= "db_assays", label = "Assay type", choices = unique(as.character(icst$assay)), direction = "horizontal")),
+                                                                   column(8,
                                                                           selectizeInput('in_icst', label='Compounds', choices = c('Select assay')),
                                                                           textOutput('compound_info'), br()
                                                                    )),
