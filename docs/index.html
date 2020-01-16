@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Peak picking parameter optimisation for xcms • msbrowser</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Peak picking parameter optimisation for xcms">
 <meta property="og:description" content="A shiny application designed for fast and easy parameter testing for xcms peak picking performance optimisation. The tool uses simple statistical techniques and different visualisation modalities that enable the user to gain insight into the LC-MS data structure and the effects different xcms parameter have on peak picking performance. The application can be run on a local computer running R.">
@@ -94,7 +94,7 @@
 <p>The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance.</p>
 <p>MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package.</p>
 <p><img src="imgs/msbrowserGIF1.gif"></p>
-<p>The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:</p>
+<p>MSbrowser addresses the need to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:</p>
 <ul>
 <li>Generation of LC-MS experiment summary statistics</li>
 <li>User-interactive LC-MS data visualisatons that allow gaining insight into raw MS data structure</li>
@@ -105,7 +105,7 @@
 <div id="app-installation-and-launch" class="section level1">
 <h1 class="hasAnchor">
 <a href="#app-installation-and-launch" class="anchor"></a>App installation and launch</h1>
-<p>The MSbrowser package is hosted on <a href="https://github.com/">GitHub</a> and is build with <a href="https://bioconductor.org/packages/release/bioc/html/xcms.html">xcms</a> version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.</p>
+<p>The MSbrowser package is hosted on <a href="https://github.com/">GitHub</a> and is build with <a href="https://bioconductor.org/packages/release/bioc/html/xcms.html/">xcms</a> version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install dependencies from CRAN (devtools and BiocManager)</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">deps=<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'devtools'</span>, <span class="st">'BiocManager'</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">id=deps <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span>()[,<span class="dv">1</span>]</a>
@@ -124,8 +124,8 @@ devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 <div id="documentation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h1>
-<p>MSbrowser has an intuitive workflow, with <strong>help text placed in the user interface</strong>.</p>
-<p>A Guide for <em>centWave</em> peak picking parameters can be found under the <a href="https://tkimhofer.github.io/msbrowser/articles/pars.html"><em>centWave Resources</em></a> option in the page menu above.</p>
+<p>MSbrowser has an intuitive workflow, with help text placed in the user interface. Basic app functionalities and an illustration of the general workflow for fine-tuning of xcms peak picking parameters can be found in this <a href="https://vimeo.com/385203675/">video tutorial</a>.</p>
+<p>A Guide for <em>centWave</em> peak picking parameters can be found under the <a href="https://tkimhofer.github.io/msbrowser/articles/pars.html/"><em>centWave Resources</em></a> option in the page menu above.</p>
 <p>MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., <a href="http://proteowizard.sourceforge.net/">ProteoWizard</a>) or online tool (e.g., <a href="https://gnps-quickstart.ucsd.edu/conversion">GNPS</a>).</p>
 </div>
 <div id="example-data" class="section level1">
@@ -136,12 +136,12 @@ devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 <div id="feedback" class="section level1">
 <h1 class="hasAnchor">
 <a href="#feedback" class="anchor"></a>Feedback</h1>
-<p>Got questions or suggestions? Log an <a href="https://github.com/tkimhofer/msbrowser/issues">issue on GitHub</a> (requires login) or <a href="mailto:torben.kimhofer@murdoch.edu.au?subject=%5BMSbrwoser%5D%20Source%20Han%20Sans">drop me an email</a>!</p>
+<p>Got questions or suggestions? Log an <a href="https://github.com/tkimhofer/msbrowser/issues/">issue on GitHub</a> (requires login) or <a href="mailto:torben.kimhofer@murdoch.edu.au?subject=%5BMSbrwoser%5D%20Source%20Han%20Sans">drop me an email</a>!</p>
 </div>
 
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
@@ -162,7 +162,7 @@ devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Torben Kimhofer <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-7158-9930" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> <br><small>(https://www.tkimhofer.com)</small>
+<li>Torben Kimhofer <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-7158-9930" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(https://www.tkimhofer.com)</small>
 </li>
 </ul>
 </div>
@@ -176,7 +176,7 @@ devtools::install_github('tkimhofer/msbrowser')</a></code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

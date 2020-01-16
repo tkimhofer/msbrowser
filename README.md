@@ -17,7 +17,7 @@ MSbrowser is implemented in a user-friendly web-application framework that can b
 
 ![](docs/imgs/msbrowserGIF1.gif)
 
-The idea behind MSbrowser is to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
+MSbrowser addresses the need to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
 
 - Generation of LC-MS experiment summary statistics 
 - User-interactive LC-MS data visualisatons that allow gaining insight into raw MS data structure
@@ -27,7 +27,7 @@ The idea behind MSbrowser is to make peak picking of LC-MS data more transparent
 
 # App installation and launch
 
-The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
+The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html/) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
 
 ```R
 # install dependencies from CRAN (devtools and BiocManager)
@@ -55,10 +55,11 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 
 
-# Documentation 
-MSbrowser has an intuitive workflow, with **help text placed in the user interface**. 
 
-A Guide for *centWave* peak picking parameters can be found under the [*centWave Resources*](https://tkimhofer.github.io/msbrowser/articles/pars.html) option in the page menu above. 
+# Documentation 
+MSbrowser has an intuitive workflow, with help text placed in the user interface. Basic app functionalities and an illustration of the general workflow for fine-tuning of xcms peak picking parameters can be found in this [video tutorial](https://vimeo.com/385203675/).
+
+A Guide for *centWave* peak picking parameters can be found under the [*centWave Resources*](https://tkimhofer.github.io/msbrowser/articles/pars.html/) option in the page menu above. 
 
 MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., [ProteoWizard](http://proteowizard.sourceforge.net/)) or online tool (e.g., [GNPS](https://gnps-quickstart.ucsd.edu/conversion)).
 
@@ -67,4 +68,4 @@ The application comes with HILIC-MS example data acquired from a urine sample, s
 
 
 # Feedback
-Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!
+Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!
