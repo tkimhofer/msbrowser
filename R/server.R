@@ -118,7 +118,7 @@ server <- function(input, output, session) {
         pars$msfile=msfile1
         message(paste0('Selected file: ', pars$msfile))
 
-        updateTabsetPanel(session, inputI='msexpl', selected = 'ichron')
+        updateTabsetPanel(session, inputId='msexpl', selected = 'ichron')
 
         # remove all ui's that have been included with other files
         removeTab('msexpl', 'ichron')
@@ -326,7 +326,7 @@ server <- function(input, output, session) {
 
 
     observeEvent(input$go_xic, {
-      updateTabsetPanel(session, inputI='msexpl', selected = 'ichron')
+      updateTabsetPanel(session, inputId='msexpl', selected = 'ichron')
       xic_ra=sort(input$xic_ra)
       if(all(is.numeric(xic_ra))){
         if(length(xic_ra)==2 & all(!is.na(xic_ra)) &  xic_ra[2]!=xic_ra[1]){
@@ -461,7 +461,7 @@ server <- function(input, output, session) {
           )
           ui_ind$rawData=1
         }else{
-          updateTabsetPanel(session, inputI='msexpl', selected = 'rawData')
+          updateTabsetPanel(session, inputId='msexpl', selected = 'rawData')
         }
 
         if(input$target_input=='man'){
@@ -577,7 +577,7 @@ server <- function(input, output, session) {
       #browser()
 
       #showTab(inputId = "msexpl", target = "ppick", select=T)
-      updateTabsetPanel(session, inputI='msexpl', selected = 'ppick')
+      updateTabsetPanel(session, inputId='msexpl', selected = 'ppick')
       if(ui_ind$nopeaks==1){
         removeNotification('nopeaks')
         ui_ind$nopeaks=0
