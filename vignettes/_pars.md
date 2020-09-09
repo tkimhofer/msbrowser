@@ -27,7 +27,7 @@ All centWave parameters require fine-tuning for each assay type and mass analyse
 
 &nbsp;
 
-## ***<span style="color:red">ppm</span>***: Allowed signal deviation in m/z dimension
+## ***<span style="color:red">ppm</span>***: Maximum allowed signal deviation in m/z dimension
 This *centWave* parameter *ppm* specifies the tolerance in m/z values for defining a signal in m/z dimensions. This parameter is closely related to the mass accuracy of the mass spectrometer, which is traditionally expressed in parts per million (ppm). 
 
 <p align="center">
@@ -90,7 +90,7 @@ Closely related to the noise structure is the *snthresh* parameter, allowing to 
 ![](../imgs/pars1/snthresh_formula.png)
 </p>
 
-This S/N definition can be problematic when the noise structure is not evenly distributed across the m/z dimension. The example below shows that higher intensity signals are discarded with higher *snthresh* values, most likely due to noisy and high intensity data points in proximity to the signal's m/z trace. The final peak list using a high *snthresh* parameter value contains signals of low intensities, which is somewhat unexpected.
+This S/N definition can be problematic when the noise structure is not evenly distributed across the m/z dimension. The example below shows that higher intensity signals are discarded with higher *snthresh* values, most likely due to noisy and high intensity data points in proximity to the signal's m/z trace. The final peak list using a high *snthresh* parameter value contains signals of low intensities, which is somewhat unexpected. **UPDATE: THIS BEHAVIOUR IS ONLY OBSERVERVED WHEN CENTWAVE FUNCITON IS PARAMTETRISED WITH THE SCANRANGE ARGUMENT.**
 
 <p align="center">
 ![](../imgs/pars1/snthresh_comp.png)
