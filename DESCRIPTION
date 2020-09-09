@@ -29,7 +29,8 @@ Imports:
   stats  (>= 1.4),
   utils,
   xcms  (>= 3.6),
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 StagedInstall: yes
+VignetteBuilder: utils
 URL: https://github.com/tkimhofer/msbrowser
 BugReports: https://github.com/tkimhofer/msbrowser/issues

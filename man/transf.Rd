@@ -8,6 +8,8 @@ transf(df, trans)
 }
 \arguments{
 \item{df}{data.frame with scantime, m/z value and intensity}
+
+\item{trans}{char indicating transformation methods}
 }
 \description{
 Transformation functions

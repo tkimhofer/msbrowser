@@ -1,6 +1,6 @@
 #' @title  Transformation functions
 #' @param df data.frame with scantime, m/z value and intensity
-
+#' @param trans char indicating transformation methods
 transf=function(df, trans){
 
   switch(trans,
