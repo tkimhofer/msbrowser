@@ -4,12 +4,15 @@
 \alias{chrom_bpc_tic}
 \title{Plotting function for base peak and total ion chromatrogram in a single plot}
 \usage{
-chrom_bpc_tic(df = raw_data()[[1]], pars)
+chrom_bpc_tic(df, pars)
 }
 \arguments{
 \item{df}{data.frame with scantime, m/z value and intensity}
 
 \item{pars}{plotting parameters (shiny reactive values)}
+}
+\value{
+plotly object
 }
 \description{
 Plotting function for base peak and total ion chromatrogram in a single plot

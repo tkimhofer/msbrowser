@@ -12,3 +12,8 @@ shiny application object
 \description{
 Launch MSbrowser application
 }
+\examples{
+\dontrun{
+msbrowser::startApp()
+}
+}

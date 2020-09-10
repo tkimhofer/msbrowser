@@ -13,6 +13,9 @@ server(input, output, session)
 
 \item{session}{session ID}
 }
+\value{
+Server part of the app
+}
 \description{
 Shiny app server function
 }

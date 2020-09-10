@@ -9,6 +9,9 @@ xcms_df(raw_xcms)
 \arguments{
 \item{raw_xcms}{xcms data object}
 }
+\value{
+data frame mz, Int, scan, scantime
+}
 \description{
 Read-in LC-MS file (xcms) and extract raw scan data and create dataframe
 }

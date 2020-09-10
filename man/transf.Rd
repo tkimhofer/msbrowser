@@ -11,6 +11,9 @@ transf(df, trans)
 
 \item{trans}{char indicating transformation methods}
 }
+\value{
+data frame with transformed counts
+}
 \description{
 Transformation functions
 }

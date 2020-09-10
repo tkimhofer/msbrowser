@@ -1,6 +1,10 @@
 ---
 title: "centWave Parameters"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{centWave Parameters}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 *ppm, peakwidth, snthresh, prefilter, mzCenterFun, integrate, mzdiff, fitgauss, scanrange, noise.*  
 
@@ -96,7 +100,7 @@ Closely related to the noise structure is the *snthresh* parameter, allowing to 
 ![](../imgs/pars1/snthresh_formula.png)
 </p>
 
-This S/N definition can be problematic when the noise structure is not evenly distributed across the m/z dimension. The example below shows that higher intensity signals are discarded with higher *snthresh* values, most likely due to noisy and high intensity data points in proximity to the signal's m/z trace. The final peak list using a high *snthresh* parameter value contains signals of low intensities, which is somewhat unexpected. **UPDATE: THIS BEHAVIOUR IS ONLY OBSERVERVED WHEN CENTWAVE FUNCITON IS PARAMTETRISED WITH THE SCANRANGE ARGUMENT.**
+This S/N definition can be problematic when the noise structure is not evenly distributed across the m/z dimension. The example below shows that higher intensity signals are discarded with higher *snthresh* values, most likely due to noisy and high intensity data points in proximity to the signal's m/z trace. The final peak list using a high *snthresh* parameter value contains signals of low intensities, which is somewhat unexpected. **UPDATE: THIS BEHAVIOUR IS ONLY OBSERVERVED WHEN CENTWAVE FUNCITON IS PARAMTETRISED WITH THE SCANRANGE ARGUMENT (such as in MSbrowser).**
 
 <p align="center">
 ![](../imgs/pars1/snthresh_comp.png)

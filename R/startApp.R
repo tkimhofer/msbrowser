@@ -4,11 +4,13 @@
 #'
 #' @return shiny application object
 #' @examples
+#' \dontrun{
 #' msbrowser::startApp()
+#' }
 #' @import shiny
 
 
 
 startApp <- function() {
-  shinyApp(ui = ui, server = server)
+    shinyApp(ui = ui, server = server)
 }

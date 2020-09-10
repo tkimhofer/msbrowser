@@ -11,6 +11,9 @@ massspectrum(df, pars)
 
 \item{pars}{plotting parameters (shiny reactive values)}
 }
+\value{
+plotly object
+}
 \description{
 Plotting function for single scan mass spectrum
 }

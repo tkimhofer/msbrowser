@@ -11,6 +11,9 @@ chrom_xic(df, pars)
 
 \item{pars}{plotting parameters (shiny reactive values)}
 }
+\value{
+plotly object
+}
 \description{
 Plotting function for eXtracted Ion Chromatogram (XIC)
 }

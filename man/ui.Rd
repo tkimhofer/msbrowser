@@ -3,12 +3,15 @@
 \docType{data}
 \name{ui}
 \alias{ui}
-\title{Shiny app server function}
+\title{Shiny app UI function}
 \format{An object of class \code{shiny.tag.list} (inherits from \code{list}) of length 3.}
 \usage{
 ui
 }
+\value{
+UI part of the app
+}
 \description{
-Shiny app server function
+Shiny app UI function
 }
 \keyword{datasets}
