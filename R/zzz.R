@@ -4,8 +4,8 @@
   #addResourcePath('www',  system.file("www", package = "msbrowser"))
 
   invisible(suppressPackageStartupMessages(
-    sapply(c('xcms', 'mzR', 'methods', 'shiny'),
-           requireNamespace, quietly = TRUE)
+    vapply(c('xcms', 'mzR', 'methods', 'shiny'),
+           requireNamespace, quietly = TRUE, FUN.VALUE = NULL)
   )
   )
 
@@ -15,8 +15,8 @@
 
 .onLoad <- function(libname, pkgname) {
   invisible(suppressPackageStartupMessages(
-    sapply(c('xcms', 'mzR', 'methods', 'shiny'),
-           requireNamespace, quietly = TRUE)
+    vapply(c('xcms', 'mzR', 'methods', 'shiny'),
+           requireNamespace, quietly = TRUE, FUN.VALUE = NULL)
   )
   )
 }

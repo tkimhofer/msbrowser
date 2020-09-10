@@ -1,6 +1,7 @@
 #' @title  Plotting function for base peak and total ion chromatrogram in a single plot
 #' @param df data.frame with scantime, m/z value and intensity
 #' @param pars plotting parameters (shiny reactive values)
+#' @return plotly object
 #' @import shiny
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
 #' @import plyr
@@ -9,7 +10,7 @@
 #' @importFrom plotly renderPlotly plot_ly add_trace layout event_register event_data add_segments add_text ggplotly hide_colorbar
 #' @importFrom magrittr %>%
 
-chrom_bpc_tic=function(df=raw_data()[[1]], pars){
+chrom_bpc_tic=function(df, pars){
   message('bpc & tic')
   # filter for mz value
   tic=ddply(df, as.quoted('scantime'),function(x) sum(x$Int))
@@ -26,13 +27,13 @@ chrom_bpc_tic=function(df=raw_data()[[1]], pars){
                         showspikes = TRUE,
                         spikemode  = 'toaxis+across',
                         spikesnap = 'data',
-                        showline=F,
-                        zeroline = F,
+                        showline=FALSE,
+                        zeroline = FALSE,
                         spikedash = 'solid',
                         showgrid=TRUE),
            yaxis = list(title='Counts',
-                        showgrid = F,
-                        showticklabels = T,
+                        showgrid = FALSE,
+                        showticklabels = TRUE,
                         zeroline = FALSE,
                         showline=F),
            hovermode  = 'x',

@@ -9,7 +9,6 @@
 #' @import plyr
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
 #' @importFrom colorRamps matlab.like2
-#' @importFrom dbscan dbscan
 #' @importFrom DT renderDataTable
 #' @importFrom reshape2 melt
 #' @importFrom shinyBS bsTooltip
@@ -82,7 +81,7 @@ server <- function(input, output, session) {
       ui_ind$div_input_collapse=1
     }
 
-  }, ignoreInit = T, ignoreNULL = T)
+  }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
 
@@ -98,7 +97,7 @@ server <- function(input, output, session) {
       ui_ind$div_target_collapse=1
     }
 
-  }, ignoreInit = T, ignoreNULL = T)
+  }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
 
@@ -171,13 +170,13 @@ server <- function(input, output, session) {
         # cat('Reading example file...')
         message(paste0('Selected file: ', pars$msfile))
       }else{pars$msfile=exF}
-    }, ignoreNULL = T, ignoreInit = T)
+    }, ignoreNULL = TRUE, ignoreInit = TRUE)
   }
 
   # AND READ DATA
   raw_data<-eventReactive(pars$msfile, {
 
-    raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = F, mslevel = 1)
+    raw_xcms=xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE, mslevel = 1)
     df_xcms=xcms_df(raw_xcms)
 
     #browser()
@@ -186,9 +185,9 @@ server <- function(input, output, session) {
       {data.frame(Descr=c('Scan time range', 'Scan frequency', 'Mass range', 'Median ion count across scans', 'Counts ECDF(x<=X), p=0.98'),
                   Value=c(paste(paste(round(range(raw_xcms@scantime)), collapse = '-'), 's'),
                           paste(round(1/median(diff(raw_xcms@scantime[order(raw_xcms@scanindex)]))), 'scans per s'), paste(paste(round(raw_xcms@mzrange), collapse = '-'), 'm/z'),
-                          paste(format(median(raw_xcms@tic), scientific = T, digits = 3)),
+                          paste(format(median(raw_xcms@tic), scientific = TRUE, digits = 3)),
                           paste(pars$noise98p))
-      )} , rownames=F, colnames=F, spacing='xs', caption = "Summary", caption.placement = getOption("xtable.caption.placement", "top"),
+      )} , rownames=FALSE, colnames=FALSE, spacing='xs', caption = "Summary", caption.placement = getOption("xtable.caption.placement", "top"),
       caption.width = getOption("xtable.caption.width", NULL))
 
 
@@ -223,7 +222,7 @@ server <- function(input, output, session) {
         )
         ui_ind$xicra=0
       }
-    }, ignoreInit = T, ignoreNULL = T)
+    }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
 
@@ -237,7 +236,7 @@ server <- function(input, output, session) {
     pars$scantimera=range(df_xcms$scantime)
     #cat('completed!\nPlotting chromatograms and mass spectrum...')
     return(list(df_xcms, raw_xcms))
-  }, ignoreNULL = T, ignoreInit = T)
+  }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
 
 
@@ -273,7 +272,7 @@ server <- function(input, output, session) {
         prependTab(
           inputId='msexpl',
           tab=uiT_ichron,
-          select=T
+          select=TRUE
         )
         ui_ind$ichron=1
       }
@@ -282,7 +281,7 @@ server <- function(input, output, session) {
       pars$xic_ra=xic_mzrange(pars$xic_mz, pars$ppm_change)
       # scantime for single scan mass spectrum
       pars$mspec_scant=pars$Imax_xic_scant
-    }, ignoreNULL = T)
+    }, ignoreNULL = TRUE)
 
 
     # 2. click on BPC/TIC
@@ -307,7 +306,7 @@ server <- function(input, output, session) {
         pars$xic_mz=sub$mz[which.max(sub$Int)]
         pars$xic_ra=xic_mzrange(pars$xic_mz, pars$ppm_change)
 
-      }, ignoreInit = T, ignoreNULL = T)
+      }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
     # pb_act=observeEvent(
@@ -320,7 +319,7 @@ server <- function(input, output, session) {
         # which scan xic is closest to click, save scan mspec
         sdif=abs(df$scantime-event.data$x[1])
         pars$mspec_scant=df$scantime[which(sdif==min(sdif))[1]]
-      }, ignoreInit = T, ignoreNULL = T)
+      }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
     # clean-up / validate manually entered mz range for xic
 
@@ -334,9 +333,9 @@ server <- function(input, output, session) {
           pars$xic_ra=xic_ra
         }
       } else{
-        showNotification(ui="Check entered mass range for XIC!", duration=NULL, closeButton = T, type='warning', id='xic_notnumeric')
+        showNotification(ui="Check entered mass range for XIC!", duration=NULL, closeButton = TRUE, type='warning', id='xic_notnumeric')
       }
-    }, ignoreNULL = T, ignoreInit = T)
+    }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
 
     # Generate xic plot based on trigger event
@@ -348,7 +347,7 @@ server <- function(input, output, session) {
           pars$pb=1
           return(pb)
         })
-      }, ignoreNULL = T, ignoreInit = T)
+      }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     observeEvent(
       {pars$xic_ra
@@ -363,13 +362,14 @@ server <- function(input, output, session) {
           # pc<<-pc
           # pc
         })
-      }, ignoreNULL = T, ignoreInit = T)
+      }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
 
 
     observeEvent({
       req(pars$pc)
       event_data("plotly_click", source='pc')
+      print('selection in mass spectrum')
       },{
         event.data <- event_data("plotly_click", source='pc')
         #browser()
@@ -405,11 +405,11 @@ server <- function(input, output, session) {
         updateNumericInput(session, inputId='in_mz', value=round(as.numeric(pars$pp.mz), 4))
         updateNumericInput(session, inputId='in_noisethr', value=round(pars$noise98p))
 
-      }, ignoreInit = T, ignoreNULL = T)
+      }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
     observeEvent(input$'imp_vis',{
-      if(input$'imp_vis'==T & ui_ind$impvis==0){
+      if(input$'imp_vis'==TRUE & ui_ind$impvis==0){
         insertUI(
           selector='#selectors1',
           where='afterEnd',
@@ -426,7 +426,7 @@ server <- function(input, output, session) {
         ui_ind$impvis=1
       }
 
-      if(input$'imp_vis'==F & ui_ind$impvis==1){
+      if(input$'imp_vis'==FALSE & ui_ind$impvis==1){
         removeUI(
           selector = '#div_vis'
         )
@@ -439,7 +439,7 @@ server <- function(input, output, session) {
       req(input$raw_trans)
       input$raw_trans}, {
       pars$trans_plot=input$raw_trans
-    }, ignoreNULL = T, ignoreInit = T)
+    }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     observeEvent({
       req(input$in_noisethr)
@@ -457,7 +457,7 @@ server <- function(input, output, session) {
             tab=uiT_rawData,
             target='ichron',
             position='after',
-            select=T
+            select=TRUE
           )
           ui_ind$rawData=1
         }else{
@@ -503,8 +503,8 @@ server <- function(input, output, session) {
           df=transf(sub, pars$trans_plot)
 
           g1=ggplot()+
-            geom_point(data=df[idx,], aes(scantime, mz, colour=Int), size=0.1)+
-            geom_point(data=df[!idx,], aes(scantime, mz, colour=Int), size=1)+
+            geom_point(data=df[idx,], aes_string('scantime', 'mz', colour='Int'), size=0.1)+
+            geom_point(data=df[!idx,], aes_string('scantime', 'mz', colour='Int'), size=1)+
             #scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scantime (min)'))+
             theme_bw()+
             scale_colour_gradientn(colours=matlab.like2(10))+
@@ -516,7 +516,7 @@ server <- function(input, output, session) {
 #             g1= g1+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
 #           }
 
-          ggplotly(g1, height=1000, width=1100, dynamicTicks=T)
+          ggplotly(g1, height=1000, width=1100, dynamicTicks=TRUE)
         })
 
 
@@ -530,7 +530,7 @@ server <- function(input, output, session) {
 
         }
         return(sub)
-      }, ignoreNULL = T, ignoreInit = T)
+      }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     observeEvent(ttt(), {message(paste0('Number of data points ', nrow(ttt()), '.'))})
 
@@ -550,7 +550,7 @@ server <- function(input, output, session) {
         updateSelectizeInput(session, "in_icst",
                              label = "Compound",
                              choices = dlply(icst_cname, as.quoted('info'), function(x) {x[,2]}),
-                             selected=F)
+                             selected=FALSE)
         output$compound_info=renderText({''})
       })
 
@@ -569,7 +569,7 @@ server <- function(input, output, session) {
           #pars$pp.rt.ra=input$in_rt_ws
 
         }
-      }, ignoreNULL = T, ignoreInit = T)
+      }, ignoreNULL = TRUE, ignoreInit = TRUE)
     }
 
     # peak picking
@@ -607,7 +607,7 @@ server <- function(input, output, session) {
                peaktbl=as.data.frame(peaktbl)
 
                codeF=paste0('msfile=\"', pars$msfile, '\"\n')
-               codeRI=paste0('xcms_data=xcmsRaw(filename=msfile , profstep = 0, includeMSn = F, mslevel = 1)\n')
+               codeRI=paste0('xcms_data=xcmsRaw(filename=msfile , profstep = 0, includeMSn = FALSE, mslevel = 1)\n')
                codePP=paste0('xcms_ppick=findPeaks.centWave(xcms_data, ', 'ppm=', as.numeric(input$in_mzdev), ' , peakwidth=c(', input$in_rtrange[1], ', ', input$in_rtrange[2] ,'), snthresh=', as.numeric(input$in_sn),', prefilter=c(', input$in_prefilter_k, ', ', as.numeric(input$in_prefilter_I), '), mzCenterFun="', input$in_mzCentFun, '", integrate=', as.numeric(input$in_integrate), ', mzdiff=', input$in_mzdiff, ', fitgauss=', input$in_fitgauss, ', noise=', as.numeric(input$in_noise), ')\n')
 
                # cat(codeRI, '\n')
@@ -696,7 +696,7 @@ server <- function(input, output, session) {
             tab=uiT_ppick,
             target='rawData',
             position='after',
-            select=T
+            select=TRUE
           )
 
           insertTab(
@@ -704,7 +704,7 @@ server <- function(input, output, session) {
             tab=uiT_peaks,
             target='ppick',
             position='after',
-            select=F
+            select=FALSE
           )
 
 
@@ -714,8 +714,8 @@ server <- function(input, output, session) {
 
         #cat('Vis peaks.\n')
         ptbl=peaktbl[idx,]
-        ptbl=ptbl[order(ptbl$maxo, decreasing = T),]
-        ptbl$feature=as.character(1:nrow(ptbl))
+        ptbl=ptbl[order(ptbl$maxo, decreasing = TRUE),]
+        ptbl$feature=as.character(seq_len(nrow(ptbl)))
         output$pp1 <- renderPlotly({
 
           # raw data
@@ -727,10 +727,10 @@ server <- function(input, output, session) {
           df$peak='No'
           df$peak[idc]='Yes'
           g2=ggplot()+
-            geom_point(data=subset(df, peak=='No'), aes(scantime, mz, colour=Int), size=0.1)+
-            geom_rect(data=ptbl, aes(xmin=rtmin, xmax=rtmax, ymin=mzmin, ymax=mzmax),  size=1 , color='darkgrey', fill='darkgrey')+
-            geom_point(data=subset(df, peak=='Yes'), aes(scantime, mz, colour=Int), size=1)+
-            geom_text(data=ptbl, aes(x=rtmax, y=mzmin, label=feature), colour='red', size=5, hjust=0, vjust=0)+
+            geom_point(data=subset(df, peak=='No'), aes_string('scantime', 'mz', colour='Int'), size=0.1)+
+            geom_rect(data=ptbl, aes_string(xmin='rtmin', xmax='rtmax', ymin='mzmin', ymax='mzmax'),  size=1 , color='darkgrey', fill='darkgrey')+
+            geom_point(data=subset(df, peak=='Yes'), aes_string('scantime', 'mz', colour='Int'), size=1)+
+            geom_text(data=ptbl, aes_string(x='rtmax', y='mzmin', label='feature'), colour='red', size=5, hjust=0, vjust=0)+
             theme_bw()+
             scale_colour_gradientn(colours=matlab.like2(10))+
             scale_x_continuous(sec.axis = sec_axis(trans=~./60, name='Scan time (min)'))+
@@ -742,23 +742,23 @@ server <- function(input, output, session) {
           #   g2= g2+scale_colour_gradientn(colours=matlab.like2(10), trans=pars$trans_plot)
           # }
 
-          ggplotly(g2, height=1000, width=1100, dynamicTicks=T)
+          ggplotly(g2, height=1000, width=1100, dynamicTicks=TRUE)
         })
         return(ptbl)
       }else{
         message('No peaks detected- change parameter values!');
         ui_ind$nopeaks=1
-        showNotification(ui="No peaks detected!", duration=NULL, closeButton = T, type='error', id='nopeaks');
+        showNotification(ui="No peaks detected!", duration=NULL, closeButton = TRUE, type='error', id='nopeaks');
         return(NULL)
       }
-    }, ignoreNULL = T)
+    }, ignoreNULL = TRUE)
 
     observeEvent(fgt(), {
       message(paste('Features:', nrow(fgt())))
     })
 
     peakTbl <- observeEvent(fgt(), {
-      out=fgt()[,c(11, 1:10)]
+      out=fgt()[,c(11, seq_len(10))]
       rownames(out)=NULL
       #cat('Ouputting peak table.\n')
       idx=grep('mz', colnames(out))
@@ -770,7 +770,7 @@ server <- function(input, output, session) {
 
       # browser()
       output$PeakTbl=DT::renderDataTable(
-        out, server=F,
+        out, server=FALSE,
         selection = 'multiple',
         escape = FALSE,
         extensions = 'Buttons',
@@ -782,13 +782,13 @@ server <- function(input, output, session) {
           rownames= FALSE
         ),
         rownames= FALSE)
-    }, ignoreNULL = T, ignoreInit = F)
+    }, ignoreNULL = TRUE, ignoreInit = FALSE)
 
     observeEvent(input$plotselection, {
       idx=input$PeakTbl_rows_selected
       if(length(idx)>0){
         removeNotification('norows')
-        df=fgt()[idx,c(11, 1:10)]
+        df=fgt()[idx,c(11, seq_len(10))]
         df$feature=paste('Feat.', df$feature)
         df$feature=factor(df$feature, levels=df$feature)
         output$peakplt <- renderPlotly({
@@ -796,7 +796,7 @@ server <- function(input, output, session) {
           plot_ly(df, x = ~feature, type = 'bar', hoverinfo = 'text', y = ~into, name = 'into: Signal integration', text = ~paste0('into<br />', text_hover), marker = list(color = 'rgba(255,88,120,,0.8)')) %>%
             add_trace(y = ~intb, name = 'intb: Signal integration after baseline correction', text = ~paste0('intb<br />', text_hover), marker = list(color = 'rgba(255,213,117,,0.8)')) %>%
             add_trace(y = ~maxo, name = 'maxo: Maximum signal intensity', text = ~paste0('maxo<br />', text_hover), marker = list(color = 'rgba(0, 214, 167,0.8)')) %>%
-            layout(yaxis = list(title = 'Intensity', showgrid = T), barmode = 'group', xaxis = list(title = ''), legend=list(x=0.15, y=-0.1, orientation='h'))
+            layout(yaxis = list(title = 'Intensity', showgrid = TRUE), barmode = 'group', xaxis = list(title = ''), legend=list(x=0.15, y=-0.1, orientation='h'))
         })
         output$peakpltIso <- renderPlotly({
           int_max=max(df$maxo)
@@ -814,30 +814,30 @@ server <- function(input, output, session) {
 
           g1=plot_ly() %>%
             layout(scene = list(xaxis = list(title = "scan time (s)", range = ra_rt), yaxis = list(title = "m/z", range = ra_mz), zaxis = list(title = "Counts")),  legend=list(x=0.15, y=-0.1, orientation='h'))  %>%
-            add_trace(data = df, x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode='markers', color=~sn, hoverinfo='text', marker=list(size=20, color='rgba(166, 143, 195, 1)'), showlegend =F, hoverinfo = 'text', text = ~df$text_annot) %>%
+            add_trace(data = df, x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode='markers', color=~sn, hoverinfo='text', marker=list(size=20, color='rgba(166, 143, 195, 1)'), showlegend =FALSE, hoverinfo = 'text', text = ~df$text_annot) %>%
             add_trace(data = df,x = ~rt, y = ~mz, z=~maxo, type = 'scatter3d', mode = 'lines', line = list(width = 10, color='rgba(166, 143, 195, 0.8)'), showlegend = F, name='Min-Max of Feat.')# %>%
 
-          for(i in 1:length(add)){
-            if(i==1){ g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black', width=5, showscale = F),  name='Signal width in rt dimension', showlegend=T) # %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
+          for(i in seq_len(length(add))){
+            if(i==1){ g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black', width=5, showscale = F),  name='Signal width in rt dimension', showlegend=TRUE) # %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
             }else{
-              g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black',  width=5),  name='', showlegend=F) #%>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5),  name='', showlegend=F)
+              g1= g1 %>% add_trace(data=add[[i]][idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'black',  width=5),  name='', showlegend=FALSE) #%>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5),  name='', showlegend=F)
             }
           }
           # add rois that fall into the specified spectral region
-          ds=fgt()[-idx,c(11, 1:10)]
+          ds=fgt()[-idx,c(11, seq_len(10))]
           idx_other=which(ds$mz>ra_mz[1] & ds$mz<ra_mz[2] & ds$rt>ra_rt[1] & ds$rt<ra_rt[2] & ds$maxo<=int_max)
           if(length(idx_other)>0){
             ds=ds[which(ds$mz>ra_mz[1] & ds$mz<ra_mz[2] & ds$rt>ra_rt[1] & ds$rt<ra_rt[2] & ds$maxo<=int_max),]
             ds$feature=paste('Feature', ds$feature)
             ds$maxo=ds$max/int_max*100
-            g1 %>% add_trace(data = ds, x = ~rt, y = ~mz, z=~maxo,  type = 'scatter3d', mode='markers', showlegend =F, hoverinfo='text', marker=list(size=5, color='rgba(0, 214, 167,0.4)', showscale = F), text = ~ds$feature) %>%
+            g1 %>% add_trace(data = ds, x = ~rt, y = ~mz, z=~maxo,  type = 'scatter3d', mode='markers', showlegend =F, hoverinfo='text', marker=list(size=5, color='rgba(0, 214, 167,0.4)', showscale = FALSE), text = ~ds$feature) %>%
               hide_colorbar()
           }else{
             g1 %>% hide_colorbar()
           }
         })
       }else{
-        showNotification(ui="Select rows in the peak table", duration=NULL, closeButton = T, type='warning', id='norows')
+        showNotification(ui="Select rows in the peak table", duration=NULL, closeButton = TRUE, type='warning', id='norows')
       }
 
     })

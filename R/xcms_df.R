@@ -8,7 +8,7 @@ xcms_df=function(raw_xcms){
   ndp=length(raw_xcms@env$mz)
   idx.trans=which(raw_xcms@env$mz[-1]<raw_xcms@env$mz[-ndp]) # every new scan starts with low mz
   idx.scans=cbind(c(0, idx.trans)+1, c(idx.trans, ndp)) # create df of indices (one scan per row)
-  df_xcms$scan=unlist(sapply(1:nrow(idx.scans), function(i){ rep(i, diff(idx.scans[i,])+1) }))
+  df_xcms$scan=unlist(lapply(seq_len(nrow(idx.scans)), function(i){ rep(i, diff(idx.scans[i,])+1) }))
   df_xcms$scantime=raw_xcms@scantime[df_xcms$scan] # add scantime (s)
   return(df_xcms)
 }

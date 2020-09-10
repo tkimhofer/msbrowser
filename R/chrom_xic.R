@@ -1,6 +1,7 @@
 #' @title  Plotting function for eXtracted Ion Chromatogram (XIC)
 #' @param df data.frame with scantime, m/z value and intensity
 #' @param pars plotting parameters (shiny reactive values)
+#' @return plotly object
 #' @import shiny
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
 #' @import plyr
@@ -43,15 +44,15 @@ chrom_xic=function(df, pars){
            annotations =annot_max,
            xaxis=list(
              title='Scan time (s)',
-             showgrid = T,
-             showticklabels = T,
+             showgrid = TRUE,
+             showticklabels = TRUE,
              showspikes = TRUE,
              spikedash = 'solid'),
            yaxis = list(
              title='Counts',
              zeroline = FALSE,
-             showgrid = F,
-             showticklabels = T)
+             showgrid = FALSE,
+             showticklabels = TRUE)
     ) %>% event_register('plotly_click')
 
   return(g1)
