@@ -13,7 +13,5 @@ shiny application object
 Launch MSbrowser application
 }
 \examples{
-\dontrun{
-msbrowser::startApp()
-}
+\donttest{msbrowser::startApp()}
 }

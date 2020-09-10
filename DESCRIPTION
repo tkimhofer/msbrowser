@@ -29,7 +29,7 @@ Imports:
   utils,
   xcms  (>= 3.6)
 Suggests: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 StagedInstall: yes
 VignetteBuilder: knitr
 biocViews: Metabolomics, MassSpectrometry, Preprocessing, Cheminformatics

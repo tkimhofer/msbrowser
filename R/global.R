@@ -1,9 +1,11 @@
-#' @title UI elements used with insertUI and removeUI
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
 #' @import shiny
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinybusy add_busy_bar
 #' @importFrom shinyBS bsTooltip
+
+globalVariables(c("peak"))
+
 
 icst <- read.table(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform$file.sep),
     sep = ",", stringsAsFactors = FALSE, comment.char = "#", blank.lines.skip = TRUE,
@@ -128,26 +130,26 @@ uiE_div_ppick <- div(id = "div_ppick", h3("3. Perform peak picking"), helpText("
         conditionalPanel(condition = "input.in_pickMethod=='centWave'",
             fluidRow(h4("Parameters"), helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set (most importantly: ppm, rt range and noise level)."),
                 hr(), column(4, numericInput(inputId = "in_mzdev", label = paste0("m/z deviation [ppm]"),
-                  value = 25), br(), sliderInput("in_rtrange", "Elution time range (s) [peakwidth]",
-                  min = 1, max = 100, step = 1, value = c(20, 50)), br(),
-                  numericInput("in_mzdiff", label = "Minimum diff m/z overlap [mzdiff]",
-                    value = -0.001), br(), fluidRow(h4(a("Need parameter help?",
-                    href = "https://tkimhofer.github.io/msbrowser/articles/pars.html",
-                    target = "_blank")))), column(4, numericInput(inputId = "in_noise",
-                  label = "Noise", value = 0), br(), numericInput(inputId = "in_sn",
-                  label = "Signal/Noise threshold [snthresh]", value = 10),
-                  br(), selectInput("in_mzCentFun", label = "m/z center function",
-                    choices = c(`Weighted Mean` = "wMean", Mean = "mean",
-                      `Peak apex` = "apex", `Weighted mean of peak apex and neigbouring scans` = "wMeanApex3",
-                      `Mean of peak apex and neigbouring scans` = "meanApex3")),
-                  br(), selectInput("in_integrate", label = "Integration method [integrate]",
-                    choices = c(`1: Mexican Hat` = "1", `2: Real MS data` = "2"),
-                    selected = "1")), column(4, wellPanel(h5("Pre-filter"),
-                  numericInput("in_prefilter_k", label = "Number of scans [k]",
-                    min = 0, max = 100, value = 3), br(), numericInput("in_prefilter_I",
-                    label = "Intensity [I]", min = 0, max = 1e+07, value = 100)),
-                  br(), checkboxInput("in_fitgauss", label = "Fit Gaussian to each peak [fitgauss]",
-                    value = FALSE)))), conditionalPanel(condition = "input.in_pickMethod=='matchedFilter'",
+                value = 25), br(), sliderInput("in_rtrange", "Elution time range (s) [peakwidth]",
+                min = 1, max = 100, step = 1, value = c(20, 50)), br(),
+                numericInput("in_mzdiff", label = "Minimum diff m/z overlap [mzdiff]",
+                value = -0.001), br(), fluidRow(h4(a("Need parameter help?",
+                href = "https://tkimhofer.github.io/msbrowser/articles/pars.html",
+                target = "_blank")))), column(4, numericInput(inputId = "in_noise",
+                label = "Noise", value = 0), br(), numericInput(inputId = "in_sn",
+                label = "Signal/Noise threshold [snthresh]", value = 10),
+                br(), selectInput("in_mzCentFun", label = "m/z center function",
+                choices = c(`Weighted Mean` = "wMean", Mean = "mean",
+                `Peak apex` = "apex", `Weighted mean of peak apex and neigbouring scans` = "wMeanApex3",
+                `Mean of peak apex and neigbouring scans` = "meanApex3")),
+                br(), selectInput("in_integrate", label = "Integration method [integrate]",
+                choices = c(`1: Mexican Hat` = "1", `2: Real MS data` = "2"),
+                selected = "1")), column(4, wellPanel(h5("Pre-filter"),
+                numericInput("in_prefilter_k", label = "Number of scans [k]",
+                min = 0, max = 100, value = 3), br(), numericInput("in_prefilter_I",
+                label = "Intensity [I]", min = 0, max = 1e+07, value = 100)),
+                br(), checkboxInput("in_fitgauss", label = "Fit Gaussian to each peak [fitgauss]",
+                value = FALSE)))), conditionalPanel(condition = "input.in_pickMethod=='matchedFilter'",
             fluidRow(h4("Parameters"), helpText("The following peak picking parameters are the standard parameters defined by xcms - these nearly always require optimisation for each data set."),
                 hr(), column(4, numericInput(inputId = "in_fwhm", label = paste0("FWHM of matched filtration Gaussian"),
                   value = 30), br(), numericInput("in_sigma", "SD of matched Gaussian",
@@ -171,7 +173,7 @@ uiE_div_ppick <- div(id = "div_ppick", h3("3. Perform peak picking"), helpText("
                 label = paste0("rt trans (might not be needed)"), value = 1)))))),
     actionButton("pickpeak1", label = "Pick Peaks!", icon("thumbs-up"),
         style = "color: #fff; background-color: #33A2FF; border-color: #33A2FF"))
-# helper functions
+
 xic_mzrange <- function(xic_mz, ppm) {
 
     mz_window <- (xic_mz * (ppm/10^6))/2

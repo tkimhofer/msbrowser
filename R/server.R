@@ -84,29 +84,38 @@ server <- function(input, output, session) {
 
     observeEvent(input$fileexample, {
         removeNotification(id = "nofile")
-        exF <- system.file(file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML",
-            fsep = .Platform$file.sep), package = "msbrowser")
+        # exF <- system.file(file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML",
+        #     fsep = .Platform$file.sep), package = "msbrowser")
+
+        exF <- system.file(file.path("extdata", "mzXML", "test1.mzML",
+                                     fsep = .Platform$file.sep), package = "msbrowser")
+
         output$msfile <- renderText({
             "Example file: HILIC-ESI(+)-MS of a urine sample"
         })
-        if (exF == "") {
-            zipF <- file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML.zip",
-                fsep = .Platform$file.sep)
-            exFzip <- system.file(zipF, package = "msbrowser")
-            if (exFzip == "") {
-                message("No example file installed")
-            }
-            unzip(exFzip, exdir = dirname(exFzip))
-            pars$msfile <- gsub("\\.zip", "", exFzip)
-            message(paste0("Selected file: ", pars$msfile))
-        } else {
-            pars$msfile <- exF
-        }
+        # if (exF == "") {
+        #     zipF <- file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML.zip",
+        #         fsep = .Platform$file.sep)
+        #     exFzip <- system.file(zipF, package = "msbrowser")
+        #     if (exFzip == "") {
+        #         message("No example file installed")
+        #     }
+        #     unzip(exFzip, exdir = dirname(exFzip))
+        #     pars$msfile <- gsub("\\.zip", "", exFzip)
+        #     message(paste0("Selected file: ", pars$msfile))
+        # } else {
+        pars$msfile <- exF
+       # }
+        #pars$msfile='test1.mzML'
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     raw_data <- eventReactive(pars$msfile, {
-        raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,
-            mslevel = 1)
+        if(grepl('test', pars$msfile)){
+            load(gsub('mzML', 'R', pars$msfile))
+        }else{
+            raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,
+                                mslevel = 1)
+        }
         df_xcms <- xcms_df(raw_xcms)
         output$datsum <- renderTable({
             data.frame(Descr = c("Scan time range", "Scan frequency", "Mass range",
@@ -159,7 +168,6 @@ server <- function(input, output, session) {
             }
 
             pars$xic_ra <- xic_mzrange(pars$xic_mz, pars$ppm_change)
-            # scantime for single scan mass spectrum
             pars$mspec_scant <- pars$Imax_xic_scant
         }, ignoreNULL = TRUE)
 

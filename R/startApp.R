@@ -4,9 +4,7 @@
 #'
 #' @return shiny application object
 #' @examples
-#' \dontrun{
-#' msbrowser::startApp()
-#' }
+#' \dontrun{msbrowser::startApp()}
 #' @import shiny
 
 

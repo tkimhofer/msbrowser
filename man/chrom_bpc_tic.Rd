@@ -2,7 +2,7 @@
 % Please edit documentation in R/chrom_bpc_tic.R
 \name{chrom_bpc_tic}
 \alias{chrom_bpc_tic}
-\title{Plotting function for base peak and total ion chromatrogram in a single plot}
+\title{Plotting BPC and TIC}
 \usage{
 chrom_bpc_tic(df, pars)
 }
@@ -15,5 +15,5 @@ chrom_bpc_tic(df, pars)
 plotly object
 }
 \description{
-Plotting function for base peak and total ion chromatrogram in a single plot
+Plotting BPC and TIC
 }
