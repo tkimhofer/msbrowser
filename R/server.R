@@ -54,7 +54,7 @@ server <- function(input, output, session) {
 
     observeEvent(input$filechoose, {
         msfile1 <- tryCatch(file.choose(), error = function(e) "no selection")
-        if (grepl("\\.mzxml$|\\.mzml$|\\.cdf$|\\.netcdf$", msfile1, ignore.case = T)) {
+        if (grepl("\\.mzxml$|\\.mzml$|\\.cdf$|\\.netcdf$", msfile1, ignore.case = TRUE)) {
             removeNotification(id = "nofile")
             output$msfile <- renderText({
                 msfile1
@@ -77,8 +77,8 @@ server <- function(input, output, session) {
             removeUI("#div_ppick")
             ui_ind$ppdiv <- 0
         } else {
-            showNotification(ui = "Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software. ",
-                duration = NULL, closeButton = T, type = "error", id = "nofile")
+            showNotification(ui = "Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software.",
+                duration = NULL, closeButton = TRUE, type = "error", id = "nofile")
         }
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
@@ -119,12 +119,10 @@ server <- function(input, output, session) {
         }, rownames = FALSE, colnames = FALSE, spacing = "xs", caption = "Summary",
             caption.placement = getOption("xtable.caption.placement", "top"),
             caption.width = getOption("xtable.caption.width", NULL))
-
         if (ui_ind$summarytbl == 0) {
             ui_ind$summarytbl <- 1
             output$ss1 <- renderUI(uiE_div_summary_file)
         }
-
         observeEvent(input$imp_xic, {
             if (input$imp_xic & ui_ind$xicra == 0) {
                 insertUI(selector = "#imp_xic", where = "afterEnd", ui = uiE_div_xic)
@@ -136,7 +134,6 @@ server <- function(input, output, session) {
                 ui_ind$xicra <- 0
             }
         }, ignoreInit = TRUE, ignoreNULL = TRUE)
-
         pars$noise98p <- round(quantile(df_xcms$Int, probs = 0.98))
         pars$Imax_xic_mz <- df_xcms$mz[which.max(df_xcms$Int)]
         pars$Imax_xic_scant <- df_xcms$scantime[which.max(df_xcms$Int)]
@@ -568,7 +565,7 @@ server <- function(input, output, session) {
                         x = ~value, y = ~mz, z = ~maxo, type = "scatter3d",
                         mode = "lines", line = list(color = "black", width = 5,
                           showscale = FALSE), name = "Signal width in rt dimension",
-                        showlegend = TRUE)  # %>% add_trace(data=add[[i]][-idx_rt,], x = ~value, y = ~mz, z=~maxo, type='scatter3d', mode='lines',  line = list(color = 'red', width=5, showscale = F),  name='Signal range in m/z dimension', showlegend=T)
+                        showlegend = TRUE)
                     } else {
                       g1 <- g1 %>% add_trace(data = add[[i]][idx_rt, ],
                         x = ~value, y = ~mz, z = ~maxo, type = "scatter3d",
