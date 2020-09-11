@@ -6,13 +6,14 @@ Authors@R:
            family = "Kimhofer",
            role = c("aut", "cre"),
            email = "torben.kimhofer@murdoch.edu.au",
-           comment = c(ORCID = "0000-0001-7158-9930", website = "https://www.tkimhofer.com"))
+           comment = c(ORCID = "0000-0001-7158-9930"))
 Description: A user-friendly browser application for fast and easy xcms parameter testing, designed to optimise peak picking for GC-MS and LC-MS. The application visualizes spectral summary statistics such as total/extracted ion chromatograms and enables the user to gain insight into the data structure and the effects different xcms parameter sets have on peak picking performance. Resulting LC/GC feature list and plots can be used evaluatwhich parameters work best for the respective spectral data. MSbrowser runs in an R session started on a computer running macOS, Windows or Linux.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
   shiny  (>= 1.4),
+  lcmsData
 Imports:
   colorRamps  (>= 2.3),
   DT  (>= 0.1),

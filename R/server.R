@@ -1,8 +1,8 @@
-#' @title  Shiny app server function
-#' @param input provided by shiny
-#' @param output provided by shiny
-#' @param session session ID
-#' @return Server part of the app
+# @title  Shiny app server function
+# @param input provided by shiny
+# @param output provided by shiny
+# @param session session ID
+# @return Server part of the app
 #' @import shiny
 # @import shinyjs @importFrom shinyjs hide hideElement show showElement
 # toggle toggleElement onclick
@@ -18,8 +18,6 @@
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
 #' @importFrom plyr dlply
 #' @importFrom utils unzip
-
-
 server <- function(input, output, session) {
     pars <- reactiveValues(msfile = NA, noise98p = NA, noise_plot = NA,
         trans_plot = "log10", Imax_xic_mz = NA, Imax_xic_scant = NA, xic_mz = NA,
@@ -84,38 +82,22 @@ server <- function(input, output, session) {
 
     observeEvent(input$fileexample, {
         removeNotification(id = "nofile")
-        # exF <- system.file(file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML",
-        #     fsep = .Platform$file.sep), package = "msbrowser")
-
-        exF <- system.file(file.path("extdata", "mzXML", "test1.mzML",
-                                     fsep = .Platform$file.sep), package = "msbrowser")
-
+        exF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML",
+                                     fsep = .Platform$file.sep), package = "lcmsData")
         output$msfile <- renderText({
             "Example file: HILIC-ESI(+)-MS of a urine sample"
         })
-        # if (exF == "") {
-        #     zipF <- file.path("extdata", "mzXML", "Urine_HILIC_ESIpos.mzXML.zip",
-        #         fsep = .Platform$file.sep)
-        #     exFzip <- system.file(zipF, package = "msbrowser")
-        #     if (exFzip == "") {
-        #         message("No example file installed")
-        #     }
-        #     unzip(exFzip, exdir = dirname(exFzip))
-        #     pars$msfile <- gsub("\\.zip", "", exFzip)
-        #     message(paste0("Selected file: ", pars$msfile))
-        # } else {
+        if (exF == "") {
+            stop('No example mzML file found. Please install data package "lcmsData"')
+        } else {
         pars$msfile <- exF
-       # }
-        #pars$msfile='test1.mzML'
+       }
+
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     raw_data <- eventReactive(pars$msfile, {
-        if(grepl('test', pars$msfile)){
-            load(gsub('mzML', 'R', pars$msfile))
-        }else{
             raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,
                                 mslevel = 1)
-        }
         df_xcms <- xcms_df(raw_xcms)
         output$datsum <- renderTable({
             data.frame(Descr = c("Scan time range", "Scan frequency", "Mass range",
@@ -243,6 +225,8 @@ server <- function(input, output, session) {
             event.data <- event_data("plotly_click", source = "pc")
             pars$pp.mz <- as.numeric(event.data$x[1])
             pars$pp.rt <- as.numeric(pars$mspec_scant)
+            updateNumericInput(session, "in_mz", value = as.numeric(pars$pp.mz))
+            updateNumericInput(session, "in_rt", value = as.numeric(pars$pp.rt))
             output$selection <- renderText({
                 paste("Selected signal: scan time", round(as.numeric(pars$pp.rt),
                   2), "s, m/z", round(as.numeric(pars$pp.mz), 4))

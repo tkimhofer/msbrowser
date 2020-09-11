@@ -1,6 +1,6 @@
-#' @title  Read-in LC-MS file (xcms) and extract raw scan data and create dataframe
-#' @param raw_xcms xcms data object
-#' @return data frame mz, Int, scan, scantime
+# Read-in LC-MS file (xcms) and extract raw scan data and create dataframe
+# param raw_xcms xcms data object
+# return data frame mz, Int, scan, scantime
 #' @importFrom xcms xcmsRaw
 
 xcms_df <- function(raw_xcms) {

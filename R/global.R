@@ -11,7 +11,6 @@ icst <- read.table(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform
     sep = ",", stringsAsFactors = FALSE, comment.char = "#", blank.lines.skip = TRUE,
     row.names = NULL, skip = 1, col.names = c("assay", "compound", "mz",
         "rt", "info"))
-
 icst <- icst[icst$assay != "" & !is.na(icst$assay), ]
 
 ui_par_centwave <- fluidRow(column(12, offset = 0.2, h4("Parameterisation"),

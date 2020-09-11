@@ -1,5 +1,5 @@
-#' @title  Shiny app UI function
-#' @return UI part of the app
+# Shiny app UI function
+# UI part of the app
 #' @import shiny
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinyBS bsTooltip

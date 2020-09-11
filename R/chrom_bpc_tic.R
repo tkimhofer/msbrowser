@@ -1,10 +1,8 @@
-#' @title  Plotting BPC and TIC
-#' @param df data.frame with scantime, m/z value and intensity
-#' @param pars plotting parameters (shiny reactive values)
-#' @return plotly object
-#' @import plyr
-#' @importFrom plotly renderPlotly plot_ly add_trace layout
-#' @importFrom plotly event_register event_data add_segments add_text ggplotly hide_colorbar
+# Plotting BPC and TIC
+# m/z value and intensity
+# param pars plotting pa# rameters (shiny reactive values)
+#' @importFrom plyr ddply
+#' @importFrom plotly plot_ly add_trace layout
 #' @importFrom magrittr %>%
 
 chrom_bpc_tic <- function(df, pars) {

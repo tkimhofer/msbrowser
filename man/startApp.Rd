@@ -12,6 +12,3 @@ shiny application object
 \description{
 Launch MSbrowser application
 }
-\examples{
-\donttest{msbrowser::startApp()}
-}
