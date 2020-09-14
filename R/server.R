@@ -3,12 +3,12 @@
 # @param output provided by shiny
 # @param session session ID
 # @return Server part of the app
-#' @import shiny
 # @import shinyjs @importFrom shinyjs hide hideElement show showElement
 # toggle toggleElement onclick
-#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
+#' @import shiny
 #' @import plyr
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_rect geom_text theme_bw labs scale_colour_gradientn scale_x_continuous sec_axis
 #' @importFrom colorRamps matlab.like2
 #' @importFrom reshape2 melt
 #' @importFrom shinyBS bsTooltip
