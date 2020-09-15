@@ -1,8 +1,9 @@
 pandoc: 2.3.1
-pkgdown: 1.6.0
+pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: []
-last_built: 2020-09-15T10:25Z
+articles:
+  pars: pars.html
+last_built: 2020-09-15T12:59Z
 urls:
   reference: https://tkimhofer.github.io/msbrowser//reference
   article: https://tkimhofer.github.io/msbrowser//articles
