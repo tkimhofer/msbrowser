@@ -7,7 +7,7 @@
 globalVariables(c("peak"))
 
 
-icst <- read.table(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform$file.sep),
+icst <- read.table(system.file(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform$file.sep), package = "msbrowser"),
     sep = ",", stringsAsFactors = FALSE, comment.char = "#", blank.lines.skip = TRUE,
     row.names = NULL, skip = 1, col.names = c("assay", "compound", "mz",
         "rt", "info"))

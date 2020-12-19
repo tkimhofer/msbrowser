@@ -82,15 +82,18 @@ server <- function(input, output, session) {
 
     observeEvent(input$fileexample, {
         removeNotification(id = "nofile")
-        exF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML",
+        exF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML.zip",
                                      fsep = .Platform$file.sep), package = "lcmsData")
         output$msfile <- renderText({
-            "Example file: HILIC-ESI(+)-MS of a urine sample"
+            "Example spectrum: HILIC-ESI(+)-MS of a urine sample"
         })
         if (exF == "") {
-            stop('No example mzML file found. Please install data package "lcmsData"')
+            showNotification(ui = "Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software.",
+                             duration = NULL, closeButton = TRUE, type = "error", id = "nofile")
+            stop('Please install data package "lcmsData" and restart msbrowser. `devtools::install_github(\"tkimhofer/lcmsdata\`"')
         } else {
-        pars$msfile <- exF
+            if(grepl('zip$', exF)) unzip(exF, exdir=dirname(exF))
+        pars$msfile <- gsub('.zip','', exF)
        }
 
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
