@@ -38,13 +38,13 @@ All centWave parameters require fine-tuning for each assay type and mass analyse
 &nbsp;
 
 ## ***<span style="color:red">ppm</span>***: Allowed signal deviation in m/z dimension
-This *centWave* parameter *ppm* specifies the tolerance in m/z values for defining a signal in m/z dimensions. This parameter is closely related to the mass accuracy of the mass spectrometer, which is traditionally expressed in parts per million (ppm). 
+This *centWave* parameter *ppm* specifies the tolerance in m/z values for defining a signal in m/z dimension. This parameter is closely related to the mass accuracy of the mass spectrometer, which is traditionally expressed in parts per million (ppm). 
 
 <p align="center">
 ![](../man/figures/pars1/ppm_formula.png)
 </p>
 
-Higher *ppm* values allow more m/z value variations and lead to detection of a higher number of potential peaks - increasing false positives. Lower values can lead to missing out on many signals, since the measured mass values differ from the true mass more than expected. 
+Higher *ppm* values allow more m/z value variablity and lead to detection of a higher number of features (potential peaks), increasing false positives. Lower values can lead to missing out of signals, since the measured mass values may deviate from the true mass more than expected (this is common). 
 
 The illustration below shows a peak picking example using the same LC-MS data, where *ppm* parameter value was varied while all other centWave parameters were held constant.
 
