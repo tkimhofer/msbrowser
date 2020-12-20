@@ -1,4 +1,5 @@
-![](imgs/logo_upd.png)
+
+![](man/figures/logo_upd.png)
 
 # Welcome!
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -6,15 +7,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-**MSbrowser is an R-based web-browser-based application for parameter fine-tuning of xcms peak picking algorithms**. 
+**MSbrowser is an R-based web-browser application for parameter fine-tuning of xcms peak picking algorithms**. 
 
 
 The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance. 
 
-MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package.
+MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package. Performance was tested with Google Chrome.
 
 
-![](imgs/msbrowserGIF1.gif)
+![](man/figures/msbrowserGIF1.gif)
 
 MSbrowser addresses the need to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
 
@@ -62,9 +63,12 @@ A Guide for *centWave* peak picking parameters can be found under the [*centWave
 
 MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., [ProteoWizard](http://proteowizard.sourceforge.net/)) or online tool (e.g., [GNPS](https://gnps-quickstart.ucsd.edu/conversion)).
 
-# Example Data
-The application comes with HILIC-MS example data acquired from a urine sample, so that one can familiarise oneself with MSbrowser's functionalities without the need to perform any file conversion first.
 
+# Example Data
+The application can be tested using human urine experiment data acquired with HILIC-ESI(+)-Q-TOF-MS. This data are available in the lcmsData package which can be installed with the following R code:
+```R
+devtools::install_github('tkimhofer/lcmsData')
+```
 
 # Feedback
-Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrwoser]%20Source%20Han%20Sans)!
+Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrowser]%20Source%20Han%20Sans)!

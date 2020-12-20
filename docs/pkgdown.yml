@@ -3,8 +3,5 @@ pkgdown: 1.6.1.9000
 pkgdown_sha: 6094ac3dd80a1f3f1d4e2f47d0ed4716d51362b0
 articles:
   pars: pars.html
-last_built: 2020-12-20T01:07Z
-urls:
-  reference: https://tkimhofer.github.io/msbrowser//reference
-  article: https://tkimhofer.github.io/msbrowser//articles
+last_built: 2020-12-20T01:50Z
 
