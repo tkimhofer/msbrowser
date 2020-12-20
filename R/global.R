@@ -5,13 +5,16 @@
 #' @importFrom shinyBS bsTooltip
 
 globalVariables(c("peak"))
-
-
-icst <- read.table(system.file(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform$file.sep), package = "msbrowser"),
-    sep = ",", stringsAsFactors = FALSE, comment.char = "#", blank.lines.skip = TRUE,
-    row.names = NULL, skip = 1, col.names = c("assay", "compound", "mz",
-        "rt", "info"))
-icst <- icst[icst$assay != "" & !is.na(icst$assay), ]
+#
+# lib_file=system.file(file.path("inst", "extdata", "signalDB.csv", fsep = .Platform$file.sep), package = "msbrowser")
+# icst <- read.table(lib_file,
+#     sep = ",", stringsAsFactors = FALSE, comment.char = "#", blank.lines.skip = TRUE,
+#     row.names = NULL, skip = 1, col.names = c("assay", "compound", "mz",
+#         "rt", "info"))
+# icst <- icst[icst$assay != "" & !is.na(icst$assay), ]
+#
+#save(icst, file = 'inst/extdata/icst.rda')
+load('inst/extdata/icst.rda')
 
 ui_par_centwave <- fluidRow(column(12, offset = 0.2, h4("Parameterisation"),
     helpText("The following peak picking parameters values are xcms pre-adjusted - these nearly always require optimisation for each instrumental setup.")),

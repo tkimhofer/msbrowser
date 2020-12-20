@@ -85,22 +85,25 @@ server <- function(input, output, session) {
         exF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML.zip",
                                      fsep = .Platform$file.sep), package = "lcmsData")
         output$msfile <- renderText({
-            "Example spectrum: HILIC-ESI(+)-MS of a urine sample"
+            "Example: HILIC-ESI(+)-Q-TOF-MS of a urine sample"
         })
         if (exF == "") {
             showNotification(ui = "Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software.",
                              duration = NULL, closeButton = TRUE, type = "error", id = "nofile")
-            stop('Please install data package "lcmsData" and restart msbrowser. `devtools::install_github(\"tkimhofer/lcmsdata\`"')
-        } else {
-            if(grepl('zip$', exF)) unzip(exF, exdir=dirname(exF))
-        pars$msfile <- gsub('.zip','', exF)
-       }
+            stop('Please install R package "lcmsData" and restart msbrowser. `devtools::install_github(\"tkimhofer/lcmsdata\`"')
+        }
 
+        pars$msfile <- exF
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
     raw_data <- eventReactive(pars$msfile, {
-            raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,
-                                mslevel = 1)
+        if(grepl('lcmsData/extdata/Urine_HILIC_ESIpos_msLevel1.mzML', pars$msfile)){
+            data("hilicPosUrine", package = 'lcmsData')
+            raw_xcms<-hilicPosUrine
+        }else{
+            raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,mslevel = 1)
+        }
+
         df_xcms <- xcms_df(raw_xcms)
         output$datsum <- renderTable({
             data.frame(Descr = c("Scan time range", "Scan frequency", "Mass range",

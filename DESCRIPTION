@@ -1,13 +1,13 @@
 Package: msbrowser
-Title: Peak picking parameter optimisation for xcms
-Version: 0.1.0
+Title: Viz tool for xcms peak picking parameter optimisation
+Version: 0.99.1
 Authors@R: 
     person(given = "Torben",
            family = "Kimhofer",
            role = c("aut", "cre"),
            email = "torben.kimhofer@murdoch.edu.au",
            comment = c(ORCID = "0000-0001-7158-9930"))
-Description: A user-friendly browser application for fast and easy xcms parameter testing, designed to optimise peak picking for GC-MS and LC-MS. The application visualizes spectral summary statistics such as total/extracted ion chromatograms and enables the user to gain insight into the data structure and the effects different xcms parameter sets have on peak picking performance. Resulting LC/GC feature list and plots can be used evaluatwhich parameters work best for the respective spectral data. MSbrowser runs in an R session started on a computer running macOS, Windows or Linux.
+Description: A user-friendly browser application for fast and easy xcms parameter testing, designed to optimise peak picking for GC-MS and LC-MS experiments. The application outputs experiment summary statistics such as total/extracted ion chromatograms and enables the user to gain insight into the data structure and the effects different xcms parameter sets have on peak picking performance. Resulting LC/GC feature list and plots can be used evaluatwhich parameters work best for the respective spectral data. MSbrowser runs on a macOS, Windows and Linux.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
