@@ -1,4 +1,5 @@
 # msbrowser 0.99.1
 
-* Updated example file
+* Suggested dependency on lcmsData package for example experiment
+* Updated example experiment
 * Minor bugs fixed
