@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-**MSbrowser is web-browser-based application for parameter fine-tuning of xcms peak picking algorithms**. 
+**MSbrowser is an R-based web-browser-based application for parameter fine-tuning of xcms peak picking algorithms**. 
 
 
 The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance. 
