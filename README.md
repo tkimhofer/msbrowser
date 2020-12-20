@@ -1,4 +1,3 @@
-
 ![](man/figures/logo_upd.png)
 
 # Welcome!

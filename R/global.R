@@ -14,6 +14,7 @@ globalVariables(c("peak"))
 # icst <- icst[icst$assay != "" & !is.na(icst$assay), ]
 #
 #save(icst, file = 'inst/extdata/icst.rda')
+
 load('inst/extdata/icst.rda')
 
 ui_par_centwave <- fluidRow(column(12, offset = 0.2, h4("Parameterisation"),
