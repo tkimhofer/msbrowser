@@ -1,10 +1,12 @@
 ![](reference/figures/logo_upd.png)
 
 # Welcome!
+<!-- badges: start -->
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![HitCount](http://hits.dwyl.io/tkimhofer/msbrowser.svg)](http://hits.dwyl.io/tkimhofer/msbrowser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/tkimhofer/msbrowser?branch=master&svg=true)](https://ci.appveyor.com/project/tkimhofer/msbrowser)
+ <!-- badges: end -->
 
 **MSbrowser is an R-based web-browser application for parameter fine-tuning of xcms peak picking algorithms**. 
 
