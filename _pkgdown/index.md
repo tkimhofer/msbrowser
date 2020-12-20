@@ -1,4 +1,4 @@
-![](man/figures/logo_upd.png)
+![](reference/figures/logo_upd.png)
 
 # Welcome!
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -14,7 +14,7 @@ The app is designed for fast and easy parameter testing to optimise xcms peak pi
 MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package. Performance was tested with Google Chrome.
 
 
-![](man/figures/msbrowserGIF1.gif)
+![](reference/figures/msbrowserGIF1.gif)
 
 MSbrowser addresses the need to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
 
