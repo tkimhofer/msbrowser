@@ -24,6 +24,11 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - echo Current directory=%CD%
+  - travis-tool.sh github_package tkimhofer/lcmsData
+  - travis-tool.sh install_bioc xcms
+  - travis-tool.sh install_bioc_deps
+  - travis-tool.sh install_deps
 
 test_script:
   - travis-tool.sh run_tests
