@@ -31,11 +31,11 @@ server <- function(input, output, session) {
 
     dat_pl <- reactiveVal()
 
-    observe({
-      ed <- event_data("plotly_click", source = "pc")
-      print("pc click event:")
-      print(ed)
-    })
+    # observe({
+    #   ed <- event_data("plotly_click", source = "pc")
+    #   print("pc click event:")
+    #   print(ed)
+    # })
 
     observeEvent(input$clicked_text, {
         if (ui_ind$div_input_collapse == 1) {
@@ -404,9 +404,9 @@ server <- function(input, output, session) {
 
 
             if (ui_ind$ppdiv == 0) {
-              insertUI(selector = "#div_target", where = "afterEnd", ui = uiE_div_tar_col())
-                # insertUI(selector = "#div_target", where = "afterEnd",
-                #   ui = uiE_div_ppick)
+              # insertUI(selector = "#div_target", where = "afterEnd", ui = uiE_div_tar_col())
+                insertUI(selector = "#div_target", where = "afterEnd",
+                  ui = uiE_div_ppick)
                 ui_ind$ppdiv <- 1
 
             }
