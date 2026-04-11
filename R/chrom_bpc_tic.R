@@ -7,7 +7,6 @@
 
 chrom_bpc_tic <- function(df, pars) {
     message("bpc & tic")
-    # filter for mz value
     tic <- ddply(df, as.quoted("scantime"), function(x) sum(x$Int))
     bpc <- ddply(df, as.quoted("scantime"), function(x) {
         idx <- which.max(x$Int)[1]

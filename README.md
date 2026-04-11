@@ -31,19 +31,19 @@ MSbrowser addresses the need to make peak picking of LC-MS data more transparent
 The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html/) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
 
 ```R
-# install dependencies from CRAN (devtools and BiocManager)
-deps=c('devtools', 'BiocManager')
-id=deps %in% installed.packages()[,1]
-if(any(!id)) install.packages(deps[id])
+# Install missing CRAN packages
+needed <- setdiff(c("devtools", "BiocManager"), installed.packages()[,"Package"])
+if(length(needed)) install.packages(needed)
 
-# install xcms
-if(!requireNamespace("xcms", versionCheck=list(op = ">=", version = "3.6"), quietly = T)){BiocManager::install('xcms')}
+# Install or update xcms (>= 3.6) from Bioconductor
+if(!requireNamespace("xcms", quietly=TRUE) || packageVersion("xcms") < "3.6")
+  BiocManager::install("xcms")
 ```
 
 Now you're ready to go for the installation of MSbrowser:
 ```
-# install MSbroswer
-devtools::install_github('tkimhofer/msbrowser')
+# Install MSBrowser from GitHub
+devtools::install_github("tkimhofer/msbrowser")
 ```
 If prompted by the command line, perform necessary package updates.
 

@@ -2,17 +2,18 @@
 # return data frame with transformed counts
 # df is data.frame with scantime, m/z value and intensity
 # trans is char indicating transformation methods
-transf <- function(df, trans) {
+transf <- function(df, trans = "log10") {
+  stopifnot("Int" %in% colnames(df))
 
-    switch(trans, log10 = {
-        df$Int <- log10(df$Int)
-    }, sqrt = {
-        df$Int <- df$Int^2
-    }, exp = {
-        df$Int <- sqrt(df$Int)
-    }, reciprocal = {
-        df$Int <- 1/(df$Int)
-    }, )
+  df2 <- df
 
-    return(df)
+  df2$Int <- switch(
+    trans,
+    none  = df2$Int,
+    sqrt  = sqrt(df2$Int),
+    log10 = log10(df2$Int + 1),
+    stop("Unknown transformation: ", trans)
+  )
+
+  df2
 }

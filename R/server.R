@@ -19,6 +19,7 @@
 #' @importFrom plyr dlply
 #' @importFrom utils unzip
 server <- function(input, output, session) {
+
     pars <- reactiveValues(msfile = NA, noise98p = NA, noise_plot = NA,
         trans_plot = "log10", Imax_xic_mz = NA, Imax_xic_scant = NA, xic_mz = NA,
         xic_ra = NA, mspec_scant = NA, massSpec_scantime = NA, ppm_change = 50,
@@ -29,6 +30,12 @@ server <- function(input, output, session) {
         div_input_collapse = 1, div_target_collapse = 1, nopeaks = 0)
 
     dat_pl <- reactiveVal()
+
+    observe({
+      ed <- event_data("plotly_click", source = "pc")
+      print("pc click event:")
+      print(ed)
+    })
 
     observeEvent(input$clicked_text, {
         if (ui_ind$div_input_collapse == 1) {
@@ -41,13 +48,15 @@ server <- function(input, output, session) {
     }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
     observeEvent(input$clicked_target, {
-        if (ui_ind$div_target_collapse == 1) {
-            removeUI("#target_col")
-            ui_ind$div_target_collapse <- 0
-        } else {
-            insertUI("#div_target", "afterEnd", ui = uiE_div_tar_col)
-            ui_ind$div_target_collapse <- 1
-        }
+      if (ui_ind$target == 1) {
+        removeUI(selector = "#div_target")
+        ui_ind$target <- 0
+        ui_ind$div_target_collapse <- 0
+      } else {
+        insertUI(selector = "#div_input", where = "afterEnd", ui = uiE_target)
+        ui_ind$target <- 1
+        ui_ind$div_target_collapse <- 1
+      }
     }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
     observeEvent(input$filechoose, {
@@ -149,15 +158,26 @@ server <- function(input, output, session) {
             return(pa)
         })
 
-        observeEvent(raw_data(), {
-            if (ui_ind$ichron == 0) {
-                prependTab(inputId = "msexpl", tab = uiT_ichron, select = TRUE)
-                ui_ind$ichron <- 1
-            }
+      observeEvent(raw_data(), {
+        if (ui_ind$ichron == 0) {
+          prependTab(inputId = "msexpl", tab = uiT_ichron, select = TRUE)
+          ui_ind$ichron <- 1
+        }
 
-            pars$xic_ra <- xic_mzrange(pars$xic_mz, pars$ppm_change)
-            pars$mspec_scant <- pars$Imax_xic_scant
-        }, ignoreNULL = TRUE)
+        if (ui_ind$target == 0) {
+
+          insertUI(selector = "#div_input", where = "afterEnd", ui = uiE_target)
+          ui_ind$target <- 1
+          ui_ind$div_target_collapse <- 1
+        }
+
+        pars$xic_ra <- xic_mzrange(pars$xic_mz, pars$ppm_change)
+        pars$mspec_scant <- pars$Imax_xic_scant
+
+        updateNumericInput(session, inputId = "in_rt", value = as.numeric(pars$mspec_scant))
+        updateNumericInput(session, inputId = "in_mz", value = round(as.numeric(pars$xic_mz), 4))
+        updateNumericInput(session, inputId = "in_noisethr", value = round(pars$noise98p))
+      }, ignoreNULL = TRUE)
 
         observeEvent({
             req(pars$pa)
@@ -223,52 +243,101 @@ server <- function(input, output, session) {
             })
         }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
-        observeEvent({
-            req(pars$pc)
-            event_data("plotly_click", source = "pc")
-            print("selection in mass spectrum")
-        }, {
-            event.data <- event_data("plotly_click", source = "pc")
-            pars$pp.mz <- as.numeric(event.data$x[1])
-            pars$pp.rt <- as.numeric(pars$mspec_scant)
-            updateNumericInput(session, "in_mz", value = as.numeric(pars$pp.mz))
-            updateNumericInput(session, "in_rt", value = as.numeric(pars$pp.rt))
-            output$selection <- renderText({
-                paste("Selected signal: scan time", round(as.numeric(pars$pp.rt),
-                  2), "s, m/z", round(as.numeric(pars$pp.mz), 4))
-            })
-            removeUI("#proceed")
+        observeEvent(event_data("plotly_click", source = "pc"), {
+          req(pars$pc)
 
-            if (ui_ind$target == 0) {
-                insertUI(selector = "#div_input", where = "afterEnd", ui = uiE_target)
-                ui_ind$target <- 1
-                insertUI(selector = "#div_target", where = "afterEnd",
-                  ui = uiE_div_tar_col)
-                ui_ind$div_target_collapse <- 1
-            }
-            updateNumericInput(session, inputId = "in_rt", value = as.numeric(pars$pp.rt))
-            updateNumericInput(session, inputId = "in_mz", value = round(as.numeric(pars$pp.mz),
-                4))
-            updateNumericInput(session, inputId = "in_noisethr", value = round(pars$noise98p))
+          event.data <- event_data("plotly_click", source = "pc")
+          df <- raw_data()[[1]]
+          sub <- df[df$scantime == pars$mspec_scant, ]
+
+          clicked_mz <- as.numeric(event.data$x[1])
+
+          sub_use <- sub[sub$Int > pars$noise98p, ]
+          if (nrow(sub_use) == 0) {
+            sub_use <- sub
+          }
+
+          mdif <- abs(sub_use$mz - clicked_mz)
+          pars$pp.mz <- sub_use$mz[which.min(mdif)]
+          pars$pp.rt <- as.numeric(pars$mspec_scant)
+
+          updateNumericInput(session, "in_mz", value = round(as.numeric(pars$pp.mz), 4))
+          updateNumericInput(session, "in_rt", value = as.numeric(pars$pp.rt))
+
+          output$selection <- renderText({
+            paste(
+              "Selected signal: scan time",
+              round(as.numeric(pars$pp.rt), 2),
+              "s, m/z",
+              round(as.numeric(pars$pp.mz), 4)
+            )
+          })
+
+          removeUI(selector = "#proceed", immediate = TRUE)
+          updateNumericInput(session, inputId = "in_noisethr", value = round(pars$noise98p))
         }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
         observeEvent(input$imp_vis, {
-            if (input$imp_vis == TRUE & ui_ind$impvis == 0) {
-                insertUI(selector = "#selectors1", where = "afterEnd",
-                  ui = div(id = "div_vis", br(), fluidRow(column(12, offset = 0.7,
-                    column(width = 3, numericInput(inputId = "in_noisethr",
-                      label = "Noise Threshold", value = as.numeric(pars$noise98p))),
-                    column(width = 9, align = "center", radioGroupButtons("raw_trans",
-                      label = "Data Transformation", choices = list(None = "none",
-                        Squared = "sqrt", `Square Root` = "exp", `Log 10` = "log10",
-                        Reciprocal = "reciprocal"), selected = "log10"))))))
-                ui_ind$impvis <- 1
-            }
+          if (isTRUE(input$imp_vis) && ui_ind$impvis == 0) {
+            insertUI(
+              selector = "#selectors1",
+              where = "afterEnd",
+              ui = div(
+                id = "div_vis",
+                style = paste(
+                  "margin-top:12px;",
+                  "margin-bottom:10px;",
+                  "padding:14px 16px 12px 16px;",
+                  "background:#f8fafc;",
+                  "border:1px solid #e8edf5;",
+                  "border-radius:12px;"
+                ),
+                div(
+                  style = "font-weight:600; color:#22678D; margin-bottom:6px;",
+                  "Visualisation options"
+                ),
+                div(
+                  style = "color:#607086; font-size:13px; line-height:1.5; margin-bottom:12px;",
+                  "Adjust the display threshold and intensity transformation for the raw data view."
+                ),
+                fluidRow(
+                  column(
+                    width = 4,
+                    numericInput(
+                      inputId = "in_noisethr",
+                      label = "Noise threshold",
+                      value = as.numeric(pars$noise98p),
+                      width = "100%"
+                    )
+                  ),
+                  column(
+                    width = 8,
+                    div(
+                      style = "padding-top:2px;",
+                      radioGroupButtons(
+                        inputId = "raw_trans",
+                        label = "Intensity transformation",
+                        choices = list(
+                          None = "none",
+                          `Square root` = "sqrt",
+                          # Exponential = "exp",
+                          `Log 10` = "log10"
+                          # Reciprocal = "reciprocal"
+                        ),
+                        selected = "log10"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            ui_ind$impvis <- 1
+          }
 
-            if (input$imp_vis == FALSE & ui_ind$impvis == 1) {
-                removeUI(selector = "#div_vis")
-                ui_ind$impvis <- 0
-            }
+          if (identical(input$imp_vis, FALSE) && ui_ind$impvis == 1) {
+            removeUI(selector = "#div_vis")
+            ui_ind$impvis <- 0
+          }
         })
 
         observeEvent({
@@ -337,7 +406,7 @@ server <- function(input, output, session) {
                   theme_bw() + scale_colour_gradientn(colours = matlab.like2(10)) +
                   labs(x = "Scan time (s)", y = "m/z", colour = "Counts",
                     caption = "Raw Data")
-                ggplotly(g1, height = 1000, width = 1100, dynamicTicks = TRUE)
+                ggplotly(g1, dynamicTicks = TRUE)
             })
 
 
@@ -412,18 +481,6 @@ server <- function(input, output, session) {
                   input$in_mzCentFun, "\", integrate=", as.numeric(input$in_integrate),
                   ", mzdiff=", input$in_mzdiff, ", fitgauss=", input$in_fitgauss,
                   ", noise=", as.numeric(input$in_noise), ")\n")
-                output$Rcode_loadp <- renderText({
-                  "library(xcms)\n"
-                })
-                output$Rcode_file <- renderText({
-                  codeF
-                })
-                output$Rcode_readIn <- renderText({
-                  codeRI
-                })
-                output$Rcode_ppick <- renderText({
-                  codePP
-                })
 
             }, matchedFilter = {
                 message("Performing peak picking (matchedFilter)")
@@ -474,7 +531,8 @@ server <- function(input, output, session) {
                     scale_x_continuous(sec.axis = sec_axis(trans = ~./60,
                       name = "Scan time (min)")) + labs(x = "Scan time (s)",
                     y = "m/z", colour = "Counts")
-                  ggplotly(g2, height = 1000, width = 1100, dynamicTicks = TRUE)
+                  # ggplotly(g2, height = 1000, width = 1100, dynamicTicks = TRUE)
+                  ggplotly(g2, dynamicTicks = TRUE)
                 })
                 return(ptbl)
             } else {
@@ -523,9 +581,17 @@ server <- function(input, output, session) {
                       text = ~paste0("intb<br />", text_hover), marker = list(color = "rgba(255,213,117,,0.8)")) %>%
                     add_trace(y = ~maxo, name = "maxo: Maximum signal intensity",
                       text = ~paste0("maxo<br />", text_hover), marker = list(color = "rgba(0, 214, 167,0.8)")) %>%
-                    layout(yaxis = list(title = "Intensity", showgrid = TRUE),
-                      barmode = "group", xaxis = list(title = ""), legend = list(x = 0.15,
-                        y = -0.1, orientation = "h"))
+                    layout(
+                      yaxis = list(title = "Intensity", showgrid = TRUE),
+                      barmode = "group",
+                      xaxis = list(title = ""),
+                      legend = list(
+                        orientation = "h",
+                        x = 0,
+                        y = -0.2
+                      ),
+                      margin = list(b = 100)
+                    )
                 })
                 output$peakpltIso <- renderPlotly({
                   int_max <- max(df$maxo)

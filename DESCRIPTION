@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Torben",
            family = "Kimhofer",
            role = c("aut", "cre"),
-           email = "torben.kimhofer@murdoch.edu.au",
+           email = "tkimhofer@gmail.com",
            comment = c(ORCID = "0000-0001-7158-9930"))
 Description: A user-friendly browser application for fast and easy xcms parameter testing, designed to optimise peak picking for GC-MS and LC-MS experiments. The application outputs experiment summary statistics such as total/extracted ion chromatograms and enables the user to gain insight into the data structure and the effects different xcms parameter sets have on peak picking performance. Resulting LC/GC feature list and plots can be used evaluatwhich parameters work best for the respective spectral data. MSbrowser runs on a macOS, Windows and Linux.
 License: MIT + file LICENSE
@@ -14,7 +14,9 @@ LazyData: true
 Depends:
   shiny  (>= 1.4)
 Imports:
+  BiocManager,
   colorRamps  (>= 2.3),
+  devtools,
   DT  (>= 0.1),
   ggplot2  (>= 3.2),
   magrittr  (>= 1.5),
@@ -28,6 +30,8 @@ Imports:
   stats  (>= 1.4),
   utils,
   xcms  (>= 3.6)
+Remotes:
+  tkimhofer/lcmsData,
 Suggests: knitr, lcmsData
 RoxygenNote: 7.1.1
 StagedInstall: yes
