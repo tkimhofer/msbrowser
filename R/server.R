@@ -17,7 +17,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
 #' @importFrom plyr dlply
-#' @importFrom utils unzip
+#' @importFrom utils unzip data
 server <- function(input, output, session) {
 
     pars <- reactiveValues(msfile = NA, noise98p = NA, noise_plot = NA,
@@ -91,27 +91,19 @@ server <- function(input, output, session) {
 
     observeEvent(input$fileexample, {
         removeNotification(id = "nofile")
-        exF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML.zip",
-                                     fsep = .Platform$file.sep), package = "lcmsData")
+        exF <- system.file("extdata", "HILIC_ESIpos_msLevel1_urine_red.mzML", package = "msbrowser")
         output$msfile <- renderText({
             "Example: HILIC-ESI(+)-Q-TOF-MS of a urine sample"
         })
-        if (exF == "") {
-            showNotification(ui = "Accepted file formats are CDF, netCDF, mzXML, mzData and mzML. Check out ProteoWizard for conversion software.",
-                             duration = NULL, closeButton = TRUE, type = "error", id = "nofile")
-            stop('Please install R package "lcmsData" and restart msbrowser. `devtools::install_github(\"tkimhofer/lcmsdata\`"')
-        }
 
         pars$msfile <- exF
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
+
+
     raw_data <- eventReactive(pars$msfile, {
-        if(grepl('lcmsData/extdata/Urine_HILIC_ESIpos_msLevel1.mzML', pars$msfile)){
-            data("hilicPosUrine", package = 'lcmsData')
-            raw_xcms<-hilicPosUrine
-        }else{
-            raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE,mslevel = 1)
-        }
+
+        raw_xcms <- xcmsRaw(pars$msfile, profstep = 0, includeMSn = FALSE, mslevel = 1)
 
         df_xcms <- xcms_df(raw_xcms)
         output$datsum <- renderTable({
@@ -153,6 +145,7 @@ server <- function(input, output, session) {
 
     {
         output$tic_bpc <- renderPlotly({
+            req(input$msexpl == "ichron")
             pa <- chrom_bpc_tic(df = raw_data()[[1]], pars)
             pars$pa <- 1
             return(pa)
@@ -411,8 +404,9 @@ server <- function(input, output, session) {
 
 
             if (ui_ind$ppdiv == 0) {
-                insertUI(selector = "#div_target", where = "afterEnd",
-                  ui = uiE_div_ppick)
+              insertUI(selector = "#div_target", where = "afterEnd", ui = uiE_div_tar_col())
+                # insertUI(selector = "#div_target", where = "afterEnd",
+                #   ui = uiE_div_ppick)
                 ui_ind$ppdiv <- 1
 
             }

@@ -1,28 +1,32 @@
 Package: msbrowser
-Title: Viz tool for xcms peak picking parameter optimisation
-Version: 0.99.1
+Title: Interactive LC–MS Data Exploration and Feature Analysis
+Description: Provides a Shiny-based interface for interactive exploration of
+    LC-MS data, with a focus on parameter tuning for xcms-based feature
+    detection. Enables inspection of chromatographic and spectral data,
+    including total and extracted ion chromatograms, and facilitates evaluation
+    of how different parameter settings affect peak picking performance.
+    Resulting feature tables and visualisations support method development,
+    optimisation, and quality assessment of mass spectrometry experiments.
+Version: 0.99.2
 Authors@R: 
     person(given = "Torben",
            family = "Kimhofer",
            role = c("aut", "cre"),
            email = "tkimhofer@gmail.com",
            comment = c(ORCID = "0000-0001-7158-9930"))
-Description: A user-friendly browser application for fast and easy xcms parameter testing, designed to optimise peak picking for GC-MS and LC-MS experiments. The application outputs experiment summary statistics such as total/extracted ion chromatograms and enables the user to gain insight into the data structure and the effects different xcms parameter sets have on peak picking performance. Resulting LC/GC feature list and plots can be used evaluatwhich parameters work best for the respective spectral data. MSbrowser runs on a macOS, Windows and Linux.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Depends:
-  shiny  (>= 1.4)
+  R (>= 4.1)
 Imports:
-  BiocManager,
   colorRamps  (>= 2.3),
-  devtools,
   DT  (>= 0.1),
   ggplot2  (>= 3.2),
   magrittr  (>= 1.5),
   plotly  (>= 4.9),
   plyr  (>= 1.8),
   reshape2  (>= 1.4),
+  shiny (>= 1.4),
   shinyBS  (>= 0.6),
   shinybusy  (>= 0.2),
   shinycssloaders  (>= 0.2),
@@ -34,7 +38,6 @@ Remotes:
   tkimhofer/lcmsData,
 Suggests: knitr, lcmsData
 RoxygenNote: 7.1.1
-StagedInstall: yes
 VignetteBuilder: knitr
 biocViews: Metabolomics, MassSpectrometry, Preprocessing, Cheminformatics
 URL: https://github.com/tkimhofer/msbrowser

@@ -13,21 +13,120 @@ chrom_bpc_tic <- function(df, pars) {
         c(x$Int[idx], x$mz[idx])
     })
 
-    pa <- plot_ly(source = "pa") %>% add_trace(data = tic, x = ~scantime,
-        y = ~V1, type = "scatter", mode = "lines",
-        line = list(color = "rgba(0, 0, 0,0.7)", width = 0.8),
+    x_rng <- range(c(tic$scantime, bpc$scantime), na.rm = TRUE)
+
+    x_rng <- range(df$scantime, na.rm = TRUE)
+
+    pa <- plot_ly(source = "pa") %>%
+      add_trace(
+        data = tic,
+        x = ~scantime,
+        y = ~V1,
+        type = "scatter",
+        mode = "lines",
+        line = list(color = "rgba(0, 0, 0, 0.7)", width = 0.8),
         text = ~paste(scantime, "s"),
-        name = "<b>Total ion chromatogram</b>") %>%
-        add_trace(data = bpc, x = ~scantime, y = ~V1, type = "scatter",
-            mode = "lines",
-            line = list(color = "rgba(0, 215, 167,1)", width = 1.1),
-            text = ~paste(round(V2, 4), "m/z"), name = "<b>Base peak chromatogram</b>") %>%
-        layout(legend = list(x = 0.7, y = 0.99), xaxis = list(title = "Scan time (s)",
-            range = c(0, max(df$scantime)), showspikes = TRUE, spikemode = "toaxis+across",
-            spikesnap = "data", showline = FALSE, zeroline = FALSE, spikedash = "solid",
-            showgrid = TRUE), yaxis = list(title = "Counts", showgrid = FALSE,
-            showticklabels = TRUE, zeroline = FALSE, showline = FALSE),
-            hovermode = "x", showlegend = TRUE) %>% event_register("plotly_click")
+        name = "<b>Total ion chromatogram</b>"
+      ) %>%
+      add_trace(
+        data = bpc,
+        x = ~scantime,
+        y = ~V1,
+        type = "scatter",
+        mode = "lines",
+        line = list(color = "rgba(0, 215, 167, 1)", width = 1.1),
+        text = ~paste(round(V2, 4), "m/z"),
+        name = "<b>Base peak chromatogram</b>"
+      ) %>%
+      layout(
+        legend = list(x = 0.7, y = 0.99),
+        xaxis = list(
+          title = "Scan time (s)",
+          range = x_rng,
+          autorange = FALSE,
+          showspikes = TRUE,
+          spikemode = "toaxis+across",
+          spikesnap = "data",
+          showline = FALSE,
+          zeroline = FALSE,
+          spikedash = "solid",
+          showgrid = TRUE
+        ),
+        yaxis = list(
+          title = "Counts",
+          showgrid = FALSE,
+          showticklabels = TRUE,
+          zeroline = FALSE,
+          showline = FALSE
+        ),
+        hovermode = "x",
+        showlegend = TRUE
+      ) %>%
+      event_register("plotly_click")
+
+    # pa <- plot_ly(source = "pa") %>%
+    #   add_trace(
+    #     data = tic, x = ~scantime, y = ~V1,
+    #     type = "scatter", mode = "lines",
+    #     line = list(color = "rgba(0, 0, 0, 0.7)", width = 0.8),
+    #     text = ~paste(scantime, "s"),
+    #     name = "<b>Total ion chromatogram</b>"
+    #   ) %>%
+    #   add_trace(
+    #     data = bpc, x = ~scantime, y = ~V1,
+    #     type = "scatter", mode = "lines",
+    #     line = list(color = "rgba(0, 215, 167, 1)", width = 1.1),
+    #     text = ~paste(round(V2, 4), "m/z"),
+    #     name = "<b>Base peak chromatogram</b>"
+    #   ) %>%
+    #   layout(
+    #     legend = list(x = 0.7, y = 0.99),
+    #     xaxis = list(
+    #       title = "Scan time (s)",
+    #       autorange = FALSE,
+    #       range = x_rng,
+    #       showspikes = TRUE,
+    #       spikemode = "toaxis+across",
+    #       spikesnap = "data",
+    #       showline = FALSE,
+    #       zeroline = FALSE,
+    #       spikedash = "solid",
+    #       showgrid = TRUE
+    #     ),
+    #     yaxis = list(
+    #       title = "Counts",
+    #       showgrid = FALSE,
+    #       showticklabels = TRUE,
+    #       zeroline = FALSE,
+    #       showline = FALSE
+    #     ),
+    #     hovermode = "x",
+    #     showlegend = TRUE
+    #   ) %>%
+    #   event_register("plotly_click")
+
+    # pa <- plot_ly(source = "pa") %>% add_trace(data = tic, x = ~scantime,
+    #     y = ~V1, type = "scatter", mode = "lines",
+    #     line = list(color = "rgba(0, 0, 0,0.7)", width = 0.8),
+    #     text = ~paste(scantime, "s"),
+    #     name = "<b>Total ion chromatogram</b>") %>%
+    #     add_trace(data = bpc, x = ~scantime, y = ~V1, type = "scatter",
+    #         mode = "lines",
+    #         line = list(color = "rgba(0, 215, 167,1)", width = 1.1),
+    #         text = ~paste(round(V2, 4), "m/z"), name = "<b>Base peak chromatogram</b>") %>%
+    #     layout(legend = list(x = 0.7, y = 0.99), xaxis = list(title = "Scan time (s)",
+    #         range = range(df$scantime, na.rm = TRUE),autorange = FALSE
+    #         # range = c(0, max(df$scantime)),
+    #         showspikes = TRUE, spikemode = "toaxis+across",
+    #         spikesnap = "data", showline = FALSE, zeroline = FALSE, spikedash = "solid",
+    #         showgrid = TRUE), yaxis = list(title = "Counts", showgrid = FALSE,
+    #         showticklabels = TRUE, zeroline = FALSE, showline = FALSE),
+    #         hovermode = "x", showlegend = TRUE) %>% event_register("plotly_click")
+
+    print(range(df$scantime, na.rm = TRUE))
+    print(range(tic$scantime, na.rm = TRUE))
+    print(range(bpc$scantime, na.rm = TRUE))
+    print(head(tic$scantime))
 
     return(pa)
 
