@@ -69,4 +69,4 @@ devtools::install_github('tkimhofer/lcmsData')
 ```
 
 # Feedback
-Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login) or [drop me an email](mailto:torben.kimhofer@murdoch.edu.au?subject=[MSbrowser]%20Source%20Han%20Sans)!
+Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login)
