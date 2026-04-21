@@ -54,7 +54,7 @@ A new web-browser window opens with the **MSbrowser** user interface.
 MSbrowser provides an interactive workflow for exploring raw LC-MS data and tuning xcms peak picking parameters. Guidance is available directly within the user interface, and additional resources are provided below:
 
 - Practical guide to *centWave* parameter tuning:  
-  [centWave parameter guide](https://tkimhofer.github.io/msbrowser/articles/pars.html/)
+  [centWave parameter guide](https://tkimhofer.github.io/msbrowser/articles/pars.html)
 
 MSbrowser supports open LC-MS data formats including **mzML**, **mzXML**, **CDF**, and **netCDF**. 
 Vendor-specific formats can be converted using tools such as [ProteoWizard](http://proteowizard.sourceforge.net/) or [GNPS](https://gnps-quickstart.ucsd.edu/conversion).

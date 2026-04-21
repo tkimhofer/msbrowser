@@ -76,13 +76,13 @@
 <span></span>
 <span><span class="co"># Install or update xcms (&gt;= 3.6) from Bioconductor</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"xcms"</span>, quietly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"xcms"</span><span class="op">)</span> <span class="op">&lt;</span> <span class="st">"3.6"</span><span class="op">)</span></span>
-<span>  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"xcms"</span><span class="op">)</span></span></code></pre></div>
-<p>Now you’re ready to go for the installation of MSbrowser:</p>
-<pre><code><span><span class="co"># Install MSBrowser from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tkimhofer/msbrowser"</span><span class="op">)</span></span></code></pre>
-<p>If prompted by the command line, perform necessary package updates.</p>
+<span>  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"xcms"</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="co"># Install MSBrowser from GitHub</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tkimhofer/msbrowser"</span><span class="op">)</span></span></code></pre></div>
+<p>If prompted, run package updates.</p>
 <p>MSbrowser can be launched with the following R-terminal command:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">msbrowser</span><span class="fu">::</span><span class="fu"><a href="reference/startApp.html">startApp</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>A new web-browser window opens with the <strong>MSbrowser</strong> user interface.</p>
 </div>
@@ -91,7 +91,7 @@
 </h2>
 <p>MSbrowser provides an interactive workflow for exploring raw LC-MS data and tuning xcms peak picking parameters. Guidance is available directly within the user interface, and additional resources are provided below:</p>
 <ul>
-<li>Gide to <em>centWave</em> parameters:<br><a href="https://tkimhofer.github.io/msbrowser/articles/pars.html/">centWave parameter guide</a>
+<li>Practical guide to <em>centWave</em> parameter tuning:<br><a href="https://tkimhofer.github.io/msbrowser/articles/pars.html">centWave parameter guide</a>
 </li>
 </ul>
 <p>MSbrowser supports open LC-MS data formats including <strong>mzML</strong>, <strong>mzXML</strong>, <strong>CDF</strong>, and <strong>netCDF</strong>. Vendor-specific formats can be converted using tools such as <a href="http://proteowizard.sourceforge.net/" class="external-link">ProteoWizard</a> or <a href="https://gnps-quickstart.ucsd.edu/conversion" class="external-link">GNPS</a>.</p>
@@ -101,7 +101,7 @@
 <h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
 <p>MSbrowser can be tested using a human urine LC-MS dataset (HILIC-ESI(+)-Q-TOF-MS), available via the <code>lcmsData</code> package:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tkimhofer/lcmsData"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>

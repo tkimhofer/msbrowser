@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   centwave_parameters: centwave_parameters.html
-last_built: 2026-04-21T13:54Z
+last_built: 2026-04-21T17:10Z
 urls:
   reference: https://tkimhofer.github.io/msbrowser/reference
   article: https://tkimhofer.github.io/msbrowser/articles
