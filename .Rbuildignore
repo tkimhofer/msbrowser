@@ -1,5 +1,6 @@
-^.*\.Rproj$
+\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
-^doc$
-^Meta$
+^docs$
+^_pkgdown\.yml$
+^data-raw$

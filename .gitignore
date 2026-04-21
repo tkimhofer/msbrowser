@@ -1,8 +1,10 @@
 .Rproj
+.Rproj.user
 .Rhistory
 .Rapp.history
 .Rprofile
 .Renviron
+.Rbuild
 
 .DS_Store
 
