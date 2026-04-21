@@ -2,7 +2,7 @@
 
 ## Launching MSbrowser
 
-There is only a single function for starting the application.
+Function to launch the MSbrowser interactive application.
 
 - [`startApp()`](https://tkimhofer.github.io/msbrowser/reference/startApp.md)
   : Launch the MSbrowser application

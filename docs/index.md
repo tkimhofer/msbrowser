@@ -12,7 +12,11 @@ parameter settings influence feature detection.
 MSbrowser is implemented as a Shiny application and distributed as an R
 package. The application is optimised for use in modern web browsers.
 
-![](reference/figures/ms_browser_screenshot.png)
+![MSbrowser interface showing raw LC-MS data and peak picking
+visualisation](reference/figures/ms_browser_screenshot.png)
+
+MSbrowser interface showing raw LC-MS data and peak picking
+visualisation
 
 MSbrowser addresses the need to make peak picking of LC-MS data more
 transparent and reproducible across platforms! Key features of the app
@@ -60,10 +64,7 @@ MSbrowser provides an interactive workflow for exploring raw LC-MS data
 and tuning xcms peak picking parameters. Guidance is available directly
 within the user interface, and additional resources are provided below:
 
-- A short walkthrough of the app and parameter tuning workflow:  
-  [Video tutorial](https://vimeo.com/385203675/)
-
-- Detailed guide to *centWave* parameter settings:  
+- Gide to *centWave* parameters:  
   [centWave parameter
   guide](https://tkimhofer.github.io/msbrowser/articles/pars.html/)
 
@@ -88,5 +89,3 @@ devtools::install_github("tkimhofer/lcmsData")
 
 Got questions or suggestions? Log an [issue on
 GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login)
-or [drop me an
-email](mailto:torben.kimhofer@murdoch.edu.au?subject=%5BMSbrowser%5D%20Source%20Han%20Sans)!

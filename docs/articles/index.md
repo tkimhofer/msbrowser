@@ -3,4 +3,4 @@
 ### All vignettes
 
 - [centWave
-  Parameters](https://tkimhofer.github.io/msbrowser/articles/pars.md):
+  Parameters](https://tkimhofer.github.io/msbrowser/articles/centwave_parameters.md):
