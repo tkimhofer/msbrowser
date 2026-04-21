@@ -15,9 +15,6 @@ save(df_sub, file = "inst/extdata/HILIC_ESIpos_msLevel1_urine.rda")
 
 
 
-
-
-
 library(MSnbase)
 xeF <- system.file(file.path("extdata", "Urine_HILIC_ESIpos_msLevel1.mzML.zip",
                              fsep = .Platform$file.sep), package = "lcmsData")

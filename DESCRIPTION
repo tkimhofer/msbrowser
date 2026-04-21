@@ -1,12 +1,14 @@
 Package: msbrowser
-Title: Interactive LC–MS Data Exploration and Feature Analysis
-Description: Provides a Shiny-based interface for interactive exploration of
-    LC-MS data, with a focus on parameter tuning for xcms-based feature
-    detection. Enables inspection of chromatographic and spectral data,
-    including total and extracted ion chromatograms, and facilitates evaluation
-    of how different parameter settings affect peak picking performance.
-    Resulting feature tables and visualisations support method development,
-    optimisation, and quality assessment of mass spectrometry experiments.
+Title: Interactive LC-MS Data Exploration and Feature Analysis
+Description: Provides a Shiny interface for interactive inspection of raw LC-MS
+    data, with a focus on understanding signal and noise structure and on
+    parameter tuning for xcms-based feature detection. Enables detailed
+    exploration of chromatographic and spectral data beyond standard
+    chromatogram views, including total and extracted ion chromatograms, and
+    supports evaluation of how parameter settings influence peak picking
+    performance. Resulting feature tables and visualisations facilitate method
+    development, optimisation, and quality assessment of mass spectrometry
+    experiments.
 Version: 0.99.2
 Authors@R: 
     person(given = "Torben",
@@ -34,10 +36,8 @@ Imports:
   stats  (>= 1.4),
   utils,
   xcms  (>= 3.6)
-Remotes:
-  tkimhofer/lcmsData,
-Suggests: knitr, lcmsData
-RoxygenNote: 7.1.1
+Suggests: knitr
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 biocViews: Metabolomics, MassSpectrometry, Preprocessing, Cheminformatics
 URL: https://github.com/tkimhofer/msbrowser

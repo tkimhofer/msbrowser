@@ -3,9 +3,11 @@
 #' @importFrom shinyBS bsTooltip
 #' @importFrom shinyWidgets numericRangeInput radioGroupButtons
 #' @importFrom shinybusy add_busy_bar
-#' @importFrom plotly plotlyOutput
+# @importFrom plotly plotlyOutput
+
 
 ui <- fluidPage(
+  # useShinyjs(),
   tags$head(
     tags$title("MSbrowser"),
     tags$style(HTML("
@@ -102,7 +104,7 @@ ui <- fluidPage(
     "))
   ),
 
-  add_busy_bar(color = "#22678D"),
+  add_busy_bar(color = "#22678D", height = "6px" ),
 
   div(
     class = "app-header",
@@ -117,12 +119,31 @@ ui <- fluidPage(
   ),
 
   tags$script(HTML("
-    function doThis(el) {
-      Shiny.setInputValue('clicked_text', 'Torben', {priority: 'event'});
+
+     Shiny.addCustomMessageHandler('collapse-section', function(id) {
+      const el = document.getElementById(id + '_col');
+      if (!el) return;
+
+      if (window.getComputedStyle(el).display !== 'none') {
+        el.style.display = 'none';
+      }
+    });
+    function toggleSection(id) {
+      const el = document.getElementById(id + '_col');
+      if (!el) return;
+
+      el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+
+      Shiny.setInputValue('section_clicked', id, {priority: 'event'});
     };
-    function doThat(el) {
-      Shiny.setInputValue('clicked_target', 'Torben', {priority: 'event'});
-    }
+    function collapseIfOpen(id) {
+      const el = document.getElementById(id + '_col');
+      if (!el) return;
+
+      if (window.getComputedStyle(el).display !== 'none') {
+        el.style.display = 'none';
+      }
+    };
   ")),
 
   fluidRow(
@@ -135,7 +156,7 @@ ui <- fluidPage(
           class = "section-title",
           a(
             href = "#",
-            onclick = "doThis(this)",
+            onclick = "toggleSection('div_input'); return false;",
             "1. Read in LC-MS experiment"
           )
         ),

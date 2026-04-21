@@ -1,31 +1,30 @@
-![](man/figures/logo_upd.png)
 
-# Welcome!
+
 <!-- badges: start -->
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-**MSbrowser is an R-based web-browser application for parameter fine-tuning of xcms peak picking algorithms**. 
+[![R-CMD-check](https://github.com/tkimhofer/msbrowser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tkimhofer/msbrowser/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 
-The app is designed for fast and easy parameter testing to optimise xcms peak picking performance. Different visualisations allow to gain insight into the LC-MS data structure and the effects different peak picking parameter values have on peak picking performance. 
+**MSbrowser is an R-based Shiny application for interactive inspection of raw LC-MS data and parameter tuning of xcms peak picking algorithms.**
 
-MSbrowser is implemented in a user-friendly web-application framework that can be installed as a simple R package. Performance was tested with Google Chrome.
+The app is designed for rapid and intuitive parameter testing to optimise xcms-based peak picking. 
+Interactive visualisations provide insight into LC-MS data structure and allow users to assess how parameter settings influence feature detection.
 
+MSbrowser is implemented as a Shiny application and distributed as an R package.
+The application is optimised for use in modern web browsers.
 
-![](man/figures/msbrowserGIF1.gif)
+![](man/figures/ms_browser_screenshot.png)
 
 MSbrowser addresses the need to make peak picking of LC-MS data more transparent and reproducible across platforms! Key features of the app include:
 
-- Generation of LC-MS experiment summary statistics 
-- User-interactive LC-MS data visualisatons that allow gaining insight into raw MS data structure
-- Parameter testing and fine-tuning for xcms peak picking algorithms (*centWave* and *matchFilter*)
-- Fast and interactive visualisations of xcms peak picking results
+- Interactive visualisation of LC-MS data to explore raw signal and noise structure  
+- Parameter testing and fine-tuning for xcms peak picking algorithms (*centWave* and *matchFilter*)  
+- Fast visualisation of peak picking results
 
 
-# App installation and launch
 
-The MSbrowser package is hosted on [GitHub](https://github.com/) and is build with [xcms](https://bioconductor.org/packages/release/bioc/html/xcms.html/) version 3.6 (or higher) to perform peak picking. The following R code can be used to install necessary R dependencies on your computer.
+## App installation and launch
+MSbrowser is hosted on GitHub and depends on the Bioconductor package *xcms* (version ≥ 3.6) for feature detection.
 
 ```R
 # Install missing CRAN packages
@@ -52,21 +51,30 @@ msbrowser::startApp()
 A new web-browser window opens with the **MSbrowser** user interface.
 
 
+## Documentation
 
+MSbrowser provides an interactive workflow for exploring raw LC-MS data and tuning xcms peak picking parameters. Guidance is available directly within the user interface, and additional resources are provided below:
 
-# Documentation 
-MSbrowser has an intuitive workflow, with help text placed in the user interface. Basic app functionalities and an illustration of the general workflow for fine-tuning of xcms peak picking parameters can be found in this [video tutorial](https://vimeo.com/385203675/).
+- A short walkthrough of the app and parameter tuning workflow:  
+  [Video tutorial](https://vimeo.com/385203675/)
 
-A Guide for *centWave* peak picking parameters can be found under the [*centWave Resources*](https://tkimhofer.github.io/msbrowser/articles/pars.html/) option in the page menu above. 
+- Detailed guide to *centWave* parameter settings:  
+  [centWave parameter guide](https://tkimhofer.github.io/msbrowser/articles/pars.html/)
 
-MSbrowser can read MS files in open data formats mzML, mzXML, CDF, netCDF; file conversions from vendor format can be performed with open source softwares available either as a standalone (e.g., [ProteoWizard](http://proteowizard.sourceforge.net/)) or online tool (e.g., [GNPS](https://gnps-quickstart.ucsd.edu/conversion)).
+MSbrowser supports open LC-MS data formats including **mzML**, **mzXML**, **CDF**, and **netCDF**. Vendor-specific formats can be converted using tools such as [ProteoWizard](http://proteowizard.sourceforge.net/) or [GNPS](https://gnps-quickstart.ucsd.edu/conversion).
 
+---
 
-# Example Data
-The application can be tested using human urine experiment data acquired with HILIC-ESI(+)-Q-TOF-MS. This data are available in the lcmsData package which can be installed with the following R code:
-```R
-devtools::install_github('tkimhofer/lcmsData')
+## Example data
+
+MSbrowser can be tested using a human urine LC-MS dataset (HILIC-ESI(+)-Q-TOF-MS), available via the `lcmsData` package:
+
+```r
+devtools::install_github("tkimhofer/lcmsData")
 ```
+
+---
+
 
 # Feedback
 Got questions or suggestions? Log an [issue on GitHub](https://github.com/tkimhofer/msbrowser/issues/) (requires login)

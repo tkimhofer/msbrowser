@@ -1,16 +1,17 @@
-# add www folder to resource path
+# .onLoad <- function(libname, pkgname) {
+#   shiny::addResourcePath(
+#     "msbrowser",
+#     system.file("www", package = pkgname)
+#   )
+# }
+
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage("Welcome to the MSbrowser!
-                          If you encounter any issues or have queries please
-                          log @ https://github.com/tkimhofer/msbrowser/issues.")
-    invisible(suppressPackageStartupMessages(vapply(c("xcms", "mzR", "methods",
-        "shiny"), requireNamespace, quietly = TRUE, FUN.VALUE = NA)))
-
-
+  packageStartupMessage(
+    paste(
+      "MSbrowser loaded",
+      "Report issues:",
+      "https://github.com/tkimhofer/msbrowser/issues",
+      sep = "\n"
+    )
+  )
 }
-
-.onLoad <- function(libname, pkgname) {
-    invisible(suppressPackageStartupMessages(vapply(c("xcms", "mzR", "methods",
-        "shiny"), requireNamespace, quietly = TRUE, FUN.VALUE = NA)))
-}
-

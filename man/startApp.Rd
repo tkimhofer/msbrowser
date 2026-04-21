@@ -2,13 +2,29 @@
 % Please edit documentation in R/startApp.R
 \name{startApp}
 \alias{startApp}
-\title{Launch MSbrowser application}
+\title{Launch the MSbrowser application}
 \usage{
 startApp()
 }
 \value{
-shiny application object
+A \link[shiny]{shinyApp} object. The function is primarily called
+for its side effect of launching the interactive application.
 }
 \description{
-Launch MSbrowser application
+Starts the interactive MSbrowser graphical user interface built with
+\pkg{shiny}. The application provides tools for visualisation, inspection,
+and processing of LC-MS data, including raw data exploration, target
+selection, and peak picking workflows.
+}
+\details{
+This function initializes the Shiny application by loading the user
+interface and server logic defined within the package. The app will open
+in the default web browser or in the RStudio Viewer, depending on the
+environment.
+}
+\examples{
+\dontrun{
+msbrowser::startApp()
+}
+
 }

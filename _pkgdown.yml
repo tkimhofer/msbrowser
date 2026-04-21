@@ -1,0 +1,34 @@
+url: https://tkimhofer.github.io/msbrowser/
+
+destination: docs
+
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+
+navbar:
+  title: MSbrowser
+  structure:
+    left: [home, reference, articles, news]
+    right: [github]
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: App Function
+      href: reference/index.html
+    articles:
+      text: centWave Resources
+      menu:
+        - text: Description of Parameters
+          href: articles/pars.html
+    github:
+      icon: fa-github
+      href: https://github.com/tkimhofer/msbrowser
+
+reference:
+  - title: Launching MSbrowser
+    desc: There is only a single function for starting the application.
+    contents:
+      - startApp

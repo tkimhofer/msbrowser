@@ -3,7 +3,9 @@
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinybusy add_busy_bar
 #' @importFrom shinyBS bsTooltip
+#' @importFrom plotly plotlyOutput
 
+options(shiny.maxRequestSize = 400 * 1024^2)  # gating upload files to 400 MB
 globalVariables(c("peak"))
 
 get_icst_path <- function() {
@@ -75,9 +77,41 @@ uiT_ichron <- tabPanel(
   withSpinner(plotlyOutput("ssms", height = 320), type = 8)
 )
 
-uiT_rawData <- tabPanel(title = "Raw Data", value = "rawData", fluidRow(
-        withSpinner(plotlyOutput("rawdd", width = "100%", height = "70vh"), type = 4,
-        color = "#0dc5c1")), add_busy_bar(color = "#FBDD00"))
+uiT_rawData <- tabPanel(
+  title = "Raw Data",
+  value = "rawData",
+  fluidRow(
+    div(
+      style = "position:relative;",
+
+      div(
+        id = "rawdd_loading_text",
+        style = "
+          position:absolute;
+          top:10px;
+          left:15px;
+          z-index:10;
+          font-size:14px;
+          color:#22678D;
+          background:rgba(255,255,255,0.85);
+          padding:4px 8px;
+          border-radius:6px;
+        ",
+        "Rendering raw LC-MS data…"
+      ),
+
+      shinycssloaders::withSpinner(
+        plotlyOutput("rawdd", width = "100%", height = "70vh"),
+        type = 4,
+        color = "#0dc5c1"
+      )
+    )
+  )
+)
+#
+# uiT_rawData <- tabPanel(title = "Raw Data", value = "rawData", fluidRow(
+#         withSpinner(plotlyOutput("rawdd", width = "100%", height = "70vh"), type = 4,
+#         color = "#0dc5c1")), add_busy_bar(color = "#FBDD00"))
 
 uiT_ppick <- tabPanel(
   "Detected Features",
@@ -233,15 +267,66 @@ uiE_div_summary_file <- div(
   )
 )
 
-uiE_div_inp_col <- div(id = "div_input_collapse", fluidRow(column(12, offset = 0.7,
-    fluidRow(column(10, actionButton("filechoose", label = "Select file"),
-        textOutput("bname", inline = TRUE), actionButton("fileexample",
-            label = "Load Example", inline = TRUE), bsTooltip(id = "filechoose",
-            title = "Choose an LC-MS data file in open data format (e.g., mzML)",
-            placement = "right", options = list(container = "body")), bsTooltip(id = "fileexample",
-            title = "Use an example LC-MS file.", placement = "right",
-            options = list(container = "body")))), br(), uiOutput("ss1"),
-    add_busy_bar(color = "#FBDD00"))))
+uiE_div_inp_col <- div(
+  id = "div_input_col",
+  fluidRow(
+    column(
+      10, offset = 1,
+      div(
+        style = paste(
+          "background:#ffffff;",
+          "border:1px solid #e7edf3;",
+          "border-radius:14px;",
+          "padding:16px 18px 14px 18px;",
+          "margin-bottom:14px;"
+        ),
+        div(
+          style = "font-size:16px; font-weight:650; color:#22678D; margin-bottom:6px;",
+          "Load LC-MS data"
+        ),
+        div(
+          style = "color:#607086; font-size:13px; line-height:1.5; margin-bottom:12px;",
+          "Choose an open-format raw data file such as mzML, mzXML or netCDF, or load the included example."
+        ),
+        fileInput("raw_file", "Select file"),
+        div(
+          style = "display:flex; gap:10px; align-items:center; margin-top:6px;",
+          actionButton("fileexample", label = "Load Example"),
+          div(
+            style = "color:#5f6f86; font-size:13px;",
+            textOutput("bname", inline = TRUE)
+          )
+        ),
+        div(
+          style = paste(
+            "margin-top:12px;",
+            "padding:10px 12px;",
+            "background:#f8fafc;",
+            "border:1px solid #edf2f7;",
+            "border-radius:10px;",
+            "color:#5f6f86;",
+            "font-size:13px;"
+          ),
+          textOutput("file_status_text")
+        )
+      ),
+      br(),
+      uiOutput("ss1")
+    )
+  )
+)
+
+# uiE_div_inp_col <- div(id = "div_input_col", fluidRow(column(12, offset = 0.7,
+#     fluidRow(column(10,
+#                     fileInput("raw_file", "Select file"),
+#                     verbatimTextOutput("info"),
+#         textOutput("bname", inline = TRUE), actionButton("fileexample",
+#             label = "Load Example", inline = TRUE), bsTooltip(id = "filechoose",
+#             title = "Choose an LC-MS data file in open data format (e.g., mzML)",
+#             placement = "right", options = list(container = "body")), bsTooltip(id = "fileexample",
+#             title = "Use an example LC-MS file.", placement = "right",
+#             options = list(container = "body")))), br(), uiOutput("ss1"),
+#     add_busy_bar(color = "#FBDD00"))))
 
 uiE_move <- fluidRow(
   column(
@@ -275,7 +360,7 @@ uiE_target <- div(
     style = "margin-top:0; margin-bottom:8px; font-size:21px; font-weight:650; color:#22678D;",
     a(
       href = "#",
-      onclick = "doThat(this)",
+      onclick = "toggleSection('div_target'); return false;",
       style = "color:#22678D; text-decoration:none;",
       "2. Select target signal"
     )
@@ -287,7 +372,7 @@ uiE_target <- div(
   ),
 
   div(
-    id = "target_col",
+    id = "div_target_col",
 
     div(
       id = "selectors",
@@ -554,6 +639,7 @@ uiE_div_tar_col <- function() {
           )
         )
       )
+
     ),
 
     conditionalPanel(
@@ -736,7 +822,9 @@ uiE_div_ppick <- div(
   style = "background:#ffffff; border:1px solid #e6ebf2; border-radius:14px; padding:18px 20px; margin-top:18px; margin-bottom:18px; box-shadow:0 2px 8px rgba(25,42,70,0.05);",
 
   h3(
-    style = "margin-top:0; margin-bottom:10px; font-size:20px; font-weight:650; color:#22678D;",
+    class = "section-title",
+  # h3(
+  #   style = "margin-top:0; margin-bottom:10px; font-size:20px; font-weight:650; color:#22678D;",
     "3. Peak picking"
   ),
 

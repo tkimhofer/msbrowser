@@ -1,10 +1,3 @@
-# @title  Shiny app server function
-# @param input provided by shiny
-# @param output provided by shiny
-# @param session session ID
-# @return Server part of the app
-# @import shinyjs @importFrom shinyjs hide hideElement show showElement
-# toggle toggleElement onclick
 #' @import shiny
 #' @import plyr
 #' @importFrom xcms xcmsRaw findPeaks.centWave findPeaks.matchedFilter
@@ -31,43 +24,18 @@ server <- function(input, output, session) {
 
     dat_pl <- reactiveVal()
 
-    # observe({
-    #   ed <- event_data("plotly_click", source = "pc")
-    #   print("pc click event:")
-    #   print(ed)
-    # })
+    observeEvent(input$raw_file, {
 
-    observeEvent(input$clicked_text, {
-        if (ui_ind$div_input_collapse == 1) {
-            removeUI("#div_input_collapse")
-            ui_ind$div_input_collapse <- 0
-        } else {
-            insertUI("#1ri", "afterEnd", ui = uiE_div_inp_col)
-            ui_ind$div_input_collapse <- 1
-        }
-    }, ignoreInit = TRUE, ignoreNULL = TRUE)
+        msfile1 <- input$raw_file$datapath
+        filename <- input$raw_file$name
 
-    observeEvent(input$clicked_target, {
-      if (ui_ind$target == 1) {
-        removeUI(selector = "#div_target")
-        ui_ind$target <- 0
-        ui_ind$div_target_collapse <- 0
-      } else {
-        insertUI(selector = "#div_input", where = "afterEnd", ui = uiE_target)
-        ui_ind$target <- 1
-        ui_ind$div_target_collapse <- 1
-      }
-    }, ignoreInit = TRUE, ignoreNULL = TRUE)
-
-    observeEvent(input$filechoose, {
-        msfile1 <- tryCatch(file.choose(), error = function(e) "no selection")
-        if (grepl("\\.mzxml$|\\.mzml$|\\.cdf$|\\.netcdf$", msfile1, ignore.case = TRUE)) {
+        if (grepl("\\.mzxml$|\\.mzml$|\\.cdf$|\\.netcdf$", filename, ignore.case = TRUE)) {
             removeNotification(id = "nofile")
             output$msfile <- renderText({
                 msfile1
             })
             pars$msfile <- msfile1
-            message(paste0("Selected file: ", pars$msfile))
+            message(paste0("Selected file: ", filename))
             updateTabsetPanel(session, inputId = "msexpl", selected = "ichron")
             removeTab("msexpl", "ichron")
             ui_ind$ichron <- 0
@@ -95,10 +63,8 @@ server <- function(input, output, session) {
         output$msfile <- renderText({
             "Example: HILIC-ESI(+)-Q-TOF-MS of a urine sample"
         })
-
         pars$msfile <- exF
     }, ignoreNULL = TRUE, ignoreInit = TRUE)
-
 
 
     raw_data <- eventReactive(pars$msfile, {
@@ -158,8 +124,9 @@ server <- function(input, output, session) {
         }
 
         if (ui_ind$target == 0) {
-
+          ### this is section 2. Select target signal
           insertUI(selector = "#div_input", where = "afterEnd", ui = uiE_target)
+          session$sendCustomMessage("collapse-section", "div_input")
           ui_ind$target <- 1
           ui_ind$div_target_collapse <- 1
         }
@@ -217,7 +184,6 @@ server <- function(input, output, session) {
             pars$xic_ra
         }, {
             output$xic <- renderPlotly({
-                # browser()
                 pb <- chrom_xic(df = raw_data()[[1]], pars)
                 pars$pb <- 1
                 return(pb)
@@ -232,7 +198,6 @@ server <- function(input, output, session) {
                 pc <- massspectrum(df = raw_data()[[1]], pars)
                 pars$pc <- 1
                 return(pc)
-                # browser() pc<<-pc pc
             })
         }, ignoreNULL = TRUE, ignoreInit = TRUE)
 
@@ -405,8 +370,9 @@ server <- function(input, output, session) {
 
             if (ui_ind$ppdiv == 0) {
               # insertUI(selector = "#div_target", where = "afterEnd", ui = uiE_div_tar_col())
-                insertUI(selector = "#div_target", where = "afterEnd",
-                  ui = uiE_div_ppick)
+                session$sendCustomMessage("collapse-section", "div_input")
+                session$sendCustomMessage("collapse-section", "div_target")
+                insertUI(selector = "#div_target", where = "afterEnd", ui = uiE_div_ppick)
                 ui_ind$ppdiv <- 1
 
             }
@@ -513,18 +479,65 @@ server <- function(input, output, session) {
                   df <- transf(mf, pars$trans_plot)
                   df$peak <- "No"
                   df$peak[idc] <- "Yes"
-                  g2 <- ggplot() + geom_point(data = subset(df, peak ==
-                    "No"), aes_string("scantime", "mz", colour = "Int"),
-                    size = 0.1) + geom_rect(data = ptbl, aes_string(xmin = "rtmin",
-                    xmax = "rtmax", ymin = "mzmin", ymax = "mzmax"), size = 1,
-                    color = "darkgrey", fill = "darkgrey") + geom_point(data = subset(df,
-                    peak == "Yes"), aes_string("scantime", "mz", colour = "Int"),
-                    size = 1) + geom_text(data = ptbl, aes_string(x = "rtmax",
-                    y = "mzmin", label = "feature"), colour = "red", size = 5,
-                    hjust = 0, vjust = 0) + theme_bw() + scale_colour_gradientn(colours = matlab.like2(10)) +
-                    scale_x_continuous(sec.axis = sec_axis(trans = ~./60,
-                      name = "Scan time (min)")) + labs(x = "Scan time (s)",
-                    y = "m/z", colour = "Counts")
+                  g2 <- ggplot() +
+                    geom_point(
+                      data = subset(df, peak == "No"),
+                      aes_string("scantime", "mz", colour = "Int"),
+                      size = 0.1
+                    ) +
+                    geom_rect(
+                      data = ptbl,
+                      aes_string(
+                        xmin = "rtmin",
+                        xmax = "rtmax",
+                        ymin = "mzmin",
+                        ymax = "mzmax"
+                      ),
+                      size = 1,
+                      color = "darkgrey",
+                      fill = "darkgrey"
+                    ) +
+                    geom_point(
+                      data = subset(df, peak == "Yes"),
+                      aes_string("scantime", "mz", colour = "Int"),
+                      size = 1
+                    ) +
+                    geom_text(
+                      data = ptbl,
+                      aes_string(
+                        x = "rtmax",
+                        y = "mzmin",
+                        label = "feature"
+                      ),
+                      colour = "red",
+                      size = 5,
+                      hjust = 0,
+                      vjust = 0
+                    ) +
+                    theme_bw() +
+                    scale_colour_gradientn(colours = matlab.like2(10)) +
+                    scale_x_continuous(
+                      sec.axis = sec_axis(
+                        transform = ~ . / 60,
+                        name = "Scan time (min)"
+                      )
+                    ) +
+                    labs(
+                      x = "Scan time (s)",
+                      y = "m/z",
+                      colour = "Counts"
+                    )
+                  # g2 <- ggplot() +
+                  #   geom_point(data = subset(df, peak =="No"), aes_string("scantime", "mz", colour = "Int"), size = 0.1) +
+                  #   geom_rect(data = ptbl, aes_string(xmin = "rtmin", xmax = "rtmax", ymin = "mzmin", ymax = "mzmax"), size = 1,
+                  #   color = "darkgrey", fill = "darkgrey") + geom_point(data = subset(df,
+                  #   peak == "Yes"), aes_string("scantime", "mz", colour = "Int"),
+                  #   size = 1) + geom_text(data = ptbl, aes_string(x = "rtmax",
+                  #   y = "mzmin", label = "feature"), colour = "red", size = 5,
+                  #   hjust = 0, vjust = 0) + theme_bw() + scale_colour_gradientn(colours = matlab.like2(10)) +
+                  #   scale_x_continuous(sec.axis = sec_axis(trans = ~./60,
+                  #     name = "Scan time (min)")) + labs(x = "Scan time (s)",
+                  #   y = "m/z", colour = "Counts")
                   # ggplotly(g2, height = 1000, width = 1100, dynamicTicks = TRUE)
                   ggplotly(g2, dynamicTicks = TRUE)
                 })
