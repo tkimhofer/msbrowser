@@ -34,14 +34,12 @@ if(length(needed)) install.packages(needed)
 # Install or update xcms (>= 3.6) from Bioconductor
 if(!requireNamespace("xcms", quietly=TRUE) || packageVersion("xcms") < "3.6")
   BiocManager::install("xcms")
-```
-
-Now you're ready to go for the installation of MSbrowser:
-```
+  
 # Install MSBrowser from GitHub
 devtools::install_github("tkimhofer/msbrowser")
 ```
-If prompted by the command line, perform necessary package updates.
+
+If prompted, run package updates.
 
 MSbrowser can be launched with the following R-terminal command:
 
@@ -55,10 +53,11 @@ A new web-browser window opens with the **MSbrowser** user interface.
 
 MSbrowser provides an interactive workflow for exploring raw LC-MS data and tuning xcms peak picking parameters. Guidance is available directly within the user interface, and additional resources are provided below:
 
-- Gide to *centWave* parameters:  
+- Practical guide to *centWave* parameter tuning:  
   [centWave parameter guide](https://tkimhofer.github.io/msbrowser/articles/pars.html/)
 
-MSbrowser supports open LC-MS data formats including **mzML**, **mzXML**, **CDF**, and **netCDF**. Vendor-specific formats can be converted using tools such as [ProteoWizard](http://proteowizard.sourceforge.net/) or [GNPS](https://gnps-quickstart.ucsd.edu/conversion).
+MSbrowser supports open LC-MS data formats including **mzML**, **mzXML**, **CDF**, and **netCDF**. 
+Vendor-specific formats can be converted using tools such as [ProteoWizard](http://proteowizard.sourceforge.net/) or [GNPS](https://gnps-quickstart.ucsd.edu/conversion).
 
 ---
 
