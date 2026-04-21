@@ -97,7 +97,7 @@ uiT_rawData <- tabPanel(
           padding:4px 8px;
           border-radius:6px;
         ",
-        "Rendering raw LC-MS data…"
+        "Rendering raw LC-MS data ..."
       ),
 
       shinycssloaders::withSpinner(
@@ -874,8 +874,8 @@ uiE_div_ppick <- div(
                   `Weighted Mean` = "wMean",
                   Mean = "mean",
                   `Peak apex` = "apex",
-                  `Weighted mean apex ± scans` = "wMeanApex3",
-                  `Mean apex ± scans` = "meanApex3"
+                  `Weighted mean apex +/- scans` = "wMeanApex3",
+                  `Mean apex +/- scans` = "meanApex3"
                 )
               ),
               selectInput(

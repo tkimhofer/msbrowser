@@ -114,7 +114,7 @@ ui <- fluidPage(
     ),
     p(
       class = "app-subtitle",
-      "LC–MS data exploration and feature analysis"
+      "LC-MS data exploration and feature analysis"
     )
   ),
 
